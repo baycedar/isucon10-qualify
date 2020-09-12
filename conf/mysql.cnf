@@ -19,3 +19,10 @@
 
 !includedir /etc/mysql/conf.d/
 !includedir /etc/mysql/mysql.conf.d/
+
+[mysqld]
+general_log = 0
+#slow_query_log = 0
+slow_query_log = 1
+slow_query_log_file = /var/log/mysql/slow_query.log
+long_query_time = 0.1

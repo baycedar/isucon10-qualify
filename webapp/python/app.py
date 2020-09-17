@@ -8,13 +8,24 @@ from werkzeug.exceptions import BadRequest, NotFound
 import mysql.connector
 from sqlalchemy.pool import QueuePool
 from humps import camelize
-from scripts.debugvar import DEBUG
+
+# from scripts.debugvar import DEBUG
 
 LIMIT = 20
 NAZOTTE_LIMIT = 50
 
-chair_search_condition = json.load(open("../fixture/chair_condition.json", "r"))
-estate_search_condition = json.load(open("../fixture/estate_condition.json", "r"))
+chair_search_condition = json.load(
+    open(
+        "/home/sugiura/workspace/isucon/isucon10-qual/webapp/fixture/chair_condition.json",
+        "r",
+    )
+)
+estate_search_condition = json.load(
+    open(
+        "/home/sugiura/workspace/isucon/isucon10-qual/webapp/fixture/estate_condition.json",
+        "r",
+    )
+)
 
 app = flask.Flask(__name__)
 
@@ -58,7 +69,7 @@ def post_initialize():
     for sql_file in sql_files:
         command = f"mysql -h {mysql_connection_env['host']} -u {mysql_connection_env['user']} -p{mysql_connection_env['password']} -P {mysql_connection_env['port']} {mysql_connection_env['database']} < {path.join(sql_dir, sql_file)}"
         subprocess.run(["bash", "-c", command])
-    DEBUG("initialize done.")
+    # DEBUG("initialize done.")
     return {"language": "python"}
 
 

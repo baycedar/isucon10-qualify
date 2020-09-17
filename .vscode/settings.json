@@ -1,0 +1,42 @@
+{
+  "[python]": {
+    "editor.formatOnPaste": false,
+    "editor.formatOnSave": true,
+    "editor.formatOnType": false,
+    "editor.tabSize": 4,
+    "editor.rulers": [
+      88,
+      100,
+    ],
+  },
+  "files.exclude": {
+    "**/.venv/**": true,
+    "**/__pycache__/**": true,
+    "**/.pytest_cache/**": true,
+  },
+  "python.languageServer": "Microsoft",
+  "python.venvPath": "${workspaceFolder}/webapp/python/venv",
+  "python.pythonPath": "${workspaceFolder}/webapp/python/venv/bin/python",
+  "python.formatting.provider": "black",
+  "python.linting.flake8Enabled": true,
+  "python.linting.flake8Args": [
+    "--ignore=E203,W503",
+    "--max-line-length=100",
+  ],
+  "python.testing.pytestEnabled": true,
+  "python.testing.pytestArgs": [
+    "./webapp/python/",
+  ],
+  "cSpell.words": [
+    "NAZOTTE",
+    "consolas",
+    "dbgroup",
+    "enduml",
+    "noqa",
+    "pipenv",
+    "pyenv",
+    "skinparam",
+    "startuml",
+    "venv"
+  ],
+}

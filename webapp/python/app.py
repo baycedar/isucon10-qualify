@@ -9,8 +9,6 @@ import mysql.connector
 from sqlalchemy.pool import QueuePool
 from humps import camelize
 
-# from scripts.debugvar import DEBUG
-
 LIMIT = 20
 NAZOTTE_LIMIT = 50
 
@@ -67,9 +65,8 @@ def post_initialize():
     ]
 
     for sql_file in sql_files:
-        command = f"mysql -h {mysql_connection_env['host']} -u {mysql_connection_env['user']} -p{mysql_connection_env['password']} -P {mysql_connection_env['port']} {mysql_connection_env['database']} < {path.join(sql_dir, sql_file)}"
+        command = f"mysql -h {mysql_connection_env['host']} -u {mysql_connection_env['user']} -p{mysql_connection_env['password']} -P {mysql_connection_env['port']} {mysql_connection_env['database']} < {path.join(sql_dir, sql_file)}"  # noqa
         subprocess.run(["bash", "-c", command])
-    # DEBUG("initialize done.")
     return {"language": "python"}
 
 

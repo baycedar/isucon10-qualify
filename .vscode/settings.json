@@ -28,15 +28,22 @@
     "./webapp/python/",
   ],
   "cSpell.words": [
+    "DBNAME",
     "NAZOTTE",
+    "camelize",
+    "cnxpool",
     "consolas",
     "dbgroup",
     "enduml",
+    "getenv",
+    "isucon",
+    "isuumo",
     "noqa",
     "pipenv",
     "pyenv",
     "skinparam",
     "startuml",
-    "venv"
+    "venv",
+    "werkzeug"
   ],
 }

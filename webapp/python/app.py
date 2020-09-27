@@ -649,7 +649,7 @@ def post_estate():
         raise BadRequest()
     records = csv.reader(StringIO(flask.request.files["estates"].read().decode()))
     records = [rec.append(f"Point({rec[6]} {rec[5]})") for rec in records]
-    records ~ [tuple(rec) for rec in records]
+    records = [tuple(rec) for rec in records]
     cnx = cnxpool.connect()
     try:
         cur = cnx.cursor()

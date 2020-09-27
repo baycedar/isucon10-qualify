@@ -1,13 +1,15 @@
-from os import getenv, path
+from os import getenv
 import json
 import subprocess
 from io import StringIO
 import csv
+
 import flask
 from werkzeug.exceptions import BadRequest, NotFound
-import mysql.connector
 from sqlalchemy.pool import QueuePool
 from humps import camelize
+import psycopg2
+import psycopg2.extras
 
 LIMIT = 20
 NAZOTTE_LIMIT = 50
@@ -31,25 +33,25 @@ estate_search_condition = json.load(
 
 app = flask.Flask(__name__)
 
-mysql_connection_env = {
-    "host": getenv("MYSQL_HOST", "127.0.0.1"),
-    "port": getenv("MYSQL_PORT", 3306),
-    "user": getenv("MYSQL_USER", "isucon"),
-    "password": getenv("MYSQL_PASS", "isucon"),
-    "database": getenv("MYSQL_DBNAME", "isuumo"),
+psql_connection_env = {
+    "host": getenv("PGHOST", "127.0.0.1"),
+    "port": getenv("PGPORT", 5432),
+    "user": getenv("PGUSER", "isucon"),
+    "password": getenv("PGPASSWORD", "isucon"),
+    "dbname": getenv("PGDATABASE", "isuumo"),
 }
 
-cnxpool = QueuePool(
-    lambda: mysql.connector.connect(**mysql_connection_env), pool_size=10
-)
+cnxpool = QueuePool(lambda: psycopg2.connect(**psql_connection_env), pool_size=10)
 
 
-def select_all(query, *args, dictionary=True):
+def select_all(query, *args):
     cnx = cnxpool.connect()
     try:
-        cur = cnx.cursor(dictionary=dictionary)
+        cur = cnx.cursor(cursor_factory=psycopg2.extras.DictCursor)
         cur.execute(query, *args)
-        return cur.fetchall()
+        rows = cur.fetchall()
+        dict_results = [dict(row) for row in rows]
+        return dict_results
     finally:
         cnx.close()
 
@@ -61,23 +63,7 @@ def select_row(*args, **kwargs):
 
 @app.route("/initialize", methods=["POST"])
 def post_initialize():
-    sql_dir = "../mysql/db"
-    sql_files = [
-        "0_Schema.sql",
-        "1_DummyEstateData.sql",
-        "2_DummyChairData.sql",
-    ]
-
-    for sql_file in sql_files:
-        command = f"""mysql \
-            -h {mysql_connection_env['host']}\
-            -u {mysql_connection_env['user']}\
-            -p{mysql_connection_env['password']}\
-            -P {mysql_connection_env['port']}\
-            {mysql_connection_env['database']}\
-            < {path.join(sql_dir, sql_file)}
-        """
-        subprocess.run(["bash", "-c", command])
+    subprocess.run("bash ../psql/db/init.sh")
     return {"language": "python"}
 
 
@@ -316,23 +302,11 @@ def post_chair_buy(chair_id):
     cnx = cnxpool.connect()
     try:
         cnx.start_transaction()
-        cur = cnx.cursor(dictionary=True)
+        cur = cnx.cursor()
         cur.execute(
             f"""
             SELECT
-                id,
-                name,
-                description,
-                thumbnail,
-                price,
-                height,
-                width,
-                depth,
-                color,
-                features,
-                kind,
-                popularity,
-                stock
+                id
             FROM
                 chair
             WHERE
@@ -525,7 +499,7 @@ def post_estate_nazotte():
 
     cnx = cnxpool.connect()
     try:
-        cur = cnx.cursor(dictionary=True)
+        cur = cnx.cursor(cursor_factory=psycopg2.extras.DictCursor)
         cur.execute(
             """
             SELECT
@@ -559,7 +533,8 @@ def post_estate_nazotte():
                 bounding_box["top_left_corner"]["longitude"],
             ),
         )
-        estates = cur.fetchall()
+        estate_rows = cur.fetchall()
+        estates = [dict(row) for row in estate_rows]
         estates_in_polygon = []
         for estate in estates:
             polygon_text = f"""

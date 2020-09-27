@@ -4,6 +4,9 @@ set -uex -o pipefail
 cd `dirname ${BASH_SOURCE:-${0}}`/../
 NOW=`date +%Y%m%d-%H%M%S`
 
+# reload environment variables
+cp -b ./conf/env.sh ~/env.sh
+
 # reload daemon
 sudo cp -b ./conf/isuumo.python.service /etc/systemd/system/isuumo.python.service
 sudo systemctl daemon-reload
@@ -22,14 +25,19 @@ sudo touch /var/log/nginx/access.log
 sudo chown www-data:adm /var/log/nginx/access.log
 sudo systemctl restart nginx.service
 
-# reload mysql
-sudo cp -b ./conf/mysql.cnf /etc/mysql/mysql.cnf
-if [ -f /var/log/mysql/slow_query.log ]; then
-  sudo mv /var/log/mysql/slow_query.log /var/log/mysql/slow_query_${NOW}.log
+# stop/disable mysql
+sudo systemctl stop mysql.service
+sudo systemctl disable mysql.service
+
+# reload postgresql
+sudo cp -b ./conf/postgresql.conf /etc/postgresql/12/main/postgresql.conf
+sudo cp -b ./conf/pg_hba.conf /etc/postgresql/12/main/pg_hba.conf
+if [ -f /var/log/postgresql/postgresql-12-main.log ]; then
+  sudo mv /var/log/postgresql/postgresql-12-main.log /var/log/postgresql/postgresql-12-main_${NOW}.log
 fi
-sudo touch /var/log/mysql/slow_query.log
-sudo chown mysql:adm /var/log/mysql/slow_query.log
-sudo systemctl restart mysql.service
+sudo touch /var/log/postgresql/postgresql-12-main.log
+sudo chown postgres:adm /var/log/mysql/slow_query.log
+sudo systemctl restart postgresql.service
 
 # reload app
 ./webapp/python/venv/bin/python -m pip install -r ./webapp/python/requirements.txt

@@ -18,7 +18,7 @@ chair_search_condition = json.load(
     open(
         # VS Code's test does not work with relative paths
         "../fixture/chair_condition.json",
-        # "/home/sugiura/workspace/isucon/isucon10-qual/webapp/fixture/chair_condition.json",
+        #"/home/sugiura/workspace/isucon/isucon10-qual/webapp/fixture/chair_condition.json",
         "r",
     )
 )
@@ -26,7 +26,7 @@ estate_search_condition = json.load(
     open(
         # VS Code's test does not work with relative paths
         "../fixture/estate_condition.json",
-        # "/home/sugiura/workspace/isucon/isucon10-qual/webapp/fixture/estate_condition.json",
+        #"/home/sugiura/workspace/isucon/isucon10-qual/webapp/fixture/estate_condition.json",
         "r",
     )
 )
@@ -71,7 +71,7 @@ def post_initialize():
 
 @app.route("/api/estate/low_priced", methods=["GET"])
 def get_estate_low_priced():
-    estates = select_all(
+    rows = select_all(
         f"""
         SELECT
             id,
@@ -95,7 +95,7 @@ def get_estate_low_priced():
             {LIMIT}
         """,
     )
-    return {"estates": camelize(estates)}
+    return {"estates": camelize(rows)}
 
 
 @app.route("/api/chair/low_priced", methods=["GET"])
@@ -127,7 +127,7 @@ def get_chair_low_priced():
             {LIMIT}
         """,
     )
-    return {"chairs": rows}
+    return {"chairs": camelize(rows)}
 
 
 @app.route("/api/chair/search", methods=["GET"])
@@ -261,7 +261,7 @@ def get_chair_search():
     """
     chairs = select_all(query, params)
 
-    return {"count": count, "chairs": chairs}
+    return {"count": count, "chairs": camelize(chairs)}
 
 
 @app.route("/api/chair/search/condition", methods=["GET"])
@@ -295,7 +295,7 @@ def get_chair(chair_id):
     )
     if chair is None or chair["stock"] <= 0:
         raise NotFound()
-    return chair
+    return camelize(chair)
 
 
 @app.route("/api/chair/buy/<int:chair_id>", methods=["POST"])
@@ -441,9 +441,9 @@ def get_estate_search():
         OFFSET
             {per_page * page}
     """
-    estates = select_all(query, params)
+    chairs = select_all(query, params)
 
-    return {"count": count, "estates": camelize(estates)}
+    return {"count": count, "estates": camelize(chairs)}
 
 
 @app.route("/api/estate/search/condition", methods=["GET"])
@@ -529,8 +529,8 @@ def post_estate_nazotte():
     finally:
         cnx.close()
 
-    estates = camelize(estates)
-    results = {"estates": estates, "count": len(estates)}
+    results = {"estates": [camelize(estate) for estate in estates]}
+    results["count"] = len(results["estates"])
     return results
 
 
@@ -623,12 +623,6 @@ def post_chair():
     try:
         cur = cnx.cursor()
         for record in records:
-            record[1] = camelize(record[1]) if record[1] != "" else ""
-            record[2] = camelize(record[2]) if record[2] != "" else ""
-            record[3] = camelize(record[3]) if record[3] != "" else ""
-            record[8] = camelize(record[8]) if record[8] != "" else ""
-            record[9] = camelize(record[9]) if record[9] != "" else ""
-            record[10] = camelize(record[10]) if record[10] != "" else ""
             query = """
                 INSERT INTO chair (
                     id,
@@ -667,11 +661,6 @@ def post_estate():
     try:
         cur = cnx.cursor()
         for record in records:
-            record[1] = camelize(record[1]) if record[1] != "" else ""
-            record[2] = camelize(record[2]) if record[2] != "" else ""
-            record[3] = camelize(record[3]) if record[3] != "" else ""
-            record[4] = camelize(record[4]) if record[4] != "" else ""
-            record[10] = camelize(record[10]) if record[10] != "" else ""
             geom = f"Point({record[6]} {record[5]})"
             record.append(geom)
             query = """

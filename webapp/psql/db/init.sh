@@ -13,4 +13,4 @@ cd $CURRENT_DIR
 
 dropdb -h $PGHOST -p $PGPORT -U $PGUSER --if-exists $PGDATABASE
 createdb -h $PGHOST -p $PGPORT -U $PGUSER $PGDATABASE
-cat 0_Schema.sql 1_DummyEstateData.sql 2_DummyChairData.sql | psql -h $PGHOST -p $PGPORT -U $PGUSER -d $PGDATABASE
+cat 0_Schema.sql 1_DummyEstateData.sql 2_DummyChairData.sql 3_CreateIndices.sql | psql -h $PGHOST -p $PGPORT -U $PGUSER -d $PGDATABASE

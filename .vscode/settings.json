@@ -38,6 +38,7 @@
     "PGUSER",
     "PSQL",
     "VARCHAR",
+    "btree",
     "camelize",
     "cnxpool",
     "consolas",

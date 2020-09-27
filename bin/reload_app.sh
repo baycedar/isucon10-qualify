@@ -4,6 +4,13 @@ set -uex -o pipefail
 cd `dirname ${BASH_SOURCE:-${0}}`/../
 NOW=`date +%Y%m%d-%H%M%S`
 
+GIT_BRANCH=$1
+
+# prepare source codes
+git fetch origin
+git checkout "${GIT_BRANCH}"
+git pull origin "${GIT_BRANCH}"
+
 # reload environment variables
 cp -b ./conf/env.sh ~/env.sh
 
@@ -30,16 +37,9 @@ sudo systemctl enable nginx.service
 sudo systemctl stop mysql.service
 sudo systemctl disable mysql.service
 
-# reload postgresql
-sudo cp -b ./conf/postgresql.conf /etc/postgresql/12/main/postgresql.conf
-sudo cp -b ./conf/pg_hba.conf /etc/postgresql/12/main/pg_hba.conf
-if [ -f /var/log/postgresql/postgresql-12-main.log ]; then
-  sudo mv /var/log/postgresql/postgresql-12-main.log /var/log/postgresql/postgresql-12-main_${NOW}.log
-fi
-sudo touch /var/log/postgresql/postgresql-12-main.log
-sudo chown postgres:adm /var/log/postgresql/postgresql-12-main.log
-sudo systemctl restart postgresql.service
-sudo systemctl enable postgresql.service
+# stop/disable postgresql
+sudo systemctl stop postgresql.service
+sudo systemctl disable postgresql.service
 
 # reload app
 sudo systemctl stop isuumo.go.service

@@ -668,9 +668,8 @@ def post_estate():
                 features,
                 popularity,
                 geom_coords
-            ) VALUES (
-                %s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s
-            )
+            ) VALUES
+                %s
         """
         psycopg2.extras.execute_values(cur, query, records)
         cnx.commit()

@@ -14,13 +14,17 @@ NAZOTTE_LIMIT = 50
 
 chair_search_condition = json.load(
     open(
-        "../fixture/chair_condition.json",
+        # VS Code's test does not work with relative paths
+        # "../fixture/chair_condition.json",
+        "/home/sugiura/workspace/isucon/isucon10-qual/webapp/fixture/chair_condition.json",
         "r",
     )
 )
 estate_search_condition = json.load(
     open(
-        "../fixture/estate_condition.json",
+        # VS Code's test does not work with relative paths
+        # "../fixture/estate_condition.json",
+        "/home/sugiura/workspace/isucon/isucon10-qual/webapp/fixture/estate_condition.json",
         "r",
     )
 )

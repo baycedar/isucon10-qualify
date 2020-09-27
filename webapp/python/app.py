@@ -17,16 +17,16 @@ NAZOTTE_LIMIT = 50
 chair_search_condition = json.load(
     open(
         # VS Code's test does not work with relative paths
-        # "../fixture/chair_condition.json",
-        "/home/sugiura/workspace/isucon/isucon10-qual/webapp/fixture/chair_condition.json",
+        "../fixture/chair_condition.json",
+        #"/home/sugiura/workspace/isucon/isucon10-qual/webapp/fixture/chair_condition.json",
         "r",
     )
 )
 estate_search_condition = json.load(
     open(
         # VS Code's test does not work with relative paths
-        # "../fixture/estate_condition.json",
-        "/home/sugiura/workspace/isucon/isucon10-qual/webapp/fixture/estate_condition.json",
+        "../fixture/estate_condition.json",
+        #"/home/sugiura/workspace/isucon/isucon10-qual/webapp/fixture/estate_condition.json",
         "r",
     )
 )
@@ -661,7 +661,7 @@ def post_estate():
     try:
         cur = cnx.cursor()
         for record in records:
-            geom = f"ST_MakePoint({record[6]}, {record[5]})"
+            geom = f"Point({record[6]} {record[5]})"
             record.append(geom)
             query = """
                 INSERT INTO estate (

@@ -707,6 +707,8 @@ def post_estate():
     try:
         cur = cnx.cursor()
         for record in records:
+            geom = f"ST_MakePoint({record[6]}, {record[5]})"
+            record.append(geom)
             query = """
                 INSERT INTO estate (
                     id,
@@ -720,9 +722,10 @@ def post_estate():
                     door_height,
                     door_width,
                     features,
-                    popularity
+                    popularity,
+                    geom_coords
                 ) VALUES (
-                    %s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s
+                    %s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s
                 )
             """
             cur.execute(query, record)

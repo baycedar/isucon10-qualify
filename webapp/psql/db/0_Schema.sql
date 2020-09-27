@@ -1,3 +1,4 @@
+CREATE EXTENSION postgis;
 DROP TABLE IF EXISTS estate, chair;
 
 CREATE TABLE estate

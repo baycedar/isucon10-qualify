@@ -36,7 +36,7 @@ if [ -f /var/log/postgresql/postgresql-12-main.log ]; then
   sudo mv /var/log/postgresql/postgresql-12-main.log /var/log/postgresql/postgresql-12-main_${NOW}.log
 fi
 sudo touch /var/log/postgresql/postgresql-12-main.log
-sudo chown postgres:adm /var/log/mysql/slow_query.log
+sudo chown postgres:adm /var/log/postgresql/postgresql-12-main.log
 sudo systemctl restart postgresql.service
 
 # reload app

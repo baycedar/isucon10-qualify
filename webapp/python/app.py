@@ -17,16 +17,16 @@ NAZOTTE_LIMIT = 50
 chair_search_condition = json.load(
     open(
         # VS Code's test does not work with relative paths
-        # "../fixture/chair_condition.json",
-        "/home/sugiura/workspace/isucon/isucon10-qual/webapp/fixture/chair_condition.json",
+        "../fixture/chair_condition.json",
+        #"/home/sugiura/workspace/isucon/isucon10-qual/webapp/fixture/chair_condition.json",
         "r",
     )
 )
 estate_search_condition = json.load(
     open(
         # VS Code's test does not work with relative paths
-        # "../fixture/estate_condition.json",
-        "/home/sugiura/workspace/isucon/isucon10-qual/webapp/fixture/estate_condition.json",
+        "../fixture/estate_condition.json",
+        #"/home/sugiura/workspace/isucon/isucon10-qual/webapp/fixture/estate_condition.json",
         "r",
     )
 )
@@ -63,7 +63,7 @@ def select_row(*args, **kwargs):
 
 @app.route("/initialize", methods=["POST"])
 def post_initialize():
-    subprocess.run("bash ../psql/db/init.sh")
+    subprocess.run("bash /home/isucon/isuumo/webapp/psql/db/init.sh", shell=True, check=True)
     return {"language": "python"}
 
 
@@ -200,9 +200,8 @@ def get_chair_search():
         params.append(args.get("color"))
 
     if args.get("features"):
-        for feature_confition in args.get("features").split(","):
-            conditions.append("features LIKE CONCAT('%', %s, '%')")
-            params.append(feature_confition)
+        for feature_condition in args.get("features").split(","):
+            conditions.append(f"features LIKE '%%{feature_condition}%%'")
 
     if len(conditions) == 0:
         raise BadRequest("Search condition not found")
@@ -301,7 +300,6 @@ def get_chair(chair_id):
 def post_chair_buy(chair_id):
     cnx = cnxpool.connect()
     try:
-        cnx.start_transaction()
         cur = cnx.cursor()
         cur.execute(
             f"""
@@ -387,9 +385,8 @@ def get_estate_search():
             params.append(rent["max"])
 
     if args.get("features"):
-        for feature_confition in args.get("features").split(","):
-            conditions.append("features LIKE CONCAT('%', %s, '%')")
-            params.append(feature_confition)
+        for feature_condition in args.get("features").split(","):
+            conditions.append(f"features LIKE '%%{feature_condition}%%'")
 
     if len(conditions) == 0:
         raise BadRequest("Search condition not found")
@@ -666,7 +663,6 @@ def post_chair():
     records = csv.reader(StringIO(flask.request.files["chairs"].read().decode()))
     cnx = cnxpool.connect()
     try:
-        cnx.start_transaction()
         cur = cnx.cursor()
         for record in records:
             query = """
@@ -705,10 +701,9 @@ def post_estate():
     records = csv.reader(StringIO(flask.request.files["estates"].read().decode()))
     cnx = cnxpool.connect()
     try:
-        cnx.start_transaction()
         cur = cnx.cursor()
         for record in records:
-            query = """
+            query = f"""
                 INSERT INTO estate (
                     id,
                     name,

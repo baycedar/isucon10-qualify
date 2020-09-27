@@ -71,7 +71,7 @@ def post_initialize():
 
 @app.route("/api/estate/low_priced", methods=["GET"])
 def get_estate_low_priced():
-    rows = select_all(
+    estates = select_all(
         f"""
         SELECT
             id,
@@ -82,8 +82,8 @@ def get_estate_low_priced():
             latitude,
             longitude,
             rent,
-            doorHeight,
-            doorWidth,
+            door_height,
+            door_width,
             features,
             popularity
         FROM
@@ -95,7 +95,7 @@ def get_estate_low_priced():
             {LIMIT}
         """,
     )
-    return {"estates": rows}
+    return {"estates": camelize(estates)}
 
 
 @app.route("/api/chair/low_priced", methods=["GET"])
@@ -352,10 +352,10 @@ def get_estate_search():
         else:
             raise BadRequest("doorHeightRangeId invalid")
         if door_height["min"] != -1:
-            conditions.append("doorHeight >= %s")
+            conditions.append("door_height >= %s")
             params.append(door_height["min"])
         if door_height["max"] != -1:
-            conditions.append("doorHeight < %s")
+            conditions.append("door_height < %s")
             params.append(door_height["max"])
 
     if args.get("doorWidthRangeId"):
@@ -366,10 +366,10 @@ def get_estate_search():
         else:
             raise BadRequest("doorWidthRangeId invalid")
         if door_width["min"] != -1:
-            conditions.append("doorWidth >= %s")
+            conditions.append("door_width >= %s")
             params.append(door_width["min"])
         if door_width["max"] != -1:
-            conditions.append("doorWidth < %s")
+            conditions.append("door_width < %s")
             params.append(door_width["max"])
 
     if args.get("rentRangeId"):
@@ -425,8 +425,8 @@ def get_estate_search():
             latitude,
             longitude,
             rent,
-            doorHeight,
-            doorWidth,
+            door_height,
+            door_width,
             features,
             popularity
         FROM
@@ -441,9 +441,9 @@ def get_estate_search():
         OFFSET
             {per_page * page}
     """
-    chairs = select_all(query, params)
+    estates = select_all(query, params)
 
-    return {"count": count, "estates": chairs}
+    return {"count": count, "estates": camelize(estates)}
 
 
 @app.route("/api/estate/search/condition", methods=["GET"])
@@ -464,8 +464,8 @@ def post_estate_req_doc(estate_id):
             latitude,
             longitude,
             rent,
-            doorHeight,
-            doorWidth,
+            door_height,
+            door_width,
             features,
             popularity
         FROM
@@ -506,8 +506,8 @@ def post_estate_nazotte():
                 latitude,
                 longitude,
                 rent,
-                doorHeight,
-                doorWidth,
+                door_height,
+                door_width,
                 features,
                 popularity
             FROM
@@ -529,6 +529,7 @@ def post_estate_nazotte():
     finally:
         cnx.close()
 
+    estates = camelize(estates)
     results = {"estates": estates, "count": len(estates)}
     return results
 
@@ -546,8 +547,8 @@ def get_estate(estate_id):
             latitude,
             longitude,
             rent,
-            doorHeight,
-            doorWidth,
+            door_height,
+            door_width,
             features,
             popularity
         FROM
@@ -558,7 +559,7 @@ def get_estate(estate_id):
     )
     if estate is None:
         raise NotFound()
-    return estate
+    return camelize(estate)
 
 
 @app.route("/api/recommended_estate/<int:chair_id>", methods=["GET"])
@@ -590,19 +591,19 @@ def get_recommended_estate(chair_id):
             latitude,
             longitude,
             rent,
-            doorHeight,
-            doorWidth,
+            door_height,
+            door_width,
             features,
             popularity
         FROM
             estate
         WHERE
-            (doorWidth >= %s AND doorHeight >= %s)
-            OR (doorWidth >= %s AND doorHeight >= %s)
-            OR (doorWidth >= %s AND doorHeight >= %s)
-            OR (doorWidth >= %s AND doorHeight >= %s)
-            OR (doorWidth >= %s AND doorHeight >= %s)
-            OR (doorWidth >= %s AND doorHeight >= %s)
+            (door_width >= %s AND door_height >= %s)
+            OR (door_width >= %s AND door_height >= %s)
+            OR (door_width >= %s AND door_height >= %s)
+            OR (door_width >= %s AND door_height >= %s)
+            OR (door_width >= %s AND door_height >= %s)
+            OR (door_width >= %s AND door_height >= %s)
         ORDER BY
             popularity DESC,
             id ASC
@@ -610,7 +611,7 @@ def get_recommended_estate(chair_id):
             {LIMIT}
     """
     estates = select_all(query, (w, h, w, d, h, w, h, d, d, w, d, h))
-    return {"estates": estates}
+    return {"estates": camelize(estates)}
 
 
 @app.route("/api/chair", methods=["POST"])
@@ -622,12 +623,12 @@ def post_chair():
     try:
         cur = cnx.cursor()
         for record in records:
-            record[1] = camelize(record[1])
-            record[2] = camelize(record[2])
-            record[3] = camelize(record[3])
-            record[8] = camelize(record[8])
-            record[9] = camelize(record[9])
-            record[10] = camelize(record[10])
+            record[1] = camelize(record[1]) if record[1] != "" else ""
+            record[2] = camelize(record[2]) if record[2] != "" else ""
+            record[3] = camelize(record[3]) if record[3] != "" else ""
+            record[8] = camelize(record[8]) if record[8] != "" else ""
+            record[9] = camelize(record[9]) if record[9] != "" else ""
+            record[10] = camelize(record[10]) if record[10] != "" else ""
             query = """
                 INSERT INTO chair (
                     id,
@@ -666,11 +667,11 @@ def post_estate():
     try:
         cur = cnx.cursor()
         for record in records:
-            record[1] = camelize(record[1])
-            record[2] = camelize(record[2])
-            record[3] = camelize(record[3])
-            record[4] = camelize(record[4])
-            record[10] = camelize(record[10])
+            record[1] = camelize(record[1]) if record[1] != "" else ""
+            record[2] = camelize(record[2]) if record[2] != "" else ""
+            record[3] = camelize(record[3]) if record[3] != "" else ""
+            record[4] = camelize(record[4]) if record[4] != "" else ""
+            record[10] = camelize(record[10]) if record[10] != "" else ""
             geom = f"Point({record[6]} {record[5]})"
             record.append(geom)
             query = """
@@ -683,8 +684,8 @@ def post_estate():
                     latitude,
                     longitude,
                     rent,
-                    doorHeight,
-                    doorWidth,
+                    door_height,
+                    door_width,
                     features,
                     popularity,
                     geom_coords

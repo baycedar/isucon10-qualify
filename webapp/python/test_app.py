@@ -8,5 +8,5 @@ def test_sample_function():
 
 
 def test_get_chair():
-    chair = app.get_chair(1)
+    chair = app.get_estate(1)
     assert 1 == 1

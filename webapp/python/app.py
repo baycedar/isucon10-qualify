@@ -291,9 +291,10 @@ def get_chair(chair_id):
             chair
         WHERE
             id = {chair_id}
+            AND stock > 0
         """,
     )
-    if chair is None or chair["stock"] <= 0:
+    if chair is None:
         raise NotFound()
     return camelize(chair)
 
@@ -305,29 +306,20 @@ def post_chair_buy(chair_id):
         cur = cnx.cursor()
         cur.execute(
             f"""
-            SELECT
-                id
-            FROM
-                chair
-            WHERE
-                id = {chair_id}
-                AND stock > 0
-            FOR UPDATE
-            """,
-        )
-        chair = cur.fetchone()
-        if chair is None:
-            raise NotFound()
-        cur.execute(
-            f"""
             UPDATE
                 chair
             SET
                 stock = stock - 1
             WHERE
                 id = {chair_id}
+                AND stock > 0
+            RETURNING
+                id
             """,
         )
+        result = cur.fetchone()
+        if result is None:
+            raise NotFound()
         cnx.commit()
         return {"ok": True}
     except Exception as e:

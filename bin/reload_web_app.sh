@@ -23,8 +23,15 @@ sudo cp -b ./conf/sysctl.conf /etc/sysctl.conf
 sudo sysctl -p
 
 # reload nginx
-sudo systemctl stop nginx.service
-sudo systemctl disable nginx.service
+sudo cp -b ./conf/nginx.conf /etc/nginx/nginx.conf
+sudo cp -b ./conf/nginx_site_isuumo.conf /etc/nginx/sites-available/isuumo.conf
+if [ -f /var/log/nginx/access.log ]; then
+  sudo mv /var/log/nginx/access.log /var/log/nginx/access_${NOW}.log
+fi
+sudo touch /var/log/nginx/access.log
+sudo chown www-data:adm /var/log/nginx/access.log
+sudo systemctl restart nginx.service
+sudo systemctl enable nginx.service
 
 # stop/disable mysql
 sudo systemctl stop mysql.service

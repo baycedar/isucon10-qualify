@@ -610,31 +610,11 @@ def get_recommended_estate(chair_id):
 def post_chair():
     if "chairs" not in flask.request.files:
         raise BadRequest()
-    records = csv.reader(StringIO(flask.request.files["chairs"].read().decode()))
     cnx = cnxpool.connect()
     try:
         cur = cnx.cursor()
-        for record in records:
-            query = """
-                INSERT INTO chair (
-                    id,
-                    name,
-                    description,
-                    thumbnail,
-                    price,
-                    height,
-                    width,
-                    depth,
-                    color,
-                    features,
-                    kind,
-                    popularity,
-                    stock
-                ) VALUES (
-                    %s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s
-                )
-            """
-            cur.execute(query, record)
+        f = StringIO(flask.request.files["chairs"].read().decode())
+        psycopg2.extras.copy_from(f, "chair")
         cnx.commit()
         return {"ok": True}, 201
     except Exception as e:

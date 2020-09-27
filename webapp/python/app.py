@@ -614,7 +614,7 @@ def post_chair():
     try:
         cur = cnx.cursor()
         f = StringIO(flask.request.files["chairs"].read().decode())
-        psycopg2.extras.copy_from(f, "chair")
+        cur.copy_from(f, "chair")
         cnx.commit()
         return {"ok": True}, 201
     except Exception as e:

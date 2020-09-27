@@ -486,21 +486,17 @@ def post_estate_nazotte():
     coordinates = flask.request.json["coordinates"]
     if len(coordinates) == 0:
         raise BadRequest()
-    longitudes = [c["longitude"] for c in coordinates]
-    latitudes = [c["latitude"] for c in coordinates]
-    bounding_box = {
-        "top_left_corner": {"longitude": min(longitudes), "latitude": min(latitudes)},
-        "bottom_right_corner": {
-            "longitude": max(longitudes),
-            "latitude": max(latitudes),
-        },
-    }
+    polygon_text = f"""
+        POLYGON((
+            {','.join(['{} {}'.format(c['longitude'], c['latitude']) for c in coordinates])}
+        ))
+    """
 
     cnx = cnxpool.connect()
     try:
         cur = cnx.cursor(cursor_factory=psycopg2.extras.DictCursor)
         cur.execute(
-            """
+            f"""
             SELECT
                 id,
                 name,
@@ -517,65 +513,23 @@ def post_estate_nazotte():
             FROM
                 estate
             WHERE
-                latitude <= %s
-                AND latitude >= %s
-                AND longitude <= %s
-                AND longitude >= %s
+                ST_Contains(
+                    ST_PolygonFromText('{polygon_text}'),
+                    geom_coords
+                )
             ORDER BY
                 popularity DESC,
                 id ASC
+            LIMIT
+                {NAZOTTE_LIMIT}
             """,
-            (
-                bounding_box["bottom_right_corner"]["latitude"],
-                bounding_box["top_left_corner"]["latitude"],
-                bounding_box["bottom_right_corner"]["longitude"],
-                bounding_box["top_left_corner"]["longitude"],
-            ),
         )
         estate_rows = cur.fetchall()
         estates = [dict(row) for row in estate_rows]
-        estates_in_polygon = []
-        for estate in estates:
-            polygon_text = f"""
-                POLYGON((
-                    {','.join(['{} {}'.format(c['latitude'], c['longitude']) for c in coordinates])}
-                ))
-            """
-            geom_text = f"POINT({estate['latitude']} {estate['longitude']})"
-            query = f"""
-                SELECT
-                    id,
-                    name,
-                    description,
-                    thumbnail,
-                    address,
-                    latitude,
-                    longitude,
-                    rent,
-                    door_height,
-                    door_width,
-                    features,
-                    popularity
-                FROM
-                    estate
-                WHERE
-                    id = {estate["id"]}
-                    AND ST_Contains(
-                            ST_PolygonFromText('{polygon_text}'),
-                            ST_GeomFromText('{geom_text}')
-                        )
-            """
-            cur.execute(query)
-            if len(cur.fetchall()) > 0:
-                estates_in_polygon.append(estate)
     finally:
         cnx.close()
 
-    results = {"estates": []}
-    for i, estate in enumerate(estates_in_polygon):
-        if i >= NAZOTTE_LIMIT:
-            break
-        results["estates"].append(camelize(estate))
+    results = {"estates": [camelize(estate) for estate in estates]}
     results["count"] = len(results["estates"])
     return results
 

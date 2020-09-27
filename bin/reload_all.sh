@@ -5,7 +5,7 @@ cd `dirname ${BASH_SOURCE:-${0}}`/../
 NOW=`date +%Y%m%d-%H%M%S`
 
 # reload daemon
-sudo cp -b ./conf/isuumo.python.service
+sudo cp -b ./conf/isuumo.python.service /etc/systemd/system/isuumo.python.service
 sudo systemctl daemon-reload
 
 # reload sysctl
@@ -14,6 +14,7 @@ sudo sysctl -p
 
 # reload nginx
 sudo cp -b ./conf/nginx.conf /etc/nginx/nginx.conf
+sudo cp -b ./conf/nginx_site_isuumo.conf /etc/nginx/sites-available/isuumo.conf
 if [ -f /var/log/nginx/access.log ]; then
   sudo mv /var/log/nginx/access.log /var/log/nginx/access_${NOW}.log
 fi

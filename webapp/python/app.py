@@ -14,13 +14,13 @@ NAZOTTE_LIMIT = 50
 
 chair_search_condition = json.load(
     open(
-        "/home/sugiura/workspace/isucon/isucon10-qual/webapp/fixture/chair_condition.json",
+        "../fixture/chair_condition.json",
         "r",
     )
 )
 estate_search_condition = json.load(
     open(
-        "/home/sugiura/workspace/isucon/isucon10-qual/webapp/fixture/estate_condition.json",
+        "../fixture/estate_condition.json",
         "r",
     )
 )
@@ -583,8 +583,8 @@ def post_estate_nazotte():
                 WHERE
                     id = {estate["id"]}
                     AND ST_Contains(
-                            ST_PolygonFromText({polygon_text}),
-                            ST_GeomFromText({geom_text})
+                            ST_PolygonFromText('{polygon_text}'),
+                            ST_GeomFromText('{geom_text}')
                         )
             """
             cur.execute(query)

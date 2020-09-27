@@ -17,16 +17,16 @@ NAZOTTE_LIMIT = 50
 chair_search_condition = json.load(
     open(
         # VS Code's test does not work with relative paths
-        "../fixture/chair_condition.json",
-        #"/home/sugiura/workspace/isucon/isucon10-qual/webapp/fixture/chair_condition.json",
+        # "../fixture/chair_condition.json",
+        "/home/sugiura/workspace/isucon/isucon10-qual/webapp/fixture/chair_condition.json",
         "r",
     )
 )
 estate_search_condition = json.load(
     open(
         # VS Code's test does not work with relative paths
-        "../fixture/estate_condition.json",
-        #"/home/sugiura/workspace/isucon/isucon10-qual/webapp/fixture/estate_condition.json",
+        # "../fixture/estate_condition.json",
+        "/home/sugiura/workspace/isucon/isucon10-qual/webapp/fixture/estate_condition.json",
         "r",
     )
 )
@@ -63,7 +63,9 @@ def select_row(*args, **kwargs):
 
 @app.route("/initialize", methods=["POST"])
 def post_initialize():
-    subprocess.run("bash /home/isucon/isuumo/webapp/psql/db/init.sh", shell=True, check=True)
+    subprocess.run(
+        "bash /home/isucon/isuumo/webapp/psql/db/init.sh", shell=True, check=True
+    )
     return {"language": "python"}
 
 
@@ -611,19 +613,9 @@ def get_recommended_estate(chair_id):
     chair = select_row(
         f"""
         SELECT
-            id,
-            name,
-            description,
-            thumbnail,
-            price,
             height,
             width,
-            depth,
-            color,
-            features,
-            kind,
-            popularity,
-            stock
+            depth
         FROM
             chair
         WHERE
@@ -636,7 +628,19 @@ def get_recommended_estate(chair_id):
         )
     w, h, d = chair["width"], chair["height"], chair["depth"]
     query = f"""
-        SELECT *
+        SELECT
+            id,
+            name,
+            description,
+            thumbnail,
+            address,
+            latitude,
+            longitude,
+            rent,
+            door_height,
+            door_width,
+            features,
+            popularity
         FROM
             estate
         WHERE
@@ -703,7 +707,7 @@ def post_estate():
     try:
         cur = cnx.cursor()
         for record in records:
-            query = f"""
+            query = """
                 INSERT INTO estate (
                     id,
                     name,

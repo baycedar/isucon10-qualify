@@ -9,7 +9,7 @@ PIDFile=/home/isucon/isuumo/webapp/python/server.pid
 
 User=isucon
 Group=isucon
-ExecStart=/home/isucon/isuumo/webapp/python/venv/bin/gunicorn app:app -b '0.0.0.0:1323' -w 10 --error-logfile error.log --capture-output
+ExecStart=/home/isucon/isuumo/webapp/python/venv/bin/gunicorn app:app -b '0.0.0.0:1323' -w 5 --error-logfile error.log --capture-output
 
 Restart   = always
 Type      = simple

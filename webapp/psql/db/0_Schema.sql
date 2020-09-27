@@ -12,8 +12,8 @@ CREATE TABLE estate
     latitude    DOUBLE PRECISION    NOT NULL,
     longitude   DOUBLE PRECISION    NOT NULL,
     rent        INTEGER             NOT NULL,
-    door_height INTEGER             NOT NULL,
-    door_width  INTEGER             NOT NULL,
+    doorHeight INTEGER             NOT NULL,
+    doorWidth  INTEGER             NOT NULL,
     features    VARCHAR(64)         NOT NULL,
     popularity  INTEGER             NOT NULL,
     geom_coords GEOMETRY DEFAULT ST_MakePoint(0, 0) NOT NULL

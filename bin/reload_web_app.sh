@@ -30,10 +30,6 @@ sudo systemctl enable nginx.service
 sudo systemctl stop mysql.service
 sudo systemctl disable mysql.service
 
-# stop/disable postgresql
-sudo systemctl stop postgresql.service
-sudo systemctl disable postgresql.service
-
 # reload app
 sudo systemctl stop isuumo.go.service
 sudo systemctl disable isuumo.go.service

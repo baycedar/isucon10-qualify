@@ -9,7 +9,7 @@ from werkzeug.exceptions import BadRequest, NotFound
 from sqlalchemy.pool import QueuePool
 from humps import camelize
 import psycopg2
-import psycopg2.extras
+from psycopg2.extras import RealDictCursor, execute_values
 
 LIMIT = 20
 NAZOTTE_LIMIT = 50
@@ -41,17 +41,16 @@ psql_connection_env = {
     "dbname": getenv("PGDATABASE", "isuumo"),
 }
 
-cnxpool = QueuePool(lambda: psycopg2.connect(**psql_connection_env), pool_size=10)
+cnxpool = QueuePool(lambda: psycopg2.connect(**psql_connection_env, cursor_factory=RealDictCursor), pool_size=10)
 
 
 def select_all(query, *args):
     cnx = cnxpool.connect()
     try:
-        cur = cnx.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cur = cnx.cursor()
         cur.execute(query, *args)
         rows = cur.fetchall()
-        dict_results = [dict(row) for row in rows]
-        return dict_results
+        return rows
     finally:
         cnx.close()
 
@@ -472,43 +471,35 @@ def post_estate_nazotte():
             {','.join(['{} {}'.format(c['longitude'], c['latitude']) for c in coordinates])}
         ))
     """
-
-    cnx = cnxpool.connect()
-    try:
-        cur = cnx.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        cur.execute(
-            f"""
-            SELECT
-                id,
-                name,
-                description,
-                thumbnail,
-                address,
-                latitude,
-                longitude,
-                rent,
-                door_height,
-                door_width,
-                features,
-                popularity
-            FROM
-                estate
-            WHERE
-                ST_Contains(
-                    ST_PolygonFromText('{polygon_text}'),
-                    geom_coords
-                )
-            ORDER BY
-                popularity DESC,
-                id ASC
-            LIMIT
-                {NAZOTTE_LIMIT}
-            """,
-        )
-        estate_rows = cur.fetchall()
-        estates = [dict(row) for row in estate_rows]
-    finally:
-        cnx.close()
+    estates = select_all(
+        f"""
+        SELECT
+            id,
+            name,
+            description,
+            thumbnail,
+            address,
+            latitude,
+            longitude,
+            rent,
+            door_height,
+            door_width,
+            features,
+            popularity
+        FROM
+            estate
+        WHERE
+            ST_Contains(
+                ST_PolygonFromText('{polygon_text}'),
+                geom_coords
+            )
+        ORDER BY
+            popularity DESC,
+            id ASC
+        LIMIT
+            {NAZOTTE_LIMIT}
+        """
+    )
 
     results = {"estates": [camelize(estate) for estate in estates]}
     results["count"] = len(results["estates"])
@@ -613,7 +604,7 @@ def post_chair():
             ) VALUES
                 %s
         """
-        psycopg2.extras.execute_values(cur, query, records)
+        execute_values(cur, query, records)
         cnx.commit()
         return {"ok": True}, 201
     except Exception as e:
@@ -651,7 +642,7 @@ def post_estate():
             ) VALUES
                 %s
         """
-        psycopg2.extras.execute_values(cur, query, records)
+        execute_values(cur, query, records)
         cnx.commit()
         return {"ok": True}, 201
     except Exception as e:

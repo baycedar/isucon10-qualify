@@ -448,18 +448,7 @@ def post_estate_req_doc(estate_id):
     estate = select_row(
         f"""
         SELECT
-            id,
-            name,
-            description,
-            thumbnail,
-            address,
-            latitude,
-            longitude,
-            rent,
-            door_height,
-            door_width,
-            features,
-            popularity
+            id
         FROM
             estate
         WHERE

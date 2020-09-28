@@ -41,7 +41,7 @@ psql_connection_env = {
     "dbname": getenv("PGDATABASE", "isuumo"),
 }
 
-cnxpool = QueuePool(lambda: psycopg2.connect(**psql_connection_env, cursor_factory=RealDictCursor), pool_size=15)
+cnxpool = QueuePool(lambda: psycopg2.connect(**psql_connection_env, cursor_factory=RealDictCursor), pool_size=20)
 
 
 def select_all(query, *args):

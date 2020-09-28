@@ -545,53 +545,44 @@ def get_estate(estate_id):
 
 @app.route("/api/recommended_estate/<int:chair_id>", methods=["GET"])
 def get_recommended_estate(chair_id):
-    chair = select_row(
-        f"""
-        SELECT
-            height,
-            width,
-            depth
-        FROM
-            chair
-        WHERE
-            id = {chair_id}
-        """,
-    )
-    if chair is None:
+    query = f"""
+	SELECT
+	    e.id,
+	    e.name,
+	    e.description,
+	    e.thumbnail,
+	    e.address,
+	    e.latitude,
+	    e.longitude,
+	    e.rent,
+	    e.door_height,
+	    e.door_width,
+	    e.features,
+	    e.popularity
+	FROM
+	    estate AS e,
+	    chair AS c
+	WHERE
+	    c.id = {chair_id}
+	    AND (
+		(door_width >= c.width AND door_height >= c.height)
+		OR (door_width >= c.width AND door_height >= c.depth)
+		OR (door_width >= c.height AND door_height >= c.width)
+		OR (door_width >= c.height AND door_height >= c.depth)
+		OR (door_width >= c.depth AND door_height >= c.width)
+		OR (door_width >= c.depth AND door_height >= c.height)
+	    )
+	ORDER BY
+	    e.popularity DESC,
+	    e.id ASC
+	LIMIT
+	    {LIMIT}
+    """
+    estates = select_all(query)
+    if estates is None:
         raise BadRequest(
             f"Invalid format searchRecommendedEstateWithChair id : {chair_id}"
         )
-    w, h, d = chair["width"], chair["height"], chair["depth"]
-    query = f"""
-        SELECT
-            id,
-            name,
-            description,
-            thumbnail,
-            address,
-            latitude,
-            longitude,
-            rent,
-            door_height,
-            door_width,
-            features,
-            popularity
-        FROM
-            estate
-        WHERE
-            (door_width >= %s AND door_height >= %s)
-            OR (door_width >= %s AND door_height >= %s)
-            OR (door_width >= %s AND door_height >= %s)
-            OR (door_width >= %s AND door_height >= %s)
-            OR (door_width >= %s AND door_height >= %s)
-            OR (door_width >= %s AND door_height >= %s)
-        ORDER BY
-            popularity DESC,
-            id ASC
-        LIMIT
-            {LIMIT}
-    """
-    estates = select_all(query, (w, h, w, d, h, w, h, d, d, w, d, h))
     return {"estates": camelize(estates)}
 
 

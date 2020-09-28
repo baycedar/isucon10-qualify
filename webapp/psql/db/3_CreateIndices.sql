@@ -19,3 +19,8 @@ CREATE INDEX ON estate USING btree (door_width);
 CREATE INDEX ON estate USING btree (latitude);
 CREATE INDEX ON estate USING btree (longitude);
 CREATE INDEX ON estate USING gist (geom_coords);
+
+-- vacuum and analyze tables
+VACUUM ANALYZE estate;
+VACUUM ANALYZE chair;
+

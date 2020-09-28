@@ -9,7 +9,6 @@ CREATE INDEX ON chair USING btree (popularity DESC, id ASC);
 CREATE INDEX ON estate USING btree (popularity DESC, id ASC);
 
 -- indices for WHERE or JOIN
-CREATE INDEX ON chair USING btree (stock);
 CREATE INDEX ON chair USING btree (height);
 CREATE INDEX ON chair USING btree (width);
 CREATE INDEX ON chair USING btree (depth);

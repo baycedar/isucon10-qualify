@@ -36,8 +36,8 @@ sudo systemctl disable postgresql.service
 
 # reload redis
 sudo cp -b ./conf/redis.conf /etc/redis/redis.conf
-sudo systemctl start redis.service
-sudo systemctl enable redis.service
+sudo systemctl restart redis-server.service
+sudo systemctl enable redis-server.service
 
 # reload app
 sudo systemctl stop isuumo.go.service

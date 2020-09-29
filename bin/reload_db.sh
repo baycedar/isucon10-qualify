@@ -30,6 +30,10 @@ sudo chown postgres:adm /var/log/postgresql/postgresql-12-main.log
 sudo systemctl restart postgresql.service
 sudo systemctl enable postgresql.service
 
+# reload redis
+sudo systemctl stop redis.service
+sudo systemctl disable redis.service
+
 # reload app
 sudo systemctl stop isuumo.go.service
 sudo systemctl disable isuumo.go.service

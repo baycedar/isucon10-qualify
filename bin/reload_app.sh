@@ -27,6 +27,11 @@ sudo systemctl disable mysql.service
 sudo systemctl stop postgresql.service
 sudo systemctl disable postgresql.service
 
+# reload redis
+sudo cp -b ./conf/redis.conf /etc/redis/redis.conf
+sudo systemctl start redis.service
+sudo systemctl enable redis.service
+
 # reload app
 sudo systemctl stop isuumo.go.service
 sudo systemctl disable isuumo.go.service

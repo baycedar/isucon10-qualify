@@ -517,11 +517,11 @@ def post_estate_nazotte():
 
 @app.route("/api/estate/<int:estate_id>", methods=["GET"])
 def get_estate(estate_id):
-    #r_cnx = redis.Redis(connection_pool=redis_pool)
-    #estate_json = r_cnx.get(f"estate:{estate_id}")
-    #if estate_json is not None:
-    #    estate = json.loads(estate_json)
-    #    return camelize(estate)
+    r_cnx = redis.Redis(connection_pool=redis_pool)
+    estate_json = r_cnx.get(f"estate:{estate_id}")
+    if estate_json is not None:
+        estate = json.loads(estate_json.replace("\u2014", "\u2015"))
+        return camelize(estate)
 
     estate = select_row(
         f"""

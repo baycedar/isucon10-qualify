@@ -10,6 +10,7 @@ from sqlalchemy.pool import QueuePool
 from humps import camelize
 import psycopg2
 from psycopg2.extras import RealDictCursor, execute_values
+import redis
 
 LIMIT = 20
 NAZOTTE_LIMIT = 50
@@ -43,6 +44,10 @@ psql_connection_env = {
 
 cnxpool = QueuePool(lambda: psycopg2.connect(**psql_connection_env, cursor_factory=RealDictCursor), pool_size=20)
 
+redis_pool = redis.ConnectionPool(
+    connection_class=redis.UnixDomainSocketConnection,
+    path='/var/run/redis/redis-server.sock',
+)
 
 def select_all(query, *args):
     cnx = cnxpool.connect()
@@ -508,29 +513,34 @@ def post_estate_nazotte():
 
 @app.route("/api/estate/<int:estate_id>", methods=["GET"])
 def get_estate(estate_id):
-    estate = select_row(
-        f"""
-        SELECT
-            id,
-            name,
-            description,
-            thumbnail,
-            address,
-            latitude,
-            longitude,
-            rent,
-            door_height,
-            door_width,
-            features,
-            popularity
-        FROM
-            estate
-        WHERE
-            id = {estate_id}
-        """,
-    )
+    r_cnx = redis.Redis(connection_pool=redis_pool)
+    estate = r_cnx.get(f"estate:{estate_id}")
     if estate is None:
-        raise NotFound()
+        estate = select_row(
+            f"""
+            SELECT
+                id,
+                name,
+                description,
+                thumbnail,
+                address,
+                latitude,
+                longitude,
+                rent,
+                door_height,
+                door_width,
+                features,
+                popularity
+            FROM
+                estate
+            WHERE
+                id = {estate_id}
+            """,
+        )
+        if estate is None:
+            raise NotFound()
+    else:
+        estate = json.loads(estate)
     return camelize(estate)
 
 

@@ -19,7 +19,7 @@ chair_search_condition = json.load(
     open(
         # VS Code's test does not work with relative paths
         "../fixture/chair_condition.json",
-        #"/home/sugiura/workspace/isucon/isucon10-qual/webapp/fixture/chair_condition.json",
+        # "/home/sugiura/workspace/isucon/isucon10-qual/webapp/fixture/chair_condition.json",
         "r",
     )
 )
@@ -27,7 +27,7 @@ estate_search_condition = json.load(
     open(
         # VS Code's test does not work with relative paths
         "../fixture/estate_condition.json",
-        #"/home/sugiura/workspace/isucon/isucon10-qual/webapp/fixture/estate_condition.json",
+        # "/home/sugiura/workspace/isucon/isucon10-qual/webapp/fixture/estate_condition.json",
         "r",
     )
 )
@@ -42,12 +42,16 @@ psql_connection_env = {
     "dbname": getenv("PGDATABASE", "isuumo"),
 }
 
-cnxpool = QueuePool(lambda: psycopg2.connect(**psql_connection_env, cursor_factory=RealDictCursor), pool_size=20)
+cnxpool = QueuePool(
+    lambda: psycopg2.connect(**psql_connection_env, cursor_factory=RealDictCursor),
+    pool_size=20,
+)
 
 redis_pool = redis.ConnectionPool(
     connection_class=redis.UnixDomainSocketConnection,
-    path='/var/run/redis/redis-server.sock',
+    path="/var/run/redis/redis-server.sock",
 )
+
 
 def select_all(query, *args):
     cnx = cnxpool.connect()
@@ -553,37 +557,37 @@ def get_estate(estate_id):
 @app.route("/api/recommended_estate/<int:chair_id>", methods=["GET"])
 def get_recommended_estate(chair_id):
     query = f"""
-	SELECT
-	    e.id,
-	    e.name,
-	    e.description,
-	    e.thumbnail,
-	    e.address,
-	    e.latitude,
-	    e.longitude,
-	    e.rent,
-	    e.door_height,
-	    e.door_width,
-	    e.features,
-	    e.popularity
-	FROM
-	    estate AS e,
-	    chair AS c
-	WHERE
-	    c.id = {chair_id}
-	    AND (
-		(door_width >= c.width AND door_height >= c.height)
-		OR (door_width >= c.width AND door_height >= c.depth)
-		OR (door_width >= c.height AND door_height >= c.width)
-		OR (door_width >= c.height AND door_height >= c.depth)
-		OR (door_width >= c.depth AND door_height >= c.width)
-		OR (door_width >= c.depth AND door_height >= c.height)
-	    )
-	ORDER BY
-	    e.popularity DESC,
-	    e.id ASC
-	LIMIT
-	    {LIMIT}
+    SELECT
+        e.id,
+        e.name,
+        e.description,
+        e.thumbnail,
+        e.address,
+        e.latitude,
+        e.longitude,
+        e.rent,
+        e.door_height,
+        e.door_width,
+        e.features,
+        e.popularity
+    FROM
+        estate AS e,
+        chair AS c
+    WHERE
+        c.id = {chair_id}
+        AND (
+        (door_width >= c.width AND door_height >= c.height)
+        OR (door_width >= c.width AND door_height >= c.depth)
+        OR (door_width >= c.height AND door_height >= c.width)
+        OR (door_width >= c.height AND door_height >= c.depth)
+        OR (door_width >= c.depth AND door_height >= c.width)
+        OR (door_width >= c.depth AND door_height >= c.height)
+        )
+    ORDER BY
+        e.popularity DESC,
+        e.id ASC
+    LIMIT
+        {LIMIT}
     """
     estates = select_all(query)
     if estates is None:

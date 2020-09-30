@@ -1,0 +1,5 @@
+CREATE ROLE isucon WITH
+  SUPERUSER
+  CREATEDB
+  LOGIN
+  PASSWORD 'isucon';

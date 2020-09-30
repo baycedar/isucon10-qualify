@@ -33,22 +33,34 @@ estate_search_condition = json.load(
 
 app = flask.Flask(__name__)
 
-psql_connection_env = {
-    "host": getenv("PGHOST", "127.0.0.1"),
+estate_connection_env = {
+    "host": getenv("PG_ESTATE_HOST", "127.0.0.1"),
     "port": getenv("PGPORT", 5432),
     "user": getenv("PGUSER", "isucon"),
     "password": getenv("PGPASSWORD", "isucon"),
     "dbname": getenv("PGDATABASE", "isuumo"),
 }
 
-cnxpool = QueuePool(
-    lambda: psycopg2.connect(**psql_connection_env, cursor_factory=RealDictCursor),
+chair_connection_env = {
+    "host": getenv("PG_CHAIR_HOST", "127.0.0.1"),
+    "port": getenv("PGPORT", 5432),
+    "user": getenv("PGUSER", "isucon"),
+    "password": getenv("PGPASSWORD", "isucon"),
+    "dbname": getenv("PGDATABASE", "isuumo"),
+}
+
+estate_pool = QueuePool(
+    lambda: psycopg2.connect(**estate_connection_env, cursor_factory=RealDictCursor),
+    pool_size=20,
+)
+chair_pool = QueuePool(
+    lambda: psycopg2.connect(**chair_connection_env, cursor_factory=RealDictCursor),
     pool_size=20,
 )
 
 
-def select_all(query, *args):
-    cnx = cnxpool.connect()
+def select_estates(query, *args):
+    cnx = estate_pool.connect()
     try:
         cur = cnx.cursor()
         cur.execute(query, *args)
@@ -58,8 +70,24 @@ def select_all(query, *args):
         cnx.close()
 
 
-def select_row(*args, **kwargs):
-    rows = select_all(*args, **kwargs)
+def select_estate(*args, **kwargs):
+    rows = select_estates(*args, **kwargs)
+    return rows[0] if len(rows) > 0 else None
+
+
+def select_chairs(query, *args):
+    cnx = chair_pool.connect()
+    try:
+        cur = cnx.cursor()
+        cur.execute(query, *args)
+        rows = cur.fetchall()
+        return rows
+    finally:
+        cnx.close()
+
+
+def select_chair(*args, **kwargs):
+    rows = select_chairs(*args, **kwargs)
     return rows[0] if len(rows) > 0 else None
 
 
@@ -73,7 +101,7 @@ def post_initialize():
 
 @app.route("/api/estate/low_priced", methods=["GET"])
 def get_estate_low_priced():
-    rows = select_all(
+    rows = select_estates(
         f"""
         SELECT
             id,
@@ -102,7 +130,7 @@ def get_estate_low_priced():
 
 @app.route("/api/chair/low_priced", methods=["GET"])
 def get_chair_low_priced():
-    rows = select_all(
+    rows = select_chairs(
         f"""
         SELECT
             id,
@@ -232,7 +260,7 @@ def get_chair_search():
         WHERE
             {search_condition}
     """
-    count = select_row(query, params)["count"]
+    count = select_chair(query, params)["count"]
 
     query = f"""
         SELECT
@@ -261,7 +289,7 @@ def get_chair_search():
         OFFSET
             {per_page * page}
     """
-    chairs = select_all(query, params)
+    chairs = select_chairs(query, params)
 
     return {"count": count, "chairs": camelize(chairs)}
 
@@ -273,7 +301,7 @@ def get_chair_search_condition():
 
 @app.route("/api/chair/<int:chair_id>", methods=["GET"])
 def get_chair(chair_id):
-    chair = select_row(
+    chair = select_chair(
         f"""
         SELECT
             id,
@@ -303,7 +331,7 @@ def get_chair(chair_id):
 
 @app.route("/api/chair/buy/<int:chair_id>", methods=["POST"])
 def post_chair_buy(chair_id):
-    cnx = cnxpool.connect()
+    cnx = chair_pool.connect()
     try:
         cur = cnx.cursor()
         cur.execute(
@@ -407,7 +435,7 @@ def get_estate_search():
         WHERE
             {search_condition}
     """
-    count = select_row(query, params)["count"]
+    count = select_estate(query, params)["count"]
 
     query = f"""
         SELECT
@@ -435,7 +463,7 @@ def get_estate_search():
         OFFSET
             {per_page * page}
     """
-    chairs = select_all(query, params)
+    chairs = select_estates(query, params)
 
     return {"count": count, "estates": camelize(chairs)}
 
@@ -447,7 +475,7 @@ def get_estate_search_condition():
 
 @app.route("/api/estate/req_doc/<int:estate_id>", methods=["POST"])
 def post_estate_req_doc(estate_id):
-    estate = select_row(
+    estate = select_estate(
         f"""
         SELECT
             id
@@ -474,7 +502,7 @@ def post_estate_nazotte():
             {','.join(['{} {}'.format(c['longitude'], c['latitude']) for c in coordinates])}
         ))
     """
-    estates = select_all(
+    estates = select_estates(
         f"""
         SELECT
             id,
@@ -511,7 +539,7 @@ def post_estate_nazotte():
 
 @app.route("/api/estate/<int:estate_id>", methods=["GET"])
 def get_estate(estate_id):
-    estate = select_row(
+    estate = select_estate(
         f"""
         SELECT
             id,
@@ -541,42 +569,53 @@ def get_estate(estate_id):
 def get_recommended_estate(chair_id):
     query = f"""
     SELECT
-        e.id,
-        e.name,
-        e.description,
-        e.thumbnail,
-        e.address,
-        e.latitude,
-        e.longitude,
-        e.rent,
-        e.door_height,
-        e.door_width,
-        e.features,
-        e.popularity
+        width,
+        height,
+        depth
     FROM
-        estate AS e,
-        chair AS c
+        chair
     WHERE
-        c.id = {chair_id}
-        AND (
-        (door_width >= c.width AND door_height >= c.height)
-        OR (door_width >= c.width AND door_height >= c.depth)
-        OR (door_width >= c.height AND door_height >= c.width)
-        OR (door_width >= c.height AND door_height >= c.depth)
-        OR (door_width >= c.depth AND door_height >= c.width)
-        OR (door_width >= c.depth AND door_height >= c.height)
-        )
-    ORDER BY
-        e.popularity DESC,
-        e.id ASC
-    LIMIT
-        {LIMIT}
+        id = {chair_id}
     """
-    estates = select_all(query)
-    if estates is None:
+    chair = select_chair(query)
+    if chair is None:
         raise BadRequest(
             f"Invalid format searchRecommendedEstateWithChair id : {chair_id}"
         )
+    c_width = chair["width"]
+    c_height = chair["height"]
+    c_depth = chair["depth"]
+
+    query = f"""
+    SELECT
+        id,
+        name,
+        description,
+        thumbnail,
+        address,
+        latitude,
+        longitude,
+        rent,
+        door_height,
+        door_width,
+        features,
+        popularity
+    FROM
+        estate
+    WHERE
+        (door_width >= {c_width} AND door_height >= {c_height})
+        OR (door_width >= {c_width} AND door_height >= {c_depth})
+        OR (door_width >= {c_height} AND door_height >= {c_width})
+        OR (door_width >= {c_height} AND door_height >= {c_depth})
+        OR (door_width >= {c_depth} AND door_height >= {c_width})
+        OR (door_width >= {c_depth} AND door_height >= {c_height})
+    ORDER BY
+        popularity DESC,
+        id ASC
+    LIMIT
+        {LIMIT}
+    """
+    estates = select_estates(query)
     return {"estates": camelize(estates)}
 
 
@@ -586,7 +625,7 @@ def post_chair():
         raise BadRequest()
     records = csv.reader(StringIO(flask.request.files["chairs"].read().decode()))
     records = [tuple(record) for record in records]
-    cnx = cnxpool.connect()
+    cnx = chair_pool.connect()
     try:
         cur = cnx.cursor()
         query = """
@@ -624,7 +663,7 @@ def post_estate():
     records = csv.reader(StringIO(flask.request.files["estates"].read().decode()))
     records = [rec + [f"Point({rec[6]} {rec[5]})"] for rec in records]
     records = [tuple(rec) for rec in records]
-    cnx = cnxpool.connect()
+    cnx = estate_pool.connect()
     try:
         cur = cnx.cursor()
         query = """

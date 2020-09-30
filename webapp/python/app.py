@@ -10,7 +10,6 @@ from sqlalchemy.pool import QueuePool
 from humps import camelize
 import psycopg2
 from psycopg2.extras import RealDictCursor, execute_values
-import redis
 
 LIMIT = 20
 NAZOTTE_LIMIT = 50
@@ -45,11 +44,6 @@ psql_connection_env = {
 cnxpool = QueuePool(
     lambda: psycopg2.connect(**psql_connection_env, cursor_factory=RealDictCursor),
     pool_size=20,
-)
-
-redis_pool = redis.ConnectionPool(
-    connection_class=redis.UnixDomainSocketConnection,
-    path="/var/run/redis/redis-server.sock",
 )
 
 
@@ -453,10 +447,6 @@ def get_estate_search_condition():
 
 @app.route("/api/estate/req_doc/<int:estate_id>", methods=["POST"])
 def post_estate_req_doc(estate_id):
-    r_cnx = redis.Redis(connection_pool=redis_pool)
-    if r_cnx.exists(f"estate:{estate_id}"):
-        return {"ok": True}
-
     estate = select_row(
         f"""
         SELECT
@@ -521,13 +511,6 @@ def post_estate_nazotte():
 
 @app.route("/api/estate/<int:estate_id>", methods=["GET"])
 def get_estate(estate_id):
-    r_cnx = redis.Redis(connection_pool=redis_pool)
-    estate_json = r_cnx.get(f"estate:{estate_id}")
-    if estate_json is not None:
-        estate_json = estate_json.decode("utf-8").replace("\u2014", "\u2015")
-        estate = json.loads(estate_json)
-        return camelize(estate)
-
     estate = select_row(
         f"""
         SELECT

@@ -51,11 +51,11 @@ chair_connection_env = {
 
 estate_pool = QueuePool(
     lambda: psycopg2.connect(**estate_connection_env, cursor_factory=RealDictCursor),
-    pool_size=20,
+    pool_size=10,
 )
 chair_pool = QueuePool(
     lambda: psycopg2.connect(**chair_connection_env, cursor_factory=RealDictCursor),
-    pool_size=20,
+    pool_size=10,
 )
 
 

@@ -257,7 +257,7 @@ def get_chair_search():
 
     if args.get("features"):
         for feature_condition in args.get("features").split(","):
-            conditions.append(f"features LIKE '%%{feature_condition}%%'")
+            conditions.append(f"features LIKE '%{feature_condition}%'")
 
     if len(conditions) == 0:
         raise BadRequest("Search condition not found")

@@ -38,6 +38,7 @@
     "PGUSER",
     "PSQL",
     "VARCHAR",
+    "blks",
     "btree",
     "camelize",
     "cnxpool",
@@ -57,6 +58,7 @@
     "pyenv",
     "skinparam",
     "startuml",
+    "stddev",
     "venv",
     "werkzeug"
   ],

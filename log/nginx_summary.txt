@@ -1,153 +1,153 @@
 Top 20 Sort By Count
 Count    Total    Mean  Stddev    Min  P50.0  P90.0  P95.0  P99.0    Max   2xx  3xx  4xx  5xx  TotalBytes   MinBytes  MeanBytes   MaxBytes  Request
- 2979  173.925  0.0584  0.0447  0.002  0.054  0.116  0.129  0.155  0.253  2960    0   19    0     2595471          0        871       1096  /api/estate/<int:estate_id>
- 2249  148.143  0.0659  0.0446  0.003  0.064  0.124  0.135  0.157  0.244  2248    0    1    0    39317112          0      17482      17605  GET /api/estate/low_priced HTTP/1.1
- 2249  154.547  0.0687  0.0449  0.004  0.067  0.127  0.138  0.161  0.245  2248    0    1    0    37100317          0      16496      16562  GET /api/chair/low_priced HTTP/1.1
- 1944  117.981  0.0607  0.0447  0.001  0.060  0.118  0.128  0.153  0.239  1935    0    9    0       23220          0         11         12  /api/estate/req_doc/<int:estate_id>
- 1235   99.725  0.0807  0.0447  0.002  0.085  0.135  0.149  0.173  0.233  1232    0    3    0    29478074          0      23868      45340  POST /api/estate/nazotte HTTP/1.1
- 1022   35.379  0.0346  0.0304  0.000  0.026  0.071  0.112  0.147  0.219   945    0    0   77    20743338        222      20296      22858  /api/estate/search?page=<int>&perPage=<int>&rentRangeId=<int>
- 1019   51.790  0.0508  0.0492  0.000  0.031  0.127  0.145  0.165  0.218   757    0    1  261    16683395          0      16372      23248  GET /api/estate/search?doorHeightRangeId=<int>&page=<int>&perPage=<int>
-  996   54.152  0.0544  0.0493  0.000  0.036  0.126  0.140  0.164  0.245   774    0    1  221    17032572          0      17100      22789  /api/estate/search?doorWidthRangeId=<int>&page=<int>&perPage=<int>
-  942   55.203  0.0586  0.0469  0.002  0.046  0.125  0.134  0.164  0.199   927    0   15    0      748826          0        794       1005  /api/chair/<int:chair_id>
-  918   58.381  0.0636  0.0475  0.005  0.051  0.129  0.141  0.166  0.209   915    0    3    0    15965417          0      17391      18156  /api/recommended_estate/<int:chair_id>
-  573   25.998  0.0454  0.0496  0.000  0.029  0.119  0.135  0.169  0.601   466    0    2  105     9382882          0      16375      20969  /api/chair/search?heightRangeId=<int>&page=<int>&perPage=<int>
-  556   27.767  0.0499  0.0443  0.000  0.037  0.111  0.119  0.141  0.216   556    0    0    0     1359976       2446       2446       2446  GET /api/estate/search/condition HTTP/1.1
-  463   23.620  0.0510  0.0451  0.000  0.037  0.113  0.126  0.142  0.179   463    0    0    0     1356127       2929       2929       2929  GET /api/chair/search/condition HTTP/1.1
-  458   13.480  0.0294  0.0220  0.000  0.026  0.045  0.064  0.149  0.166   435    0    0   23     8758321        222      19122      20935  /api/chair/search?page=<int>&perPage=<int>&priceRangeId=<int>
-  230   13.305  0.0578  0.0863  0.002  0.035  0.116  0.129  0.205  0.940   229    0    1    0        2748          0         11         12  POST /api/chair/buy/<int>
-  225   12.472  0.0554  0.0451  0.002  0.045  0.117  0.126  0.147  0.158   224    0    1    0        2688          0         11         12  /api/chair/buy/<int:chair_id>
-   18    0.442  0.0246  0.0051  0.018  0.025  0.033  0.038  0.038  0.038    18    0    0    0      353690      19623      19649      19651  GET /api/chair/search?depthRangeId=2&page=0&perPage=25 HTTP/1.1
-   17    1.880  0.1106  0.0269  0.067  0.119  0.145  0.166  0.166  0.166    17    0    0    0      360221      21166      21189      21299  GET /api/estate/search?doorHeightRangeId=0&doorWidthRangeId=3&page=0&perPage=25&rentRangeId=0 HTTP/1.1
-   16    0.511  0.0319  0.0110  0.017  0.031  0.047  0.061  0.061  0.061    16    0    0    0      322352      20147      20147      20147  GET /api/chair/search?depthRangeId=3&page=0&perPage=25 HTTP/1.1
-   15    1.944  0.1296  0.0335  0.058  0.137  0.171  0.177  0.177  0.177    15    0    0    0      324465      21631      21631      21631  GET /api/estate/search?doorHeightRangeId=1&doorWidthRangeId=0&page=0&perPage=25&rentRangeId=1 HTTP/1.1
+ 2995  171.046  0.0571  0.0414  0.001  0.058  0.112  0.121  0.134  0.216  2980    0   15    0     2607771          0        870       1129  /api/estate/<int:estate_id>
+ 2291  153.109  0.0668  0.0400  0.004  0.071  0.118  0.128  0.141  0.165  2286    0    5    0    37728538          0      16468      16562  GET /api/chair/low_priced HTTP/1.1
+ 2291  146.580  0.0640  0.0399  0.004  0.068  0.115  0.125  0.140  0.164  2286    0    5    0    39983708          0      17452      17605  GET /api/estate/low_priced HTTP/1.1
+ 1953  114.973  0.0589  0.0407  0.001  0.064  0.111  0.120  0.136  0.160  1951    0    2    0       23412          0         11         12  /api/estate/req_doc/<int:estate_id>
+ 1263   97.257  0.0770  0.0418  0.002  0.081  0.126  0.138  0.155  0.340  1257    0    6    0    29424418          0      23297      45307  POST /api/estate/nazotte HTTP/1.1
+ 1074   56.765  0.0529  0.0466  0.000  0.035  0.122  0.135  0.155  0.175   843    0    1  230    18564653          0      17285      23248  GET /api/estate/search?doorHeightRangeId=<int>&page=<int>&perPage=<int>
+ 1058   55.127  0.0521  0.0460  0.000  0.035  0.120  0.131  0.148  0.171   810    0    1  247    17810402          0      16834      22974  /api/estate/search?doorWidthRangeId=<int>&page=<int>&perPage=<int>
+  990   34.138  0.0345  0.0281  0.000  0.027  0.075  0.094  0.135  0.174   906    0    2   82    19887308          0      20088      22858  /api/estate/search?page=<int>&perPage=<int>&rentRangeId=<int>
+  953   53.955  0.0566  0.0420  0.003  0.054  0.114  0.122  0.137  0.266   939    0   14    0      753698          0        790       1033  /api/chair/<int:chair_id>
+  929   57.444  0.0618  0.0430  0.007  0.060  0.118  0.128  0.145  0.244   928    0    1    0    16181959          0      17418      18156  /api/recommended_estate/<int:chair_id>
+  598   26.954  0.0451  0.0410  0.000  0.032  0.113  0.130  0.148  0.160   477    0    0  121     9617794        222      16083      20969  /api/chair/search?heightRangeId=<int>&page=<int>&perPage=<int>
+  563   27.849  0.0495  0.0424  0.000  0.045  0.108  0.122  0.136  0.202   562    0    1    0     1374652          0       2441       2446  GET /api/estate/search/condition HTTP/1.1
+  466   22.945  0.0492  0.0417  0.000  0.041  0.105  0.115  0.133  0.145   464    0    2    0     1359056          0       2916       2929  GET /api/chair/search/condition HTTP/1.1
+  406   13.402  0.0330  0.0228  0.000  0.028  0.058  0.085  0.121  0.148   378    0    0   28     7592778        222      18701      21077  /api/chair/search?page=<int>&perPage=<int>&priceRangeId=<int>
+  339   17.677  0.0521  0.0409  0.002  0.046  0.110  0.120  0.128  0.139   337    0    2    0        4044          0         11         12  /api/chair/buy/<int:chair_id>
+  122    6.661  0.0546  0.0425  0.003  0.060  0.112  0.119  0.131  0.136   122    0    0    0        1464         12         12         12  POST /api/chair/buy/<int>
+   22    0.686  0.0312  0.0079  0.017  0.031  0.040  0.044  0.051  0.051    22    0    0    0      440605      20025      20027      20043  GET /api/chair/search?page=0&perPage=25&widthRangeId=0 HTTP/1.1
+   19    0.516  0.0272  0.0072  0.016  0.028  0.038  0.040  0.040  0.040    19    0    0    0      383296      20147      20173      20338  GET /api/chair/search?depthRangeId=3&page=0&perPage=25 HTTP/1.1
+   19    0.517  0.0272  0.0071  0.015  0.029  0.039  0.041  0.041  0.041    19    0    0    0      381368      20072      20072      20072  GET /api/chair/search?page=0&perPage=25&widthRangeId=2 HTTP/1.1
+   17    1.830  0.1076  0.0210  0.066  0.106  0.137  0.144  0.144  0.144    17    0    0    0      371262      21715      21838      21922  GET /api/estate/search?doorHeightRangeId=0&doorWidthRangeId=0&page=0&perPage=25&rentRangeId=2 HTTP/1.1
 
 Top 20 Sort By Total
 Count    Total    Mean  Stddev    Min  P50.0  P90.0  P95.0  P99.0    Max   2xx  3xx  4xx  5xx  TotalBytes   MinBytes  MeanBytes   MaxBytes  Request
- 2979  173.925  0.0584  0.0447  0.002  0.054  0.116  0.129  0.155  0.253  2960    0   19    0     2595471          0        871       1096  /api/estate/<int:estate_id>
- 2249  154.547  0.0687  0.0449  0.004  0.067  0.127  0.138  0.161  0.245  2248    0    1    0    37100317          0      16496      16562  GET /api/chair/low_priced HTTP/1.1
- 2249  148.143  0.0659  0.0446  0.003  0.064  0.124  0.135  0.157  0.244  2248    0    1    0    39317112          0      17482      17605  GET /api/estate/low_priced HTTP/1.1
- 1944  117.981  0.0607  0.0447  0.001  0.060  0.118  0.128  0.153  0.239  1935    0    9    0       23220          0         11         12  /api/estate/req_doc/<int:estate_id>
- 1235   99.725  0.0807  0.0447  0.002  0.085  0.135  0.149  0.173  0.233  1232    0    3    0    29478074          0      23868      45340  POST /api/estate/nazotte HTTP/1.1
-  918   58.381  0.0636  0.0475  0.005  0.051  0.129  0.141  0.166  0.209   915    0    3    0    15965417          0      17391      18156  /api/recommended_estate/<int:chair_id>
-  942   55.203  0.0586  0.0469  0.002  0.046  0.125  0.134  0.164  0.199   927    0   15    0      748826          0        794       1005  /api/chair/<int:chair_id>
-  996   54.152  0.0544  0.0493  0.000  0.036  0.126  0.140  0.164  0.245   774    0    1  221    17032572          0      17100      22789  /api/estate/search?doorWidthRangeId=<int>&page=<int>&perPage=<int>
- 1019   51.790  0.0508  0.0492  0.000  0.031  0.127  0.145  0.165  0.218   757    0    1  261    16683395          0      16372      23248  GET /api/estate/search?doorHeightRangeId=<int>&page=<int>&perPage=<int>
- 1022   35.379  0.0346  0.0304  0.000  0.026  0.071  0.112  0.147  0.219   945    0    0   77    20743338        222      20296      22858  /api/estate/search?page=<int>&perPage=<int>&rentRangeId=<int>
-  556   27.767  0.0499  0.0443  0.000  0.037  0.111  0.119  0.141  0.216   556    0    0    0     1359976       2446       2446       2446  GET /api/estate/search/condition HTTP/1.1
-  573   25.998  0.0454  0.0496  0.000  0.029  0.119  0.135  0.169  0.601   466    0    2  105     9382882          0      16375      20969  /api/chair/search?heightRangeId=<int>&page=<int>&perPage=<int>
-  463   23.620  0.0510  0.0451  0.000  0.037  0.113  0.126  0.142  0.179   463    0    0    0     1356127       2929       2929       2929  GET /api/chair/search/condition HTTP/1.1
-  458   13.480  0.0294  0.0220  0.000  0.026  0.045  0.064  0.149  0.166   435    0    0   23     8758321        222      19122      20935  /api/chair/search?page=<int>&perPage=<int>&priceRangeId=<int>
-  230   13.305  0.0578  0.0863  0.002  0.035  0.116  0.129  0.205  0.940   229    0    1    0        2748          0         11         12  POST /api/chair/buy/<int>
-  225   12.472  0.0554  0.0451  0.002  0.045  0.117  0.126  0.147  0.158   224    0    1    0        2688          0         11         12  /api/chair/buy/<int:chair_id>
-    2    6.671  3.3355  3.3345  0.001  6.670  6.670  6.670  6.670  6.670     1    0    0    1         204         22        102        182  POST /initialize HTTP/1.1
-   11    2.090  0.1900  0.0441  0.122  0.187  0.253  0.259  0.259  0.259    11    0    0    0         132         12         12         12  POST /api/estate HTTP/1.1
-   15    1.944  0.1296  0.0335  0.058  0.137  0.171  0.177  0.177  0.177    15    0    0    0      324465      21631      21631      21631  GET /api/estate/search?doorHeightRangeId=1&doorWidthRangeId=0&page=0&perPage=25&rentRangeId=1 HTTP/1.1
-   17    1.880  0.1106  0.0269  0.067  0.119  0.145  0.166  0.166  0.166    17    0    0    0      360221      21166      21189      21299  GET /api/estate/search?doorHeightRangeId=0&doorWidthRangeId=3&page=0&perPage=25&rentRangeId=0 HTTP/1.1
+ 2995  171.046  0.0571  0.0414  0.001  0.058  0.112  0.121  0.134  0.216  2980    0   15    0     2607771          0        870       1129  /api/estate/<int:estate_id>
+ 2291  153.109  0.0668  0.0400  0.004  0.071  0.118  0.128  0.141  0.165  2286    0    5    0    37728538          0      16468      16562  GET /api/chair/low_priced HTTP/1.1
+ 2291  146.580  0.0640  0.0399  0.004  0.068  0.115  0.125  0.140  0.164  2286    0    5    0    39983708          0      17452      17605  GET /api/estate/low_priced HTTP/1.1
+ 1953  114.973  0.0589  0.0407  0.001  0.064  0.111  0.120  0.136  0.160  1951    0    2    0       23412          0         11         12  /api/estate/req_doc/<int:estate_id>
+ 1263   97.257  0.0770  0.0418  0.002  0.081  0.126  0.138  0.155  0.340  1257    0    6    0    29424418          0      23297      45307  POST /api/estate/nazotte HTTP/1.1
+  929   57.444  0.0618  0.0430  0.007  0.060  0.118  0.128  0.145  0.244   928    0    1    0    16181959          0      17418      18156  /api/recommended_estate/<int:chair_id>
+ 1074   56.765  0.0529  0.0466  0.000  0.035  0.122  0.135  0.155  0.175   843    0    1  230    18564653          0      17285      23248  GET /api/estate/search?doorHeightRangeId=<int>&page=<int>&perPage=<int>
+ 1058   55.127  0.0521  0.0460  0.000  0.035  0.120  0.131  0.148  0.171   810    0    1  247    17810402          0      16834      22974  /api/estate/search?doorWidthRangeId=<int>&page=<int>&perPage=<int>
+  953   53.955  0.0566  0.0420  0.003  0.054  0.114  0.122  0.137  0.266   939    0   14    0      753698          0        790       1033  /api/chair/<int:chair_id>
+  990   34.138  0.0345  0.0281  0.000  0.027  0.075  0.094  0.135  0.174   906    0    2   82    19887308          0      20088      22858  /api/estate/search?page=<int>&perPage=<int>&rentRangeId=<int>
+  563   27.849  0.0495  0.0424  0.000  0.045  0.108  0.122  0.136  0.202   562    0    1    0     1374652          0       2441       2446  GET /api/estate/search/condition HTTP/1.1
+  598   26.954  0.0451  0.0410  0.000  0.032  0.113  0.130  0.148  0.160   477    0    0  121     9617794        222      16083      20969  /api/chair/search?heightRangeId=<int>&page=<int>&perPage=<int>
+  466   22.945  0.0492  0.0417  0.000  0.041  0.105  0.115  0.133  0.145   464    0    2    0     1359056          0       2916       2929  GET /api/chair/search/condition HTTP/1.1
+  339   17.677  0.0521  0.0409  0.002  0.046  0.110  0.120  0.128  0.139   337    0    2    0        4044          0         11         12  /api/chair/buy/<int:chair_id>
+  406   13.402  0.0330  0.0228  0.000  0.028  0.058  0.085  0.121  0.148   378    0    0   28     7592778        222      18701      21077  /api/chair/search?page=<int>&perPage=<int>&priceRangeId=<int>
+  122    6.661  0.0546  0.0425  0.003  0.060  0.112  0.119  0.131  0.136   122    0    0    0        1464         12         12         12  POST /api/chair/buy/<int>
+    1    6.092  6.0920  0.0000  6.092  6.092  6.092  6.092  6.092  6.092     1    0    0    0          22         22         22         22  POST /initialize HTTP/1.1
+   11    2.139  0.1945  0.1058  0.085  0.175  0.233  0.507  0.507  0.507    11    0    0    0         132         12         12         12  POST /api/estate HTTP/1.1
+   11    1.932  0.1756  0.0493  0.096  0.172  0.230  0.245  0.245  0.245    11    0    0    0         132         12         12         12  POST /api/chair HTTP/1.1
+   17    1.830  0.1076  0.0210  0.066  0.106  0.137  0.144  0.144  0.144    17    0    0    0      371262      21715      21838      21922  GET /api/estate/search?doorHeightRangeId=0&doorWidthRangeId=0&page=0&perPage=25&rentRangeId=2 HTTP/1.1
 
 Top 20 Sort By Mean
 Count  Total    Mean  Stddev    Min  P50.0  P90.0  P95.0  P99.0    Max  2xx  3xx  4xx  5xx  TotalBytes   MinBytes  MeanBytes   MaxBytes  Request
-    2  6.671  3.3355  3.3345  0.001  6.670  6.670  6.670  6.670  6.670    1    0    0    1         204         22        102        182  POST /initialize HTTP/1.1
-    1  0.904  0.9040  0.0000  0.904  0.904  0.904  0.904  0.904  0.904    1    0    0    0       20044      20044      20044      20044  GET /api/chair/search?heightRangeId=0&kind=%E3%83%8F%E3%83%B3%E3%83%A2%E3%83%83%E3%82%AF&page=0&perPage=25 HTTP/1.1
-    1  0.301  0.3010  0.0000  0.301  0.301  0.301  0.301  0.301  0.301    1    0    0    0       33213      33213      33213      33213  GET /api/chair/search?features=%E6%98%87%E9%99%8D%E5%BC%8F&page=0&perPage=40 HTTP/1.1
-    1  0.295  0.2950  0.0000  0.295  0.295  0.295  0.295  0.295  0.295    1    0    0    0          24         24         24         24  GET /api/chair/search?features=%E5%92%8C%E9%A2%A8%2C%E9%80%9A%E6%B0%97%E6%80%A7%E6%8A%9C%E7%BE%A4%2C%E3%83%87%E3%82%B6%E3%82%A4%E3%83%8A%E3%83%BC%E3%82%BA&page=0&perPage=20 HTTP/1.1
-    1  0.280  0.2800  0.0000  0.280  0.280  0.280  0.280  0.280  0.280    1    0    0    0         871        871        871        871  GET /api/estate/search?features=%E9%98%B2%E9%9F%B3%E5%AE%A4%2C%E6%9C%80%E4%B8%8A%E9%9A%8E%2C%E3%82%A4%E3%83%B3%E3%82%BF%E3%83%BC%E3%83%8D%E3%83%83%E3%83%88%E7%84%A1%E6%96%99&page=0&perPage=36 HTTP/1.1
-    1  0.278  0.2780  0.0000  0.278  0.278  0.278  0.278  0.278  0.278    1    0    0    0         836        836        836        836  GET /api/estate/search?features=%E3%82%AB%E3%82%B9%E3%82%BF%E3%83%9E%E3%82%A4%E3%82%BA%E5%8F%AF%2C%E5%AE%85%E9%85%8D%E3%83%9C%E3%83%83%E3%82%AF%E3%82%B9%2C%E5%BA%8A%E4%B8%8B%E5%8F%8E%E7%B4%8D&page=0&perPage=21 HTTP/1.1
-    1  0.250  0.2500  0.0000  0.250  0.250  0.250  0.250  0.250  0.250    1    0    0    0          25         25         25         25  GET /api/estate/search?doorHeightRangeId=1&features=%E3%83%90%E3%82%B9%E3%83%BB%E3%83%88%E3%82%A4%E3%83%AC%E5%88%A5%2C%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0%E3%82%AD%E3%83%83%E3%83%81%E3%83%B3%2C%E3%82%A6%E3%82%A9%E3%83%BC%E3%82%AF%E3%82%A4%E3%83%B3%E3%82%AF%E3%83%AD%E3%83%BC%E3%82%BC%E3%83%83%E3%83%88&page=0&perPage=29 HTTP/1.1
-    1  0.243  0.2430  0.0000  0.243  0.243  0.243  0.243  0.243  0.243    1    0    0    0       29317      29317      29317      29317  GET /api/estate/search?features=%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0%E3%82%AD%E3%83%83%E3%83%81%E3%83%B3&page=0&perPage=31&rentRangeId=3 HTTP/1.1
-    1  0.233  0.2330  0.0000  0.233  0.233  0.233  0.233  0.233  0.233    1    0    0    0       20640      20640      20640      20640  GET /api/chair/search?color=%E3%82%AA%E3%83%AC%E3%83%B3%E3%82%B8&depthRangeId=3&page=0&perPage=25&priceRangeId=5&widthRangeId=3 HTTP/1.1
-    1  0.208  0.2080  0.0000  0.208  0.208  0.208  0.208  0.208  0.208    1    0    0    0          25         25         25         25  GET /api/estate/search?doorHeightRangeId=3&features=%E9%AB%98%E9%BD%A2%E8%80%85%E6%AD%93%E8%BF%8E%2C%E3%82%A4%E3%83%B3%E3%82%BF%E3%83%BC%E3%83%8D%E3%83%83%E3%83%88%E7%84%A1%E6%96%99%2C%E9%A7%90%E8%BB%8A%E5%A0%B42%E5%8F%B0%E4%BB%A5%E4%B8%8A&page=0&perPage=37&rentRangeId=1 HTTP/1.1
-    1  0.200  0.2000  0.0000  0.200  0.200  0.200  0.200  0.200  0.200    1    0    0    0       11176      11176      11176      11176  GET /api/chair/search?color=%E9%9D%92&depthRangeId=2&heightRangeId=2&page=0&perPage=25&priceRangeId=0 HTTP/1.1
-    1  0.196  0.1960  0.0000  0.196  0.196  0.196  0.196  0.196  0.196    1    0    0    0       21817      21817      21817      21817  GET /api/estate/search?doorHeightRangeId=2&doorWidthRangeId=1&page=4&perPage=25 HTTP/1.1
-   11  2.090  0.1900  0.0441  0.122  0.187  0.253  0.259  0.259  0.259   11    0    0    0         132         12         12         12  POST /api/estate HTTP/1.1
-    1  0.189  0.1890  0.0000  0.189  0.189  0.189  0.189  0.189  0.189    1    0    0    0       22184      22184      22184      22184  GET /api/estate/search?doorHeightRangeId=1&doorWidthRangeId=0&page=4&perPage=25&rentRangeId=1 HTTP/1.1
-    2  0.376  0.1880  0.0530  0.135  0.241  0.241  0.241  0.241  0.241    2    0    0    0       41206      20603      20603      20603  GET /api/chair/search?heightRangeId=3&kind=%E3%82%B2%E3%83%BC%E3%83%9F%E3%83%B3%E3%82%B0%E3%83%81%E3%82%A7%E3%82%A2&page=0&perPage=25&priceRangeId=5 HTTP/1.1
-    1  0.186  0.1860  0.0000  0.186  0.186  0.186  0.186  0.186  0.186    1    0    0    0       21600      21600      21600      21600  GET /api/chair/search?color=%E3%83%94%E3%83%B3%E3%82%AF&heightRangeId=3&kind=%E3%82%A8%E3%83%AB%E3%82%B4%E3%83%8E%E3%83%9F%E3%82%AF%E3%82%B9&page=2&perPage=25 HTTP/1.1
-    1  0.186  0.1860  0.0000  0.186  0.186  0.186  0.186  0.186  0.186    1    0    0    0       20166      20166      20166      20166  GET /api/chair/search?depthRangeId=2&kind=%E3%82%A8%E3%83%AB%E3%82%B4%E3%83%8E%E3%83%9F%E3%82%AF%E3%82%B9&page=2&perPage=25&priceRangeId=2 HTTP/1.1
-    2  0.367  0.1835  0.0635  0.120  0.247  0.247  0.247  0.247  0.247    2    0    0    0       44796      22398      22398      22398  GET /api/estate/search?doorHeightRangeId=2&doorWidthRangeId=1&page=3&perPage=25&rentRangeId=1 HTTP/1.1
-    1  0.182  0.1820  0.0000  0.182  0.182  0.182  0.182  0.182  0.182    1    0    0    0       19987      19987      19987      19987  GET /api/chair/search?heightRangeId=1&kind=%E3%82%A8%E3%83%AB%E3%82%B4%E3%83%8E%E3%83%9F%E3%82%AF%E3%82%B9&page=2&perPage=25&priceRangeId=3&widthRangeId=3 HTTP/1.1
-    1  0.182  0.1820  0.0000  0.182  0.182  0.182  0.182  0.182  0.182    1    0    0    0       20281      20281      20281      20281  GET /api/chair/search?heightRangeId=0&kind=%E3%83%8F%E3%83%B3%E3%83%A2%E3%83%83%E3%82%AF&page=1&perPage=25&priceRangeId=2 HTTP/1.1
+    1  6.092  6.0920  0.0000  6.092  6.092  6.092  6.092  6.092  6.092    1    0    0    0          22         22         22         22  POST /initialize HTTP/1.1
+    1  0.338  0.3380  0.0000  0.338  0.338  0.338  0.338  0.338  0.338    1    0    0    0       21900      21900      21900      21900  GET /api/estate/search?features=%E3%83%A1%E3%82%BE%E3%83%8D%E3%83%83%E3%83%88&page=0&perPage=25 HTTP/1.1
+    1  0.226  0.2260  0.0000  0.226  0.226  0.226  0.226  0.226  0.226    1    0    0    0       19241      19241      19241      19241  GET /api/estate/search?features=%E3%82%AA%E3%83%BC%E3%83%AB%E9%9B%BB%E5%8C%96%2C%E3%83%95%E3%83%AD%E3%83%BC%E3%83%AA%E3%83%B3%E3%82%B0&page=0&perPage=35 HTTP/1.1
+    1  0.225  0.2250  0.0000  0.225  0.225  0.225  0.225  0.225  0.225    1    0    0    0         944        944        944        944  GET /api/estate/search?features=%E3%83%A1%E3%82%BE%E3%83%8D%E3%83%83%E3%83%88%2C%E3%83%90%E3%82%A4%E3%82%AF%E7%BD%AE%E5%A0%B4%E3%81%82%E3%82%8A%2CTV%E3%83%A2%E3%83%8B%E3%82%BF%E4%BB%98%E3%81%8D%E3%82%A4%E3%83%B3%E3%82%BF%E3%83%9B%E3%83%B3&page=0&perPage=44 HTTP/1.1
+    1  0.211  0.2110  0.0000  0.211  0.211  0.211  0.211  0.211  0.211    1    0    0    0       29317      29317      29317      29317  GET /api/estate/search?features=%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0%E3%82%AD%E3%83%83%E3%83%81%E3%83%B3&page=0&perPage=31&rentRangeId=3 HTTP/1.1
+    1  0.206  0.2060  0.0000  0.206  0.206  0.206  0.206  0.206  0.206    1    0    0    0       22621      22621      22621      22621  GET /api/estate/search?features=%E3%82%AA%E3%83%BC%E3%83%88%E3%83%AD%E3%83%83%E3%82%AF&page=0&perPage=25 HTTP/1.1
+   11  2.139  0.1945  0.1058  0.085  0.175  0.233  0.507  0.507  0.507   11    0    0    0         132         12         12         12  POST /api/estate HTTP/1.1
+    1  0.177  0.1770  0.0000  0.177  0.177  0.177  0.177  0.177  0.177    1    0    0    0       20390      20390      20390      20390  GET /api/chair/search?depthRangeId=1&heightRangeId=0&kind=%E3%82%B2%E3%83%BC%E3%83%9F%E3%83%B3%E3%82%B0%E3%83%81%E3%82%A7%E3%82%A2&page=3&perPage=25&priceRangeId=5 HTTP/1.1
+   11  1.932  0.1756  0.0493  0.096  0.172  0.230  0.245  0.245  0.245   11    0    0    0         132         12         12         12  POST /api/chair HTTP/1.1
+    1  0.167  0.1670  0.0000  0.167  0.167  0.167  0.167  0.167  0.167    1    0    0    0       20543      20543      20543      20543  GET /api/chair/search?depthRangeId=2&heightRangeId=0&kind=%E3%82%A8%E3%83%AB%E3%82%B4%E3%83%8E%E3%83%9F%E3%82%AF%E3%82%B9&page=4&perPage=25&widthRangeId=2 HTTP/1.1
+    1  0.167  0.1670  0.0000  0.167  0.167  0.167  0.167  0.167  0.167    1    0    0    0       19854      19854      19854      19854  GET /api/chair/search?color=%E3%83%94%E3%83%B3%E3%82%AF&heightRangeId=2&page=1&perPage=25&priceRangeId=5&widthRangeId=3 HTTP/1.1
+    1  0.166  0.1660  0.0000  0.166  0.166  0.166  0.166  0.166  0.166    1    0    0    0       19818      19818      19818      19818  GET /api/chair/search?depthRangeId=0&heightRangeId=2&page=0&perPage=25&priceRangeId=1 HTTP/1.1
+    1  0.165  0.1650  0.0000  0.165  0.165  0.165  0.165  0.165  0.165    1    0    0    0       20029      20029      20029      20029  GET /api/chair/search?depthRangeId=2&heightRangeId=0&kind=%E3%82%A8%E3%83%AB%E3%82%B4%E3%83%8E%E3%83%9F%E3%82%AF%E3%82%B9&page=2&perPage=25&widthRangeId=2 HTTP/1.1
+    1  0.164  0.1640  0.0000  0.164  0.164  0.164  0.164  0.164  0.164    1    0    0    0       21721      21721      21721      21721  GET /api/estate/search?doorHeightRangeId=2&doorWidthRangeId=3&page=4&perPage=25&rentRangeId=3 HTTP/1.1
+    1  0.161  0.1610  0.0000  0.161  0.161  0.161  0.161  0.161  0.161    1    0    0    0       20071      20071      20071      20071  GET /api/chair/search?depthRangeId=0&heightRangeId=2&page=3&perPage=25&priceRangeId=1 HTTP/1.1
+    1  0.161  0.1610  0.0000  0.161  0.161  0.161  0.161  0.161  0.161    1    0    0    0       20857      20857      20857      20857  GET /api/chair/search?color=%E3%82%AA%E3%83%AC%E3%83%B3%E3%82%B8&depthRangeId=1&heightRangeId=2&page=2&perPage=25 HTTP/1.1
+    1  0.160  0.1600  0.0000  0.160  0.160  0.160  0.160  0.160  0.160    1    0    0    0       19703      19703      19703      19703  GET /api/chair/search?depthRangeId=2&kind=%E3%83%8F%E3%83%B3%E3%83%A2%E3%83%83%E3%82%AF&page=1&perPage=25&priceRangeId=3&widthRangeId=2 HTTP/1.1
+    1  0.159  0.1590  0.0000  0.159  0.159  0.159  0.159  0.159  0.159    1    0    0    0       20342      20342      20342      20342  GET /api/chair/search?depthRangeId=1&page=4&perPage=25&priceRangeId=2 HTTP/1.1
+    1  0.158  0.1580  0.0000  0.158  0.158  0.158  0.158  0.158  0.158    1    0    0    0       20537      20537      20537      20537  GET /api/chair/search?kind=%E3%82%B2%E3%83%BC%E3%83%9F%E3%83%B3%E3%82%B0%E3%83%81%E3%82%A7%E3%82%A2&page=1&perPage=25&priceRangeId=5&widthRangeId=1 HTTP/1.1
+    2  0.314  0.1570  0.0090  0.148  0.166  0.166  0.166  0.166  0.166    2    0    0    0       39406      19703      19703      19703  GET /api/chair/search?depthRangeId=2&kind=%E5%BA%A7%E6%A4%85%E5%AD%90&page=0&perPage=25&priceRangeId=0 HTTP/1.1
 
 Top 20 Sort By Standard Deviation
 Count   Total    Mean  Stddev    Min  P50.0  P90.0  P95.0  P99.0    Max  2xx  3xx  4xx  5xx  TotalBytes   MinBytes  MeanBytes   MaxBytes  Request
-    2   6.671  3.3355  3.3345  0.001  6.670  6.670  6.670  6.670  6.670    1    0    0    1         204         22        102        182  POST /initialize HTTP/1.1
-  230  13.305  0.0578  0.0863  0.002  0.035  0.116  0.129  0.205  0.940  229    0    1    0        2748          0         11         12  POST /api/chair/buy/<int>
-    2   0.367  0.1835  0.0635  0.120  0.247  0.247  0.247  0.247  0.247    2    0    0    0       44796      22398      22398      22398  GET /api/estate/search?doorHeightRangeId=2&doorWidthRangeId=1&page=3&perPage=25&rentRangeId=1 HTTP/1.1
-    2   0.210  0.1050  0.0630  0.042  0.168  0.168  0.168  0.168  0.168    2    0    0    0       41190      20582      20595      20608  GET /api/chair/search?heightRangeId=3&kind=%E3%82%B2%E3%83%BC%E3%83%9F%E3%83%B3%E3%82%B0%E3%83%81%E3%82%A7%E3%82%A2&page=1&perPage=25 HTTP/1.1
-    3   0.280  0.0933  0.0602  0.043  0.059  0.178  0.178  0.178  0.178    3    0    0    0       59227      19599      19742      19861  GET /api/chair/search?depthRangeId=0&heightRangeId=0&page=0&perPage=25 HTTP/1.1
-    2   0.205  0.1025  0.0595  0.043  0.162  0.162  0.162  0.162  0.162    2    0    0    0       42010      21005      21005      21005  GET /api/chair/search?color=%E3%83%8D%E3%82%A4%E3%83%93%E3%83%BC&heightRangeId=2&page=0&perPage=25&priceRangeId=4 HTTP/1.1
-    2   0.178  0.0890  0.0590  0.030  0.148  0.148  0.148  0.148  0.148    2    0    0    0       39657      19775      19828      19882  GET /api/chair/search?depthRangeId=0&heightRangeId=0&page=1&perPage=25 HTTP/1.1
-    4   0.269  0.0673  0.0538  0.008  0.112  0.129  0.129  0.129  0.129    4    0    0    0       82574      20643      20643      20644  GET /api/chair/search?kind=%E3%82%A8%E3%83%AB%E3%82%B4%E3%83%8E%E3%83%9F%E3%82%AF%E3%82%B9&page=0&perPage=25&priceRangeId=0 HTTP/1.1
-    2   0.376  0.1880  0.0530  0.135  0.241  0.241  0.241  0.241  0.241    2    0    0    0       41206      20603      20603      20603  GET /api/chair/search?heightRangeId=3&kind=%E3%82%B2%E3%83%BC%E3%83%9F%E3%83%B3%E3%82%B0%E3%83%81%E3%82%A7%E3%82%A2&page=0&perPage=25&priceRangeId=5 HTTP/1.1
-    2   0.324  0.1620  0.0510  0.111  0.213  0.213  0.213  0.213  0.213    2    0    0    0       44918      22459      22459      22459  GET /api/estate/search?doorHeightRangeId=3&doorWidthRangeId=0&page=3&perPage=25&rentRangeId=0 HTTP/1.1
-    3   0.324  0.1080  0.0500  0.038  0.134  0.152  0.152  0.152  0.152    3    0    0    0       66818      22154      22272      22332  GET /api/estate/search?doorHeightRangeId=2&doorWidthRangeId=0&page=2&perPage=25&rentRangeId=0 HTTP/1.1
-    2   0.206  0.1030  0.0500  0.053  0.153  0.153  0.153  0.153  0.153    2    0    0    0       43003      21456      21501      21547  GET /api/estate/search?doorHeightRangeId=1&doorWidthRangeId=2&page=1&perPage=25&rentRangeId=3 HTTP/1.1
-    8   0.956  0.1195  0.0496  0.077  0.108  0.242  0.242  0.242  0.242    8    0    0    0      172624      21578      21578      21578  GET /api/estate/search?doorHeightRangeId=1&doorWidthRangeId=0&page=0&perPage=25&rentRangeId=2 HTTP/1.1
-  573  25.998  0.0454  0.0496  0.000  0.029  0.119  0.135  0.169  0.601  466    0    2  105     9382882          0      16375      20969  /api/chair/search?heightRangeId=<int>&page=<int>&perPage=<int>
-  996  54.152  0.0544  0.0493  0.000  0.036  0.126  0.140  0.164  0.245  774    0    1  221    17032572          0      17100      22789  /api/estate/search?doorWidthRangeId=<int>&page=<int>&perPage=<int>
- 1019  51.790  0.0508  0.0492  0.000  0.031  0.127  0.145  0.165  0.218  757    0    1  261    16683395          0      16372      23248  GET /api/estate/search?doorHeightRangeId=<int>&page=<int>&perPage=<int>
-    6   0.452  0.0753  0.0488  0.010  0.120  0.124  0.124  0.124  0.124    6    0    0    0      130917      21804      21819      21836  GET /api/estate/search?doorHeightRangeId=2&doorWidthRangeId=2&page=0&perPage=25&rentRangeId=1 HTTP/1.1
-    6   0.426  0.0710  0.0488  0.016  0.048  0.156  0.156  0.156  0.156    6    0    0    0      132924      22154      22154      22154  GET /api/estate/search?doorHeightRangeId=1&doorWidthRangeId=3&page=0&perPage=25&rentRangeId=3 HTTP/1.1
-    4   0.550  0.1375  0.0476  0.091  0.152  0.209  0.209  0.209  0.209    4    0    0    0       88620      22005      22155      22216  GET /api/estate/search?doorHeightRangeId=3&doorWidthRangeId=2&page=4&perPage=25&rentRangeId=3 HTTP/1.1
-  918  58.381  0.0636  0.0475  0.005  0.051  0.129  0.141  0.166  0.209  915    0    3    0    15965417          0      17391      18156  /api/recommended_estate/<int:chair_id>
+   11   2.139  0.1945  0.1058  0.085  0.175  0.233  0.507  0.507  0.507   11    0    0    0         132         12         12         12  POST /api/estate HTTP/1.1
+   10   1.166  0.1166  0.1002  0.047  0.093  0.410  0.410  0.410  0.410   10    0    0    0      219554      21818      21955      22126  GET /api/estate/search?doorHeightRangeId=3&doorWidthRangeId=1&page=0&perPage=25&rentRangeId=0 HTTP/1.1
+    3   0.440  0.1467  0.0734  0.087  0.103  0.250  0.250  0.250  0.250    3    0    0    0      117612      39204      39204      39204  GET /api/chair/search?features=%E3%83%87%E3%82%A3%E3%82%B9%E3%83%97%E3%83%AC%E3%82%A4%E9%85%8D%E7%BD%AE%E5%8F%AF%E8%83%BD&heightRangeId=3&page=0&perPage=45&widthRangeId=2 HTTP/1.1
+    2   0.163  0.0815  0.0605  0.021  0.142  0.142  0.142  0.142  0.142    2    0    0    0       44483      22200      22241      22283  GET /api/estate/search?doorHeightRangeId=3&doorWidthRangeId=1&page=1&perPage=25&rentRangeId=1 HTTP/1.1
+    2   0.182  0.0910  0.0600  0.031  0.151  0.151  0.151  0.151  0.151    2    0    0    0       39386      19578      19693      19808  GET /api/chair/search?depthRangeId=2&heightRangeId=1&page=0&perPage=25 HTTP/1.1
+   12   1.559  0.1299  0.0537  0.068  0.124  0.142  0.292  0.292  0.292   12    0    0    0      268469      22352      22372      22418  GET /api/estate/search?doorHeightRangeId=1&doorWidthRangeId=1&page=0&perPage=25&rentRangeId=1 HTTP/1.1
+    2   0.137  0.0685  0.0525  0.016  0.121  0.121  0.121  0.121  0.121    2    0    0    0       39497      19664      19748      19833  GET /api/chair/search?heightRangeId=0&kind=%E5%BA%A7%E6%A4%85%E5%AD%90&page=4&perPage=25 HTTP/1.1
+    3   0.211  0.0703  0.0496  0.028  0.043  0.140  0.140  0.140  0.140    3    0    0    0       61707      20471      20569      20618  GET /api/chair/search?depthRangeId=1&page=0&perPage=25&priceRangeId=2 HTTP/1.1
+   11   1.932  0.1756  0.0493  0.096  0.172  0.230  0.245  0.245  0.245   11    0    0    0         132         12         12         12  POST /api/chair HTTP/1.1
+    2   0.168  0.0840  0.0480  0.036  0.132  0.132  0.132  0.132  0.132    2    0    0    0       40932      20074      20466      20858  GET /api/chair/search?depthRangeId=2&heightRangeId=1&page=4&perPage=25 HTTP/1.1
+ 1074  56.765  0.0529  0.0466  0.000  0.035  0.122  0.135  0.155  0.175  843    0    1  230    18564653          0      17285      23248  GET /api/estate/search?doorHeightRangeId=<int>&page=<int>&perPage=<int>
+    3   0.238  0.0793  0.0460  0.020  0.086  0.132  0.132  0.132  0.132    2    0    1    0       43914          0      14638      21957  GET /api/estate/search?doorHeightRangeId=0&doorWidthRangeId=2&page=0&perPage=25&rentRangeId=0 HTTP/1.1
+ 1058  55.127  0.0521  0.0460  0.000  0.035  0.120  0.131  0.148  0.171  810    0    1  247    17810402          0      16834      22974  /api/estate/search?doorWidthRangeId=<int>&page=<int>&perPage=<int>
+    3   0.346  0.1153  0.0455  0.054  0.129  0.163  0.163  0.163  0.163    3    0    0    0       66239      21969      22079      22192  GET /api/estate/search?doorHeightRangeId=0&doorWidthRangeId=0&page=3&perPage=25&rentRangeId=1 HTTP/1.1
+    2   0.142  0.0710  0.0440  0.027  0.115  0.115  0.115  0.115  0.115    2    0    0    0       39873      19901      19936      19972  GET /api/chair/search?depthRangeId=2&heightRangeId=1&page=2&perPage=25 HTTP/1.1
+    2   0.204  0.1020  0.0440  0.058  0.146  0.146  0.146  0.146  0.146    2    0    0    0       39580      19790      19790      19790  GET /api/chair/search?depthRangeId=2&page=0&perPage=25&priceRangeId=0 HTTP/1.1
+    4   0.342  0.0855  0.0436  0.033  0.081  0.154  0.154  0.154  0.154    4    0    0    0       87838      21472      21959      22418  GET /api/estate/search?doorHeightRangeId=3&doorWidthRangeId=1&page=3&perPage=25&rentRangeId=1 HTTP/1.1
+  929  57.444  0.0618  0.0430  0.007  0.060  0.118  0.128  0.145  0.244  928    0    1    0    16181959          0      17418      18156  /api/recommended_estate/<int:chair_id>
+  122   6.661  0.0546  0.0425  0.003  0.060  0.112  0.119  0.131  0.136  122    0    0    0        1464         12         12         12  POST /api/chair/buy/<int>
+  563  27.849  0.0495  0.0424  0.000  0.045  0.108  0.122  0.136  0.202  562    0    1    0     1374652          0       2441       2446  GET /api/estate/search/condition HTTP/1.1
 
 Top 20 Sort By Maximum(100 Percentile)
 Count    Total    Mean  Stddev    Min  P50.0  P90.0  P95.0  P99.0    Max   2xx  3xx  4xx  5xx  TotalBytes   MinBytes  MeanBytes   MaxBytes  Request
-    2    6.671  3.3355  3.3345  0.001  6.670  6.670  6.670  6.670  6.670     1    0    0    1         204         22        102        182  POST /initialize HTTP/1.1
-  230   13.305  0.0578  0.0863  0.002  0.035  0.116  0.129  0.205  0.940   229    0    1    0        2748          0         11         12  POST /api/chair/buy/<int>
-    1    0.904  0.9040  0.0000  0.904  0.904  0.904  0.904  0.904  0.904     1    0    0    0       20044      20044      20044      20044  GET /api/chair/search?heightRangeId=0&kind=%E3%83%8F%E3%83%B3%E3%83%A2%E3%83%83%E3%82%AF&page=0&perPage=25 HTTP/1.1
-  573   25.998  0.0454  0.0496  0.000  0.029  0.119  0.135  0.169  0.601   466    0    2  105     9382882          0      16375      20969  /api/chair/search?heightRangeId=<int>&page=<int>&perPage=<int>
-    1    0.301  0.3010  0.0000  0.301  0.301  0.301  0.301  0.301  0.301     1    0    0    0       33213      33213      33213      33213  GET /api/chair/search?features=%E6%98%87%E9%99%8D%E5%BC%8F&page=0&perPage=40 HTTP/1.1
-    1    0.295  0.2950  0.0000  0.295  0.295  0.295  0.295  0.295  0.295     1    0    0    0          24         24         24         24  GET /api/chair/search?features=%E5%92%8C%E9%A2%A8%2C%E9%80%9A%E6%B0%97%E6%80%A7%E6%8A%9C%E7%BE%A4%2C%E3%83%87%E3%82%B6%E3%82%A4%E3%83%8A%E3%83%BC%E3%82%BA&page=0&perPage=20 HTTP/1.1
-    1    0.280  0.2800  0.0000  0.280  0.280  0.280  0.280  0.280  0.280     1    0    0    0         871        871        871        871  GET /api/estate/search?features=%E9%98%B2%E9%9F%B3%E5%AE%A4%2C%E6%9C%80%E4%B8%8A%E9%9A%8E%2C%E3%82%A4%E3%83%B3%E3%82%BF%E3%83%BC%E3%83%8D%E3%83%83%E3%83%88%E7%84%A1%E6%96%99&page=0&perPage=36 HTTP/1.1
-    1    0.278  0.2780  0.0000  0.278  0.278  0.278  0.278  0.278  0.278     1    0    0    0         836        836        836        836  GET /api/estate/search?features=%E3%82%AB%E3%82%B9%E3%82%BF%E3%83%9E%E3%82%A4%E3%82%BA%E5%8F%AF%2C%E5%AE%85%E9%85%8D%E3%83%9C%E3%83%83%E3%82%AF%E3%82%B9%2C%E5%BA%8A%E4%B8%8B%E5%8F%8E%E7%B4%8D&page=0&perPage=21 HTTP/1.1
-   11    2.090  0.1900  0.0441  0.122  0.187  0.253  0.259  0.259  0.259    11    0    0    0         132         12         12         12  POST /api/estate HTTP/1.1
- 2979  173.925  0.0584  0.0447  0.002  0.054  0.116  0.129  0.155  0.253  2960    0   19    0     2595471          0        871       1096  /api/estate/<int:estate_id>
-    1    0.250  0.2500  0.0000  0.250  0.250  0.250  0.250  0.250  0.250     1    0    0    0          25         25         25         25  GET /api/estate/search?doorHeightRangeId=1&features=%E3%83%90%E3%82%B9%E3%83%BB%E3%83%88%E3%82%A4%E3%83%AC%E5%88%A5%2C%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0%E3%82%AD%E3%83%83%E3%83%81%E3%83%B3%2C%E3%82%A6%E3%82%A9%E3%83%BC%E3%82%AF%E3%82%A4%E3%83%B3%E3%82%AF%E3%83%AD%E3%83%BC%E3%82%BC%E3%83%83%E3%83%88&page=0&perPage=29 HTTP/1.1
-    2    0.367  0.1835  0.0635  0.120  0.247  0.247  0.247  0.247  0.247     2    0    0    0       44796      22398      22398      22398  GET /api/estate/search?doorHeightRangeId=2&doorWidthRangeId=1&page=3&perPage=25&rentRangeId=1 HTTP/1.1
- 2249  154.547  0.0687  0.0449  0.004  0.067  0.127  0.138  0.161  0.245  2248    0    1    0    37100317          0      16496      16562  GET /api/chair/low_priced HTTP/1.1
-  996   54.152  0.0544  0.0493  0.000  0.036  0.126  0.140  0.164  0.245   774    0    1  221    17032572          0      17100      22789  /api/estate/search?doorWidthRangeId=<int>&page=<int>&perPage=<int>
- 2249  148.143  0.0659  0.0446  0.003  0.064  0.124  0.135  0.157  0.244  2248    0    1    0    39317112          0      17482      17605  GET /api/estate/low_priced HTTP/1.1
-    1    0.243  0.2430  0.0000  0.243  0.243  0.243  0.243  0.243  0.243     1    0    0    0       29317      29317      29317      29317  GET /api/estate/search?features=%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0%E3%82%AD%E3%83%83%E3%83%81%E3%83%B3&page=0&perPage=31&rentRangeId=3 HTTP/1.1
-    8    0.956  0.1195  0.0496  0.077  0.108  0.242  0.242  0.242  0.242     8    0    0    0      172624      21578      21578      21578  GET /api/estate/search?doorHeightRangeId=1&doorWidthRangeId=0&page=0&perPage=25&rentRangeId=2 HTTP/1.1
-    8    1.173  0.1466  0.0397  0.091  0.140  0.242  0.242  0.242  0.242     8    0    0    0      177068      22102      22133      22144  GET /api/estate/search?doorHeightRangeId=1&doorWidthRangeId=1&page=0&perPage=25&rentRangeId=2 HTTP/1.1
-    2    0.376  0.1880  0.0530  0.135  0.241  0.241  0.241  0.241  0.241     2    0    0    0       41206      20603      20603      20603  GET /api/chair/search?heightRangeId=3&kind=%E3%82%B2%E3%83%BC%E3%83%9F%E3%83%B3%E3%82%B0%E3%83%81%E3%82%A7%E3%82%A2&page=0&perPage=25&priceRangeId=5 HTTP/1.1
- 1944  117.981  0.0607  0.0447  0.001  0.060  0.118  0.128  0.153  0.239  1935    0    9    0       23220          0         11         12  /api/estate/req_doc/<int:estate_id>
+    1    6.092  6.0920  0.0000  6.092  6.092  6.092  6.092  6.092  6.092     1    0    0    0          22         22         22         22  POST /initialize HTTP/1.1
+   11    2.139  0.1945  0.1058  0.085  0.175  0.233  0.507  0.507  0.507    11    0    0    0         132         12         12         12  POST /api/estate HTTP/1.1
+   10    1.166  0.1166  0.1002  0.047  0.093  0.410  0.410  0.410  0.410    10    0    0    0      219554      21818      21955      22126  GET /api/estate/search?doorHeightRangeId=3&doorWidthRangeId=1&page=0&perPage=25&rentRangeId=0 HTTP/1.1
+ 1263   97.257  0.0770  0.0418  0.002  0.081  0.126  0.138  0.155  0.340  1257    0    6    0    29424418          0      23297      45307  POST /api/estate/nazotte HTTP/1.1
+    1    0.338  0.3380  0.0000  0.338  0.338  0.338  0.338  0.338  0.338     1    0    0    0       21900      21900      21900      21900  GET /api/estate/search?features=%E3%83%A1%E3%82%BE%E3%83%8D%E3%83%83%E3%83%88&page=0&perPage=25 HTTP/1.1
+   12    1.559  0.1299  0.0537  0.068  0.124  0.142  0.292  0.292  0.292    12    0    0    0      268469      22352      22372      22418  GET /api/estate/search?doorHeightRangeId=1&doorWidthRangeId=1&page=0&perPage=25&rentRangeId=1 HTTP/1.1
+  953   53.955  0.0566  0.0420  0.003  0.054  0.114  0.122  0.137  0.266   939    0   14    0      753698          0        790       1033  /api/chair/<int:chair_id>
+    3    0.440  0.1467  0.0734  0.087  0.103  0.250  0.250  0.250  0.250     3    0    0    0      117612      39204      39204      39204  GET /api/chair/search?features=%E3%83%87%E3%82%A3%E3%82%B9%E3%83%97%E3%83%AC%E3%82%A4%E9%85%8D%E7%BD%AE%E5%8F%AF%E8%83%BD&heightRangeId=3&page=0&perPage=45&widthRangeId=2 HTTP/1.1
+   11    1.932  0.1756  0.0493  0.096  0.172  0.230  0.245  0.245  0.245    11    0    0    0         132         12         12         12  POST /api/chair HTTP/1.1
+  929   57.444  0.0618  0.0430  0.007  0.060  0.118  0.128  0.145  0.244   928    0    1    0    16181959          0      17418      18156  /api/recommended_estate/<int:chair_id>
+    1    0.226  0.2260  0.0000  0.226  0.226  0.226  0.226  0.226  0.226     1    0    0    0       19241      19241      19241      19241  GET /api/estate/search?features=%E3%82%AA%E3%83%BC%E3%83%AB%E9%9B%BB%E5%8C%96%2C%E3%83%95%E3%83%AD%E3%83%BC%E3%83%AA%E3%83%B3%E3%82%B0&page=0&perPage=35 HTTP/1.1
+    1    0.225  0.2250  0.0000  0.225  0.225  0.225  0.225  0.225  0.225     1    0    0    0         944        944        944        944  GET /api/estate/search?features=%E3%83%A1%E3%82%BE%E3%83%8D%E3%83%83%E3%83%88%2C%E3%83%90%E3%82%A4%E3%82%AF%E7%BD%AE%E5%A0%B4%E3%81%82%E3%82%8A%2CTV%E3%83%A2%E3%83%8B%E3%82%BF%E4%BB%98%E3%81%8D%E3%82%A4%E3%83%B3%E3%82%BF%E3%83%9B%E3%83%B3&page=0&perPage=44 HTTP/1.1
+ 2995  171.046  0.0571  0.0414  0.001  0.058  0.112  0.121  0.134  0.216  2980    0   15    0     2607771          0        870       1129  /api/estate/<int:estate_id>
+    1    0.211  0.2110  0.0000  0.211  0.211  0.211  0.211  0.211  0.211     1    0    0    0       29317      29317      29317      29317  GET /api/estate/search?features=%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0%E3%82%AD%E3%83%83%E3%83%81%E3%83%B3&page=0&perPage=31&rentRangeId=3 HTTP/1.1
+    1    0.206  0.2060  0.0000  0.206  0.206  0.206  0.206  0.206  0.206     1    0    0    0       22621      22621      22621      22621  GET /api/estate/search?features=%E3%82%AA%E3%83%BC%E3%83%88%E3%83%AD%E3%83%83%E3%82%AF&page=0&perPage=25 HTTP/1.1
+  563   27.849  0.0495  0.0424  0.000  0.045  0.108  0.122  0.136  0.202   562    0    1    0     1374652          0       2441       2446  GET /api/estate/search/condition HTTP/1.1
+    1    0.177  0.1770  0.0000  0.177  0.177  0.177  0.177  0.177  0.177     1    0    0    0       20390      20390      20390      20390  GET /api/chair/search?depthRangeId=1&heightRangeId=0&kind=%E3%82%B2%E3%83%BC%E3%83%9F%E3%83%B3%E3%82%B0%E3%83%81%E3%82%A7%E3%82%A2&page=3&perPage=25&priceRangeId=5 HTTP/1.1
+ 1074   56.765  0.0529  0.0466  0.000  0.035  0.122  0.135  0.155  0.175   843    0    1  230    18564653          0      17285      23248  GET /api/estate/search?doorHeightRangeId=<int>&page=<int>&perPage=<int>
+  990   34.138  0.0345  0.0281  0.000  0.027  0.075  0.094  0.135  0.174   906    0    2   82    19887308          0      20088      22858  /api/estate/search?page=<int>&perPage=<int>&rentRangeId=<int>
+   12    1.350  0.1125  0.0272  0.081  0.117  0.145  0.172  0.172  0.172    12    0    0    0      268100      22272      22341      22348  GET /api/estate/search?doorHeightRangeId=2&doorWidthRangeId=3&page=0&perPage=25&rentRangeId=2 HTTP/1.1
 
 TOP 37 Slow Requests
- 1  6.670  POST /initialize HTTP/1.1
- 2  0.940  POST /api/chair/buy/11103 HTTP/1.1
- 3  0.904  GET /api/chair/search?heightRangeId=0&kind=%E3%83%8F%E3%83%B3%E3%83%A2%E3%83%83%E3%82%AF&page=0&perPage=25 HTTP/1.1
- 4  0.739  POST /api/chair/buy/6135 HTTP/1.1
- 5  0.601  GET /api/chair/search?heightRangeId=0&page=0&perPage=25&priceRangeId=0 HTTP/1.1
- 6  0.301  GET /api/chair/search?features=%E6%98%87%E9%99%8D%E5%BC%8F&page=0&perPage=40 HTTP/1.1
- 7  0.295  GET /api/chair/search?features=%E5%92%8C%E9%A2%A8%2C%E9%80%9A%E6%B0%97%E6%80%A7%E6%8A%9C%E7%BE%A4%2C%E3%83%87%E3%82%B6%E3%82%A4%E3%83%8A%E3%83%BC%E3%82%BA&page=0&perPage=20 HTTP/1.1
- 8  0.280  GET /api/estate/search?features=%E9%98%B2%E9%9F%B3%E5%AE%A4%2C%E6%9C%80%E4%B8%8A%E9%9A%8E%2C%E3%82%A4%E3%83%B3%E3%82%BF%E3%83%BC%E3%83%8D%E3%83%83%E3%83%88%E7%84%A1%E6%96%99&page=0&perPage=36 HTTP/1.1
- 9  0.278  GET /api/estate/search?features=%E3%82%AB%E3%82%B9%E3%82%BF%E3%83%9E%E3%82%A4%E3%82%BA%E5%8F%AF%2C%E5%AE%85%E9%85%8D%E3%83%9C%E3%83%83%E3%82%AF%E3%82%B9%2C%E5%BA%8A%E4%B8%8B%E5%8F%8E%E7%B4%8D&page=0&perPage=21 HTTP/1.1
-10  0.259  POST /api/estate HTTP/1.1
-11  0.253  GET /api/estate/44 HTTP/1.1
-12  0.253  POST /api/estate HTTP/1.1
-13  0.252  GET /api/estate/13 HTTP/1.1
-14  0.250  GET /api/estate/search?doorHeightRangeId=1&features=%E3%83%90%E3%82%B9%E3%83%BB%E3%83%88%E3%82%A4%E3%83%AC%E5%88%A5%2C%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0%E3%82%AD%E3%83%83%E3%83%81%E3%83%B3%2C%E3%82%A6%E3%82%A9%E3%83%BC%E3%82%AF%E3%82%A4%E3%83%B3%E3%82%AF%E3%83%AD%E3%83%BC%E3%82%BC%E3%83%83%E3%83%88&page=0&perPage=29 HTTP/1.1
-15  0.247  GET /api/estate/search?doorHeightRangeId=2&doorWidthRangeId=1&page=3&perPage=25&rentRangeId=1 HTTP/1.1
-16  0.246  GET /api/estate/97 HTTP/1.1
-17  0.245  GET /api/chair/low_priced HTTP/1.1
-18  0.245  GET /api/estate/search?doorWidthRangeId=1&page=0&perPage=25&rentRangeId=1 HTTP/1.1
-19  0.244  GET /api/chair/low_priced HTTP/1.1
-20  0.244  GET /api/estate/low_priced HTTP/1.1
-21  0.243  GET /api/estate/search?features=%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0%E3%82%AD%E3%83%83%E3%83%81%E3%83%B3&page=0&perPage=31&rentRangeId=3 HTTP/1.1
-22  0.242  GET /api/estate/low_priced HTTP/1.1
-23  0.242  GET /api/estate/search?doorHeightRangeId=1&doorWidthRangeId=0&page=0&perPage=25&rentRangeId=2 HTTP/1.1
-24  0.242  GET /api/chair/search?heightRangeId=2&page=4&perPage=25&priceRangeId=1&widthRangeId=2 HTTP/1.1
-25  0.242  GET /api/estate/search?doorHeightRangeId=1&doorWidthRangeId=1&page=0&perPage=25&rentRangeId=2 HTTP/1.1
-26  0.241  GET /api/chair/search?heightRangeId=3&kind=%E3%82%B2%E3%83%BC%E3%83%9F%E3%83%B3%E3%82%B0%E3%83%81%E3%82%A7%E3%82%A2&page=0&perPage=25&priceRangeId=5 HTTP/1.1
-27  0.239  GET /api/estate/44 HTTP/1.1
-28  0.239  POST /api/estate/req_doc/28658 HTTP/1.1
-29  0.237  GET /api/chair/low_priced HTTP/1.1
-30  0.236  GET /api/estate/low_priced HTTP/1.1
-31  0.236  GET /api/estate/22932 HTTP/1.1
-32  0.235  GET /api/estate/low_priced HTTP/1.1
-33  0.234  GET /api/estate/14 HTTP/1.1
-34  0.233  GET /api/chair/search?color=%E3%82%AA%E3%83%AC%E3%83%B3%E3%82%B8&depthRangeId=3&page=0&perPage=25&priceRangeId=5&widthRangeId=3 HTTP/1.1
-35  0.233  GET /api/estate/low_priced HTTP/1.1
-36  0.233  POST /api/estate/nazotte HTTP/1.1
-37  0.229  GET /api/estate/search?doorHeightRangeId=0&doorWidthRangeId=0&page=0&perPage=25&rentRangeId=3 HTTP/1.1
+ 1  6.092  POST /initialize HTTP/1.1
+ 2  0.507  POST /api/estate HTTP/1.1
+ 3  0.410  GET /api/estate/search?doorHeightRangeId=3&doorWidthRangeId=1&page=0&perPage=25&rentRangeId=0 HTTP/1.1
+ 4  0.340  POST /api/estate/nazotte HTTP/1.1
+ 5  0.339  POST /api/estate/nazotte HTTP/1.1
+ 6  0.338  GET /api/estate/search?features=%E3%83%A1%E3%82%BE%E3%83%8D%E3%83%83%E3%83%88&page=0&perPage=25 HTTP/1.1
+ 7  0.324  POST /api/estate/nazotte HTTP/1.1
+ 8  0.292  GET /api/estate/search?doorHeightRangeId=1&doorWidthRangeId=1&page=0&perPage=25&rentRangeId=1 HTTP/1.1
+ 9  0.266  GET /api/chair/54 HTTP/1.1
+10  0.262  POST /api/estate/nazotte HTTP/1.1
+11  0.250  GET /api/chair/search?features=%E3%83%87%E3%82%A3%E3%82%B9%E3%83%97%E3%83%AC%E3%82%A4%E9%85%8D%E7%BD%AE%E5%8F%AF%E8%83%BD&heightRangeId=3&page=0&perPage=45&widthRangeId=2 HTTP/1.1
+12  0.245  POST /api/chair HTTP/1.1
+13  0.244  GET /api/recommended_estate/19 HTTP/1.1
+14  0.241  GET /api/recommended_estate/35 HTTP/1.1
+15  0.241  GET /api/recommended_estate/64 HTTP/1.1
+16  0.235  GET /api/recommended_estate/77 HTTP/1.1
+17  0.233  POST /api/estate HTTP/1.1
+18  0.232  GET /api/recommended_estate/60 HTTP/1.1
+19  0.230  POST /api/chair HTTP/1.1
+20  0.229  POST /api/chair HTTP/1.1
+21  0.226  GET /api/estate/search?features=%E3%82%AA%E3%83%BC%E3%83%AB%E9%9B%BB%E5%8C%96%2C%E3%83%95%E3%83%AD%E3%83%BC%E3%83%AA%E3%83%B3%E3%82%B0&page=0&perPage=35 HTTP/1.1
+22  0.225  GET /api/estate/search?features=%E3%83%A1%E3%82%BE%E3%83%8D%E3%83%83%E3%83%88%2C%E3%83%90%E3%82%A4%E3%82%AF%E7%BD%AE%E5%A0%B4%E3%81%82%E3%82%8A%2CTV%E3%83%A2%E3%83%8B%E3%82%BF%E4%BB%98%E3%81%8D%E3%82%A4%E3%83%B3%E3%82%BF%E3%83%9B%E3%83%B3&page=0&perPage=44 HTTP/1.1
+23  0.216  GET /api/estate/31 HTTP/1.1
+24  0.216  GET /api/estate/31 HTTP/1.1
+25  0.216  GET /api/estate/5 HTTP/1.1
+26  0.212  GET /api/estate/12 HTTP/1.1
+27  0.211  GET /api/estate/search?features=%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0%E3%82%AD%E3%83%83%E3%83%81%E3%83%B3&page=0&perPage=31&rentRangeId=3 HTTP/1.1
+28  0.208  GET /api/estate/41 HTTP/1.1
+29  0.206  GET /api/estate/search?features=%E3%82%AA%E3%83%BC%E3%83%88%E3%83%AD%E3%83%83%E3%82%AF&page=0&perPage=25 HTTP/1.1
+30  0.206  POST /api/chair HTTP/1.1
+31  0.204  POST /api/chair HTTP/1.1
+32  0.203  POST /api/estate/nazotte HTTP/1.1
+33  0.202  GET /api/estate/search/condition HTTP/1.1
+34  0.194  POST /api/estate HTTP/1.1
+35  0.192  POST /api/estate HTTP/1.1
+36  0.181  POST /api/estate/nazotte HTTP/1.1
+37  0.177  GET /api/chair/search?depthRangeId=1&heightRangeId=0&kind=%E3%82%B2%E3%83%BC%E3%83%9F%E3%83%B3%E3%82%B0%E3%83%81%E3%82%A7%E3%82%A2&page=3&perPage=25&priceRangeId=5 HTTP/1.1

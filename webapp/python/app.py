@@ -7,7 +7,6 @@ import csv
 import flask
 from werkzeug.exceptions import BadRequest, NotFound
 from sqlalchemy.pool import QueuePool
-from humps import camelize
 import psycopg2
 from psycopg2.extras import RealDictCursor, execute_values
 
@@ -91,6 +90,13 @@ def select_chair(*args, **kwargs):
     return rows[0] if len(rows) > 0 else None
 
 
+def camelize_key(estate):
+    estate = dict(estate)
+    estate["doorHeight"] = estate.pop("door_height")
+    estate["doorWidth"] = estate.pop("door_width")
+    return estate
+
+
 @app.route("/initialize", methods=["POST"])
 def post_initialize():
     subprocess.run(
@@ -101,7 +107,7 @@ def post_initialize():
 
 @app.route("/api/estate/low_priced", methods=["GET"])
 def get_estate_low_priced():
-    rows = select_estates(
+    estates = select_estates(
         f"""
 SELECT
   id,
@@ -125,7 +131,7 @@ LIMIT
   {LIMIT}
         """,
     )
-    return {"estates": camelize(rows)}
+    return {"estates": [camelize_key(estate) for estate in estates]}
 
 
 @app.route("/api/chair/low_priced", methods=["GET"])
@@ -463,9 +469,9 @@ LIMIT
 OFFSET
   {per_page * page}
     """
-    chairs = select_estates(query, params)
+    estates = select_estates(query, params)
 
-    return {"count": count, "estates": camelize(chairs)}
+    return {"count": count, "estates": [camelize_key(estate) for estate in estates]}
 
 
 @app.route("/api/estate/search/condition", methods=["GET"])
@@ -532,8 +538,10 @@ LIMIT
         """
     )
 
-    results = {"estates": [camelize(estate) for estate in estates]}
-    results["count"] = len(results["estates"])
+    results = {
+        "estates": [camelize_key(estate) for estate in estates],
+        "count": len(estates),
+    }
     return results
 
 
@@ -562,7 +570,7 @@ WHERE
     )
     if estate is None:
         raise NotFound()
-    return camelize(estate)
+    return camelize_key(estate)
 
 
 @app.route("/api/recommended_estate/<int:chair_id>", methods=["GET"])
@@ -616,7 +624,7 @@ LIMIT
   {LIMIT}
     """
     estates = select_estates(query)
-    return {"estates": camelize(estates)}
+    return {"estates": [camelize_key(estate) for estate in estates]}
 
 
 @app.route("/api/chair", methods=["POST"])

@@ -200,71 +200,60 @@ def get_chair_search():
         raise BadRequest("Invalid format perPage parameter")
 
     conditions = []
-    params = []
 
     if args.get("priceRangeId"):
         for _range in chair_search_condition["price"]["ranges"]:
             if _range["id"] == int(args.get("priceRangeId")):
                 price = _range
                 break
-        else:
-            raise BadRequest("priceRangeID invalid")
+            else:
+                raise BadRequest("priceRangeID invalid")
         if price["min"] != -1:
-            conditions.append("price >= %s")
-            params.append(price["min"])
+            conditions.append(f"price >= {price['min']}")
         if price["max"] != -1:
-            conditions.append("price < %s")
-            params.append(price["max"])
+            conditions.append(f"price < {price['max']}")
 
     if args.get("heightRangeId"):
         for _range in chair_search_condition["height"]["ranges"]:
             if _range["id"] == int(args.get("heightRangeId")):
                 height = _range
                 break
-        else:
-            raise BadRequest("heightRangeId invalid")
+            else:
+                raise BadRequest("heightRangeId invalid")
         if height["min"] != -1:
-            conditions.append("height >= %s")
-            params.append(height["min"])
+            conditions.append(f"height >= {height['min']}")
         if height["max"] != -1:
-            conditions.append("height < %s")
-            params.append(height["max"])
+            conditions.append(f"height < {height['max']}")
 
     if args.get("widthRangeId"):
         for _range in chair_search_condition["width"]["ranges"]:
             if _range["id"] == int(args.get("widthRangeId")):
                 width = _range
                 break
-        else:
-            raise BadRequest("widthRangeId invalid")
+            else:
+                raise BadRequest("widthRangeId invalid")
         if width["min"] != -1:
-            conditions.append("width >= %s")
-            params.append(width["min"])
+            conditions.append(f"width >= {width['min']}")
         if width["max"] != -1:
-            conditions.append("width < %s")
-            params.append(width["max"])
+            conditions.append(f"width < {width['max']}")
 
     if args.get("depthRangeId"):
         for _range in chair_search_condition["depth"]["ranges"]:
             if _range["id"] == int(args.get("depthRangeId")):
                 depth = _range
                 break
-        else:
-            raise BadRequest("depthRangeId invalid")
+            else:
+                raise BadRequest("depthRangeId invalid")
         if depth["min"] != -1:
-            conditions.append("depth >= %s")
-            params.append(depth["min"])
+            conditions.append(f"depth >= {depth['min']}")
         if depth["max"] != -1:
-            conditions.append("depth < %s")
-            params.append(depth["max"])
+            conditions.append(f"depth < {depth['max']}")
 
     if args.get("kind"):
-        conditions.append("kind = %s")
-        params.append(args.get("kind"))
+        conditions.append(f"kind = {args.get('kind')}")
 
     if args.get("color"):
-        conditions.append("color = %s")
-        params.append(args.get("color"))
+        conditions.append(f"color = {args.get('color')}")
 
     if args.get("features"):
         for feature_condition in args.get("features").split(","):
@@ -285,7 +274,7 @@ FROM
 WHERE
   {search_condition}
     """
-    count = select_chair(query, params)["count"]
+    count = select_chair(query)["count"]
 
     query = f"""
 SELECT
@@ -314,7 +303,7 @@ LIMIT
 OFFSET
   {per_page * page}
     """
-    chairs = select_chairs(query, params)
+    chairs = select_chairs(query)
 
     return {"count": count, "chairs": [dict(chair) for chair in chairs]}
 

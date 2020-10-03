@@ -4,7 +4,6 @@ After=syslog.target
 
 [Service]
 WorkingDirectory=/home/isucon/isuumo/webapp/python
-EnvironmentFile=/home/isucon/env.sh
 PIDFile=/home/isucon/isuumo/webapp/python/server.pid
 
 User=isucon

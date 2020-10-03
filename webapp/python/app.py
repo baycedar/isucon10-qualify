@@ -157,7 +157,7 @@ LIMIT
   {LIMIT}
         """,
     )
-    return {"chairs": camelize(rows)}
+    return {"chairs": [dict(row) for row in rows]}
 
 
 @app.route("/api/chair/search", methods=["GET"])
@@ -291,7 +291,7 @@ OFFSET
     """
     chairs = select_chairs(query, params)
 
-    return {"count": count, "chairs": camelize(chairs)}
+    return {"count": count, "chairs": [dict(chair) for chair in chairs]}
 
 
 @app.route("/api/chair/search/condition", methods=["GET"])

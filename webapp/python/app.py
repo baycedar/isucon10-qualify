@@ -103,26 +103,26 @@ def post_initialize():
 def get_estate_low_priced():
     rows = select_estates(
         f"""
-        SELECT
-            id,
-            name,
-            description,
-            thumbnail,
-            address,
-            latitude,
-            longitude,
-            rent,
-            door_height,
-            door_width,
-            features,
-            popularity
-        FROM
-            estate
-        ORDER BY
-            rent ASC,
-            id ASC
-        LIMIT
-            {LIMIT}
+SELECT
+  id,
+  name,
+  description,
+  thumbnail,
+  address,
+  latitude,
+  longitude,
+  rent,
+  door_height,
+  door_width,
+  features,
+  popularity
+FROM
+  estate
+ORDER BY
+  rent ASC,
+  id ASC
+LIMIT
+  {LIMIT}
         """,
     )
     return {"estates": camelize(rows)}
@@ -132,29 +132,29 @@ def get_estate_low_priced():
 def get_chair_low_priced():
     rows = select_chairs(
         f"""
-        SELECT
-            id,
-            name,
-            description,
-            thumbnail,
-            price,
-            height,
-            width,
-            depth,
-            color,
-            features,
-            kind,
-            popularity,
-            stock
-        FROM
-            chair
-        WHERE
-            stock > 0
-        ORDER BY
-            price ASC,
-            id ASC
-        LIMIT
-            {LIMIT}
+SELECT
+  id,
+  name,
+  description,
+  thumbnail,
+  price,
+  height,
+  width,
+  depth,
+  color,
+  features,
+  kind,
+  popularity,
+  stock
+FROM
+  chair
+WHERE
+  stock > 0
+ORDER BY
+  price ASC,
+  id ASC
+LIMIT
+  {LIMIT}
         """,
     )
     return {"chairs": camelize(rows)}
@@ -253,41 +253,41 @@ def get_chair_search():
     search_condition = " AND ".join(conditions)
 
     query = f"""
-        SELECT
-            COUNT(*) as count
-        FROM
-            chair
-        WHERE
-            {search_condition}
+SELECT
+  COUNT(*) as count
+FROM
+  chair
+WHERE
+  {search_condition}
     """
     count = select_chair(query, params)["count"]
 
     query = f"""
-        SELECT
-            id,
-            name,
-            description,
-            thumbnail,
-            price,
-            height,
-            width,
-            depth,
-            color,
-            features,
-            kind,
-            popularity,
-            stock
-        FROM
-            chair
-        WHERE
-            {search_condition}
-        ORDER BY
-            popularity DESC,
-            id ASC
-        LIMIT
-            {per_page}
-        OFFSET
-            {per_page * page}
+SELECT
+  id,
+  name,
+  description,
+  thumbnail,
+  price,
+  height,
+  width,
+  depth,
+  color,
+  features,
+  kind,
+  popularity,
+  stock
+FROM
+  chair
+WHERE
+  {search_condition}
+ORDER BY
+  popularity DESC,
+  id ASC
+LIMIT
+  {per_page}
+OFFSET
+  {per_page * page}
     """
     chairs = select_chairs(query, params)
 
@@ -303,25 +303,25 @@ def get_chair_search_condition():
 def get_chair(chair_id):
     chair = select_chair(
         f"""
-        SELECT
-            id,
-            name,
-            description,
-            thumbnail,
-            price,
-            height,
-            width,
-            depth,
-            color,
-            features,
-            kind,
-            popularity,
-            stock
-        FROM
-            chair
-        WHERE
-            id = {chair_id}
-            AND stock > 0
+SELECT
+  id,
+  name,
+  description,
+  thumbnail,
+  price,
+  height,
+  width,
+  depth,
+  color,
+  features,
+  kind,
+  popularity,
+  stock
+FROM
+  chair
+WHERE
+  id = {chair_id}
+  AND stock > 0
         """,
     )
     if chair is None:
@@ -336,15 +336,15 @@ def post_chair_buy(chair_id):
         cur = cnx.cursor()
         cur.execute(
             f"""
-            UPDATE
-                chair
-            SET
-                stock = stock - 1
-            WHERE
-                id = {chair_id}
-                AND stock > 0
-            RETURNING
-                id
+UPDATE
+  chair
+SET
+  stock = stock - 1
+WHERE
+  id = {chair_id}
+  AND stock > 0
+RETURNING
+  id
             """,
         )
         result = cur.fetchone()
@@ -428,40 +428,40 @@ def get_estate_search():
     search_condition = " AND ".join(conditions)
 
     query = f"""
-        SELECT
-            COUNT(*) as count
-        FROM
-            estate
-        WHERE
-            {search_condition}
+SELECT
+  COUNT(*) as count
+FROM
+  estate
+WHERE
+  {search_condition}
     """
     count = select_estate(query, params)["count"]
 
     query = f"""
-        SELECT
-            id,
-            name,
-            description,
-            thumbnail,
-            address,
-            latitude,
-            longitude,
-            rent,
-            door_height,
-            door_width,
-            features,
-            popularity
-        FROM
-            estate
-        WHERE
-            {search_condition}
-        ORDER BY
-            popularity DESC,
-            id ASC
-        LIMIT
-            {per_page}
-        OFFSET
-            {per_page * page}
+SELECT
+  id,
+  name,
+  description,
+  thumbnail,
+  address,
+  latitude,
+  longitude,
+  rent,
+  door_height,
+  door_width,
+  features,
+  popularity
+FROM
+  estate
+WHERE
+  {search_condition}
+ORDER BY
+  popularity DESC,
+  id ASC
+LIMIT
+  {per_page}
+OFFSET
+  {per_page * page}
     """
     chairs = select_estates(query, params)
 
@@ -477,12 +477,12 @@ def get_estate_search_condition():
 def post_estate_req_doc(estate_id):
     estate = select_estate(
         f"""
-        SELECT
-            id
-        FROM
-            estate
-        WHERE
-            id = {estate_id}
+SELECT
+  id
+FROM
+  estate
+WHERE
+  id = {estate_id}
         """,
     )
     if estate is None:
@@ -498,37 +498,37 @@ def post_estate_nazotte():
     if len(coordinates) == 0:
         raise BadRequest()
     polygon_text = f"""
-        POLYGON((
-            {','.join(['{} {}'.format(c['longitude'], c['latitude']) for c in coordinates])}
-        ))
+POLYGON((
+  {','.join(['{} {}'.format(c['longitude'], c['latitude']) for c in coordinates])}
+))
     """
     estates = select_estates(
         f"""
-        SELECT
-            id,
-            name,
-            description,
-            thumbnail,
-            address,
-            latitude,
-            longitude,
-            rent,
-            door_height,
-            door_width,
-            features,
-            popularity
-        FROM
-            estate
-        WHERE
-            ST_Contains(
-                ST_PolygonFromText('{polygon_text}'),
-                geom_coords
-            )
-        ORDER BY
-            popularity DESC,
-            id ASC
-        LIMIT
-            {NAZOTTE_LIMIT}
+SELECT
+  id,
+  name,
+  description,
+  thumbnail,
+  address,
+  latitude,
+  longitude,
+  rent,
+  door_height,
+  door_width,
+  features,
+  popularity
+FROM
+  estate
+WHERE
+  ST_Contains(
+    ST_PolygonFromText('{polygon_text}'),
+    geom_coords
+  )
+ORDER BY
+  popularity DESC,
+  id ASC
+LIMIT
+  {NAZOTTE_LIMIT}
         """
     )
 
@@ -541,23 +541,23 @@ def post_estate_nazotte():
 def get_estate(estate_id):
     estate = select_estate(
         f"""
-        SELECT
-            id,
-            name,
-            description,
-            thumbnail,
-            address,
-            latitude,
-            longitude,
-            rent,
-            door_height,
-            door_width,
-            features,
-            popularity
-        FROM
-            estate
-        WHERE
-            id = {estate_id}
+SELECT
+  id,
+  name,
+  description,
+  thumbnail,
+  address,
+  latitude,
+  longitude,
+  rent,
+  door_height,
+  door_width,
+  features,
+  popularity
+FROM
+  estate
+WHERE
+  id = {estate_id}
         """,
     )
     if estate is None:
@@ -568,14 +568,14 @@ def get_estate(estate_id):
 @app.route("/api/recommended_estate/<int:chair_id>", methods=["GET"])
 def get_recommended_estate(chair_id):
     query = f"""
-    SELECT
-        width,
-        height,
-        depth
-    FROM
-        chair
-    WHERE
-        id = {chair_id}
+SELECT
+  width,
+  height,
+  depth
+FROM
+  chair
+WHERE
+  id = {chair_id}
     """
     chair = select_chair(query)
     if chair is None:
@@ -587,33 +587,33 @@ def get_recommended_estate(chair_id):
     c_depth = chair["depth"]
 
     query = f"""
-    SELECT
-        id,
-        name,
-        description,
-        thumbnail,
-        address,
-        latitude,
-        longitude,
-        rent,
-        door_height,
-        door_width,
-        features,
-        popularity
-    FROM
-        estate
-    WHERE
-        (door_width >= {c_width} AND door_height >= {c_height})
-        OR (door_width >= {c_width} AND door_height >= {c_depth})
-        OR (door_width >= {c_height} AND door_height >= {c_width})
-        OR (door_width >= {c_height} AND door_height >= {c_depth})
-        OR (door_width >= {c_depth} AND door_height >= {c_width})
-        OR (door_width >= {c_depth} AND door_height >= {c_height})
-    ORDER BY
-        popularity DESC,
-        id ASC
-    LIMIT
-        {LIMIT}
+SELECT
+  id,
+  name,
+  description,
+  thumbnail,
+  address,
+  latitude,
+  longitude,
+  rent,
+  door_height,
+  door_width,
+  features,
+  popularity
+FROM
+  estate
+WHERE
+  (door_width >= {c_width} AND door_height >= {c_height})
+  OR (door_width >= {c_width} AND door_height >= {c_depth})
+  OR (door_width >= {c_height} AND door_height >= {c_width})
+  OR (door_width >= {c_height} AND door_height >= {c_depth})
+  OR (door_width >= {c_depth} AND door_height >= {c_width})
+  OR (door_width >= {c_depth} AND door_height >= {c_height})
+ORDER BY
+  popularity DESC,
+  id ASC
+LIMIT
+  {LIMIT}
     """
     estates = select_estates(query)
     return {"estates": camelize(estates)}
@@ -629,22 +629,22 @@ def post_chair():
     try:
         cur = cnx.cursor()
         query = """
-            INSERT INTO chair (
-                id,
-                name,
-                description,
-                thumbnail,
-                price,
-                height,
-                width,
-                depth,
-                color,
-                features,
-                kind,
-                popularity,
-                stock
-            ) VALUES
-                %s
+INSERT INTO chair (
+  id,
+  name,
+  description,
+  thumbnail,
+  price,
+  height,
+  width,
+  depth,
+  color,
+  features,
+  kind,
+  popularity,
+  stock
+) VALUES
+  %s
         """
         execute_values(cur, query, records)
         cnx.commit()
@@ -667,22 +667,22 @@ def post_estate():
     try:
         cur = cnx.cursor()
         query = """
-            INSERT INTO estate (
-                id,
-                name,
-                description,
-                thumbnail,
-                address,
-                latitude,
-                longitude,
-                rent,
-                door_height,
-                door_width,
-                features,
-                popularity,
-                geom_coords
-            ) VALUES
-                %s
+INSERT INTO estate (
+  id,
+  name,
+  description,
+  thumbnail,
+  address,
+  latitude,
+  longitude,
+  rent,
+  door_height,
+  door_width,
+  features,
+  popularity,
+  geom_coords
+) VALUES
+  %s
         """
         execute_values(cur, query, records)
         cnx.commit()

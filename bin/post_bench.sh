@@ -25,21 +25,17 @@ if ! git branch --list "${GIT_BRANCH}" | grep "${GIT_BRANCH}" &> /dev/null; then
   exit 1
 fi
 
+# load environment variables
+source /home/isucon/env.sh
+
 # analyze DBs
-export PG_ESTATE_HOST=${PG_ESTATE_HOST:-127.0.0.1}
-export PG_CHAIR_HOST=${PG_CHAIR_HOST:-127.0.0.1}
-export PGPORT=${PGPORT:-5432}
-export PGUSER=${PGUSER:-isucon}
-export PGDATABASE=${PGDATABASE:-isuumo}
-export PGPASSWORD=${PGPASSWORD:-isucon}
-export LANG="C.UTF-8"
 psql -h ${PG_ESTATE_HOST} -p ${PGPORT} -U ${PGUSER} -d ${PGDATABASE} \
   -f "./conf/analyze_queries.sql" > ./log/estate_db_summary.txt
 psql -h ${PG_CHAIR_HOST} -p ${PGPORT} -U ${PGUSER} -d ${PGDATABASE} \
   -f "./conf/analyze_queries.sql" > ./log/chair_db_summary.txt
 
 # analyze app
-scp 192.168.33.12:/var/log/nginx/access.log ./log/raw/
+scp ${WEB_HOST}:/var/log/nginx/access.log ./log/raw/
 cat ./log/raw/access.log | kataribe -f ./conf/kataribe.toml > ./log/nginx_summary.txt
 
 # push analysis results

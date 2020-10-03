@@ -6,9 +6,8 @@ import csv
 
 import flask
 from werkzeug.exceptions import BadRequest, NotFound
-from sqlalchemy.pool import QueuePool
-import psycopg2
 from psycopg2.extras import RealDictCursor, execute_values
+from psycopg2.pool import SimpleConnectionPool
 
 LIMIT = 20
 NAZOTTE_LIMIT = 50
@@ -48,46 +47,66 @@ chair_connection_env = {
     "dbname": getenv("PGDATABASE", "isuumo"),
 }
 
-estate_pool = QueuePool(
-    lambda: psycopg2.connect(**estate_connection_env, cursor_factory=RealDictCursor),
-    pool_size=10,
+estate_pool = SimpleConnectionPool(
+    minconn=5,
+    maxconn=10,
+    **estate_connection_env,
+    cursor_factory=RealDictCursor,
 )
-chair_pool = QueuePool(
-    lambda: psycopg2.connect(**chair_connection_env, cursor_factory=RealDictCursor),
-    pool_size=10,
+chair_pool = SimpleConnectionPool(
+    minconn=5,
+    maxconn=10,
+    **chair_connection_env,
+    cursor_factory=RealDictCursor,
 )
 
 
 def select_estates(query, *args):
-    cnx = estate_pool.connect()
+    conn = estate_pool.getconn()
+    conn.set_session(autocommit=True)
     try:
-        cur = cnx.cursor()
+        cur = conn.cursor()
         cur.execute(query, *args)
         rows = cur.fetchall()
         return rows
     finally:
-        cnx.close()
+        estate_pool.putconn(conn)
 
 
-def select_estate(*args, **kwargs):
-    rows = select_estates(*args, **kwargs)
-    return rows[0] if len(rows) > 0 else None
+def select_estate(query, *args, **kwargs):
+    conn = estate_pool.getconn()
+    conn.set_session(autocommit=True)
+    try:
+        cur = conn.cursor()
+        cur.execute(query, *args)
+        row = cur.fetchone()
+        return row
+    finally:
+        estate_pool.putconn(conn)
 
 
 def select_chairs(query, *args):
-    cnx = chair_pool.connect()
+    conn = chair_pool.getconn()
+    conn.set_session(autocommit=True)
     try:
-        cur = cnx.cursor()
+        cur = conn.cursor()
         cur.execute(query, *args)
         rows = cur.fetchall()
         return rows
     finally:
-        cnx.close()
+        chair_pool.putconn(conn)
 
 
-def select_chair(*args, **kwargs):
-    rows = select_chairs(*args, **kwargs)
-    return rows[0] if len(rows) > 0 else None
+def select_chair(query, *args):
+    conn = chair_pool.getconn()
+    conn.set_session(autocommit=True)
+    try:
+        cur = conn.cursor()
+        cur.execute(query, *args)
+        row = cur.fetchone()
+        return row
+    finally:
+        chair_pool.putconn(conn)
 
 
 def camelize_key(estate):
@@ -337,9 +356,10 @@ WHERE
 
 @app.route("/api/chair/buy/<int:chair_id>", methods=["POST"])
 def post_chair_buy(chair_id):
-    cnx = chair_pool.connect()
+    conn = chair_pool.getconn()
+    conn.set_session(autocommit=True)
     try:
-        cur = cnx.cursor()
+        cur = conn.cursor()
         cur.execute(
             f"""
 UPDATE
@@ -356,13 +376,12 @@ RETURNING
         result = cur.fetchone()
         if result is None:
             raise NotFound()
-        cnx.commit()
         return {"ok": True}
     except Exception as e:
-        cnx.rollback()
+        conn.rollback()
         raise e
     finally:
-        cnx.close()
+        chair_pool.putconn(conn)
 
 
 @app.route("/api/estate/search", methods=["GET"])
@@ -633,9 +652,10 @@ def post_chair():
         raise BadRequest()
     records = csv.reader(StringIO(flask.request.files["chairs"].read().decode()))
     records = [tuple(record) for record in records]
-    cnx = chair_pool.connect()
+    conn = chair_pool.getconn()
+    conn.set_session(autocommit=True)
     try:
-        cur = cnx.cursor()
+        cur = conn.cursor()
         query = """
 INSERT INTO chair (
   id,
@@ -655,13 +675,12 @@ INSERT INTO chair (
   %s
         """
         execute_values(cur, query, records)
-        cnx.commit()
         return {"ok": True}, 201
     except Exception as e:
-        cnx.rollback()
+        conn.rollback()
         raise e
     finally:
-        cnx.close()
+        chair_pool.putconn(conn)
 
 
 @app.route("/api/estate", methods=["POST"])
@@ -671,9 +690,10 @@ def post_estate():
     records = csv.reader(StringIO(flask.request.files["estates"].read().decode()))
     records = [rec + [f"Point({rec[6]} {rec[5]})"] for rec in records]
     records = [tuple(rec) for rec in records]
-    cnx = estate_pool.connect()
+    conn = estate_pool.getconn()
+    conn.set_session(autocommit=True)
     try:
-        cur = cnx.cursor()
+        cur = conn.cursor()
         query = """
 INSERT INTO estate (
   id,
@@ -693,13 +713,12 @@ INSERT INTO estate (
   %s
         """
         execute_values(cur, query, records)
-        cnx.commit()
         return {"ok": True}, 201
     except Exception as e:
-        cnx.rollback()
+        conn.rollback()
         raise e
     finally:
-        cnx.close()
+        estate_pool.putconn(conn)
 
 
 if __name__ == "__main__":

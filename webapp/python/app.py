@@ -189,6 +189,16 @@ LIMIT
 def get_chair_search():
     args = flask.request.args
 
+    try:
+        page = int(args.get("page"))
+    except (TypeError, ValueError):
+        raise BadRequest("Invalid format page parameter")
+
+    try:
+        per_page = int(args.get("perPage"))
+    except (TypeError, ValueError):
+        raise BadRequest("Invalid format perPage parameter")
+
     conditions = []
     params = []
 
@@ -264,16 +274,6 @@ def get_chair_search():
         raise BadRequest("Search condition not found")
 
     conditions.append("stock > 0")
-
-    try:
-        page = int(args.get("page"))
-    except (TypeError, ValueError):
-        raise BadRequest("Invalid format page parameter")
-
-    try:
-        per_page = int(args.get("perPage"))
-    except (TypeError, ValueError):
-        raise BadRequest("Invalid format perPage parameter")
 
     search_condition = " AND ".join(conditions)
 
@@ -388,6 +388,16 @@ RETURNING
 def get_estate_search():
     args = flask.request.args
 
+    try:
+        page = int(args.get("page"))
+    except (TypeError, ValueError):
+        raise BadRequest("Invalid format page parameter")
+
+    try:
+        per_page = int(args.get("perPage"))
+    except (TypeError, ValueError):
+        raise BadRequest("Invalid format perPage parameter")
+
     conditions = []
     params = []
 
@@ -439,16 +449,6 @@ def get_estate_search():
 
     if len(conditions) == 0:
         raise BadRequest("Search condition not found")
-
-    try:
-        page = int(args.get("page"))
-    except (TypeError, ValueError):
-        raise BadRequest("Invalid format page parameter")
-
-    try:
-        per_page = int(args.get("perPage"))
-    except (TypeError, ValueError):
-        raise BadRequest("Invalid format perPage parameter")
 
     search_condition = " AND ".join(conditions)
 
@@ -650,6 +650,7 @@ LIMIT
 def post_chair():
     if "chairs" not in flask.request.files:
         raise BadRequest()
+
     records = csv.reader(StringIO(flask.request.files["chairs"].read().decode()))
     records = [tuple(record) for record in records]
     conn = chair_pool.getconn()
@@ -687,6 +688,7 @@ INSERT INTO chair (
 def post_estate():
     if "estates" not in flask.request.files:
         raise BadRequest()
+
     records = csv.reader(StringIO(flask.request.files["estates"].read().decode()))
     records = [rec + [f"Point({rec[6]} {rec[5]})"] for rec in records]
     records = [tuple(rec) for rec in records]

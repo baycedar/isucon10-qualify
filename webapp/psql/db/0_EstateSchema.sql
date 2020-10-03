@@ -1,4 +1,5 @@
 CREATE EXTENSION IF NOT EXISTS postgis;
+CREATE EXTENSION IF NOT EXISTS pg_stat_statements;
 
 DROP TABLE IF EXISTS estate, chair;
 

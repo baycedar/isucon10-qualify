@@ -8,6 +8,3 @@ CREATE INDEX ON chair USING btree (width);
 CREATE INDEX ON chair USING btree (depth);
 CREATE INDEX ON chair USING btree (kind);
 CREATE INDEX ON chair USING btree (color);
-
--- vacuum and analyze tables
-VACUUM ANALYZE chair;

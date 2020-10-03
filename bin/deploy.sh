@@ -25,9 +25,9 @@ if ! git branch --list "${GIT_BRANCH}" | grep "${GIT_BRANCH}" &> /dev/null; then
   exit 1
 fi
 
-ssh 192.168.33.11 ~/isuumo/bin/pull_branch.sh "${GIT_BRANCH}"
-ssh 192.168.33.12 ~/isuumo/bin/pull_branch.sh "${GIT_BRANCH}"
-ssh 192.168.33.13 ~/isuumo/bin/pull_branch.sh "${GIT_BRANCH}"
+ssh 192.168.33.11 ~/isuumo/bin/reload/branch.sh "${GIT_BRANCH}"
+ssh 192.168.33.12 ~/isuumo/bin/reload/branch.sh "${GIT_BRANCH}"
+ssh 192.168.33.13 ~/isuumo/bin/reload/branch.sh "${GIT_BRANCH}"
 ssh 192.168.33.11 ~/isuumo/bin/reload/worker_1.sh
 ssh 192.168.33.12 ~/isuumo/bin/reload/worker_2.sh
 ssh 192.168.33.13 ~/isuumo/bin/reload/worker_3.sh

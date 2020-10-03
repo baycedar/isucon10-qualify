@@ -326,7 +326,7 @@ WHERE
     )
     if chair is None:
         raise NotFound()
-    return camelize(chair)
+    return dict(chair)
 
 
 @app.route("/api/chair/buy/<int:chair_id>", methods=["POST"])

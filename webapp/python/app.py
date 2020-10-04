@@ -555,55 +555,45 @@ WHERE
 
 @app.route("/api/recommended_estate/<int:chair_id>", methods=["GET"])
 def get_recommended_estate(chair_id):
-    query = f"""
+    estates = select_all(
+        f"""
 SELECT
-  width,
-  height,
-  depth
+  e.id,
+  e.name,
+  e.description,
+  e.thumbnail,
+  e.address,
+  e.latitude,
+  e.longitude,
+  e.rent,
+  e.door_height,
+  e.door_width,
+  e.features,
+  e.popularity
 FROM
-  chair
+  estate AS e,
+  chair AS c
 WHERE
-  id = {chair_id}
-    """
-    chair = select_one(query)
-    if chair is None:
-        raise BadRequest(
-            f"Invalid format searchRecommendedEstateWithChair id : {chair_id}"
-        )
-    c_width = chair["width"]
-    c_height = chair["height"]
-    c_depth = chair["depth"]
-
-    query = f"""
-SELECT
-  id,
-  name,
-  description,
-  thumbnail,
-  address,
-  latitude,
-  longitude,
-  rent,
-  door_height,
-  door_width,
-  features,
-  popularity
-FROM
-  estate
-WHERE
-  (door_width >= {c_width} AND door_height >= {c_height})
-  OR (door_width >= {c_width} AND door_height >= {c_depth})
-  OR (door_width >= {c_height} AND door_height >= {c_width})
-  OR (door_width >= {c_height} AND door_height >= {c_depth})
-  OR (door_width >= {c_depth} AND door_height >= {c_width})
-  OR (door_width >= {c_depth} AND door_height >= {c_height})
+  c.id = {chair_id}
+  AND (
+    (e.door_width >= c.width AND e.door_height >= c.height)
+    OR (e.door_width >= c.width AND e.door_height >= c.depth)
+    OR (e.door_width >= c.height AND e.door_height >= c.width)
+    OR (e.door_width >= c.height AND e.door_height >= c.depth)
+    OR (e.door_width >= c.depth AND e.door_height >= c.width)
+    OR (e.door_width >= c.depth AND e.door_height >= c.height)
+  )
 ORDER BY
   popularity DESC,
   id ASC
 LIMIT
   {LIMIT}
-    """
-    estates = select_all(query)
+        """
+    )
+    if len(estates) == 0:
+        raise BadRequest(
+            f"Invalid format searchRecommendedEstateWithChair id : {chair_id}"
+        )
     return {"estates": [camelize_key(estate) for estate in estates]}
 
 

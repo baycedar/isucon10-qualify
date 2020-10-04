@@ -31,7 +31,7 @@ estate_search_condition = json.load(
 app = flask.Flask(__name__)
 
 pg_connection_env = {
-    "host": getenv("PGHOST", "127.0.0.1"),
+    # "host": getenv("PGHOST", "127.0.0.1"), # disable to use UNIX socket
     "port": getenv("PGPORT", 5432),
     "user": getenv("PGUSER", "isucon"),
     "password": getenv("PGPASSWORD", "isucon"),

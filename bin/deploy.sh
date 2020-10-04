@@ -25,9 +25,25 @@ if ! git branch --list "${GIT_BRANCH}" | grep "${GIT_BRANCH}" &> /dev/null; then
   exit 1
 fi
 
-ssh 192.168.33.11 ~/isuumo/bin/reload/branch.sh "${GIT_BRANCH}"
-ssh 192.168.33.12 ~/isuumo/bin/reload/branch.sh "${GIT_BRANCH}"
-ssh 192.168.33.13 ~/isuumo/bin/reload/branch.sh "${GIT_BRANCH}"
-ssh 192.168.33.11 ~/isuumo/bin/reload/worker_1.sh
-ssh 192.168.33.12 ~/isuumo/bin/reload/worker_2.sh
-ssh 192.168.33.13 ~/isuumo/bin/reload/worker_3.sh
+WORKERS=("192.168.33.11" "192.168.33.12" "192.168.33.13")
+
+# initialization
+for WORKER in ${WORKERS}; do
+  # fetch the specified branch on all workers
+  ssh ${WORKER} ~/isuumo/bin/reload/branch.sh "${GIT_BRANCH}"
+  # stop/disable all functions
+  ssh ${WORKER} ~/isuumo/bin/reload/disable_all.sh
+  # update server environment
+  ssh ${WORKER} ~/isuumo/bin/reload/environment.sh
+done
+
+# load environment variables
+source ~/env.sh
+
+# start/enable service
+ssh ${PG_ESTATE_HOST} ~/isuumo/bin/reload/enable_postgresql.sh
+ssh ${PG_CHAIR_HOST} ~/isuumo/bin/reload/enable_postgresql.sh
+for APP_HOST in (${APP_HOSTS}); do
+  ssh ${APP_HOST} ~/isuumo/bin/reload/enable_app.sh
+done
+ssh ${WEB_HOST} ~/isuumo/bin/reload/enable_nginx.sh

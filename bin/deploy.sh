@@ -41,8 +41,7 @@ done
 source ~/env.sh
 
 # start/enable service
-ssh ${PG_ESTATE_HOST} ~/isuumo/bin/reload/enable_postgresql.sh
-ssh ${PG_CHAIR_HOST} ~/isuumo/bin/reload/enable_postgresql.sh
+ssh ${PGHOST} ~/isuumo/bin/reload/enable_postgresql.sh
 for APP_HOST in ${APP_HOSTS}; do
   ssh ${APP_HOST} ~/isuumo/bin/reload/enable_app.sh
 done

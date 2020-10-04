@@ -1,12 +1,11 @@
 from os import getenv
 import json
 import subprocess
-from io import StringIO, TextIOWrapper
-import csv
+from io import TextIOWrapper
 
 import flask
 from werkzeug.exceptions import BadRequest, NotFound
-from psycopg2.extras import RealDictCursor, execute_values
+from psycopg2.extras import RealDictCursor
 from psycopg2.pool import SimpleConnectionPool
 
 LIMIT = 20
@@ -119,7 +118,7 @@ def camelize_key(estate):
 @app.route("/initialize", methods=["POST"])
 def post_initialize():
     subprocess.run(
-        "bash /home/isucon/isuumo/webapp/psql/db/init.sh", shell=True, check=True
+        "bash /home/isucon/isuumo/webapp/psql/init.sh", shell=True, check=True
     )
     return {"language": "python"}
 
@@ -683,32 +682,38 @@ def post_estate():
     if "estates" not in flask.request.files:
         raise BadRequest()
 
-    records = csv.reader(StringIO(flask.request.files["estates"].read().decode()))
-    records = [rec + [f"Point({rec[6]} {rec[5]})"] for rec in records]
-    records = [tuple(rec) for rec in records]
+    csv_io = TextIOWrapper(flask.request.files["estates"], encoding="utf-8")
     conn = estate_pool.getconn()
     conn.set_session(autocommit=True)
     try:
         cur = conn.cursor()
-        query = """
-INSERT INTO estate (
-  id,
-  name,
-  description,
-  thumbnail,
-  address,
-  latitude,
-  longitude,
-  rent,
-  door_height,
-  door_width,
-  features,
-  popularity,
-  geom_coords
-) VALUES
-  %s
-        """
-        execute_values(cur, query, records)
+        cur.copy_expert(
+            """
+COPY
+  estate (
+    id,
+    name,
+    description,
+    thumbnail,
+    address,
+    latitude,
+    longitude,
+    rent,
+    door_height,
+    door_width,
+    features,
+    popularity
+  )
+FROM
+  STDIN
+WITH (
+  FORMAT CSV,
+  DELIMITER ',',
+  FORCE_NOT_NULL(features)
+)
+            """,
+            csv_io,
+        )
         return {"ok": True}, 201
     except Exception as e:
         conn.rollback()

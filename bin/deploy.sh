@@ -43,7 +43,8 @@ source ~/env.sh
 # start/enable service
 ssh ${PG_ESTATE_HOST} ~/isuumo/bin/reload/enable_postgresql.sh
 ssh ${PG_CHAIR_HOST} ~/isuumo/bin/reload/enable_postgresql.sh
-for APP_HOST in (${APP_HOSTS}); do
+APP_HOST_LIST=(${APP_HOSTS})
+for APP_HOST in ${APP_HOST_LIST}; do
   ssh ${APP_HOST} ~/isuumo/bin/reload/enable_app.sh
 done
 ssh ${WEB_HOST} ~/isuumo/bin/reload/enable_nginx.sh

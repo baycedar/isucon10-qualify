@@ -4,10 +4,8 @@ RETURNS TRIGGER
 VOLATILE AS $$
 DECLARE
 BEGIN
-  UPDATE estate SET
-    geom_coords = ST_MakePoint(longitude, latitude)
-  WHERE
-    geom_coords = ST_MakePoint(0, 0);
+  UPDATE NEW SET
+    NEW.geom_coords = ST_MakePoint(NEW.longitude, NEW.latitude);
   RETURN NULL;
 END;
 $$ LANGUAGE plpgsql;

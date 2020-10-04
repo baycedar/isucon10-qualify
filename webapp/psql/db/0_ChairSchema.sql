@@ -1,6 +1,6 @@
 CREATE EXTENSION IF NOT EXISTS pg_stat_statements;
 
-DROP TABLE IF EXISTS estate, chair;
+DROP TABLE IF EXISTS chair CASCADE;
 
 CREATE TABLE chair
 (

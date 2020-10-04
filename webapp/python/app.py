@@ -39,8 +39,8 @@ pg_connection_env = {
 }
 
 conn_pool = SimpleConnectionPool(
-    minconn=10,
-    maxconn=20,
+    minconn=5,
+    maxconn=10,
     **pg_connection_env,
     cursor_factory=RealDictCursor,
 )

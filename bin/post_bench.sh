@@ -35,8 +35,8 @@ psql -h ${PG_CHAIR_HOST} -p ${PGPORT} -U ${PGUSER} -d ${PGDATABASE} \
   -f "./conf/analyze_queries.sql" > ./log/chair_db_summary.txt
 
 # analyze app
-scp ${WEB_HOST}:/var/log/nginx/access.log ./log/raw/
-cat ./log/raw/access.log | kataribe -f ./conf/kataribe.toml > ./log/nginx_summary.txt
+ssh ${WEB_HOST} cat /var/log/nginx/access.log | \
+  kataribe -f ./conf/kataribe.toml > ./log/nginx_summary.txt
 
 # push analysis results
 git add ./log/*

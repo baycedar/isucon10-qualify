@@ -236,7 +236,7 @@ def get_chair_search():
 
     conditions.append("stock > 0")
 
-    search_condition = " AND ".join(conditions)
+    search_condition = "\n  AND ".join(conditions)
 
     query = f"""
 SELECT
@@ -411,7 +411,7 @@ def get_estate_search():
     if len(conditions) == 0:
         raise BadRequest("Search condition not found")
 
-    search_condition = " AND ".join(conditions)
+    search_condition = "\n  AND ".join(conditions)
 
     query = f"""
 SELECT

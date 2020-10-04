@@ -31,7 +31,7 @@ WHERE
 ORDER BY
   calls DESC
 LIMIT
-  20;
+  30;
 
 SELECT 'Order by total time' AS sort_type;
 
@@ -66,7 +66,7 @@ WHERE
 ORDER BY
   total_time DESC
 LIMIT
-  20;
+  30;
 
 SELECT 'Order by mean time' AS sort_type;
 
@@ -101,7 +101,7 @@ WHERE
 ORDER BY
   mean_time DESC
 LIMIT
-  20;
+  30;
 
 SELECT 'Order by standard deviation' AS sort_type;
 
@@ -136,7 +136,7 @@ WHERE
 ORDER BY
   stddev_time DESC
 LIMIT
-  20;
+  30;
 
 SELECT 'Order by max time' AS sort_type;
 
@@ -171,4 +171,4 @@ WHERE
 ORDER BY
   max_time DESC
 LIMIT
-  20;
+  30;

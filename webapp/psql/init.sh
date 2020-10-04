@@ -13,12 +13,14 @@ export LANG="C.UTF-8"
 cd $CURRENT_DIR
 
 psql -h $PG_ESTATE_HOST -p $PGPORT -U $PGUSER -d $PGDATABASE \
-  -f 0_EstateSchema.sql \
-  -f 1_DummyEstateData.sql \
-  -f 2_CreateEstateIndices.sql \
-  -f 3_PostProcessForEstate.sql
+  -f ./db/0_EstateSchema.sql \
+  -f ./udf/udf_update_estates.sql \
+  -f ./udf/trigger_estate_insert.sql \
+  -f ./db/1_DummyEstateData.sql \
+  -f ./db/2_CreateEstateIndices.sql \
+  -f ./db/3_PostProcessForEstate.sql
 psql -h $PG_CHAIR_HOST -p $PGPORT -U $PGUSER -d $PGDATABASE \
-  -f 0_ChairSchema.sql \
-  -f 1_DummyChairData.sql \
-  -f 2_CreateChairIndices.sql \
-  -f 3_PostProcessForChair.sql
+  -f ./db/0_ChairSchema.sql \
+  -f ./db/1_DummyChairData.sql \
+  -f ./db/2_CreateChairIndices.sql \
+  -f ./db/3_PostProcessForChair.sql

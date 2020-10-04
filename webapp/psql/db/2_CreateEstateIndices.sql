@@ -1,7 +1,3 @@
--- updates geometries
-UPDATE estate SET
-  geom_coords = ST_MakePoint(longitude, latitude);
-
 -- indices for ORDER BY
 CREATE INDEX ON estate USING btree (rent ASC, id ASC);
 CREATE INDEX ON estate USING btree (popularity DESC, id ASC);

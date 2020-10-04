@@ -30,38 +30,24 @@ estate_search_condition = json.load(
 
 app = flask.Flask(__name__)
 
-estate_connection_env = {
-    "host": getenv("PG_ESTATE_HOST", "127.0.0.1"),
+pg_connection_env = {
+    "host": getenv("PGHOST", "127.0.0.1"),
     "port": getenv("PGPORT", 5432),
     "user": getenv("PGUSER", "isucon"),
     "password": getenv("PGPASSWORD", "isucon"),
     "dbname": getenv("PGDATABASE", "isuumo"),
 }
 
-chair_connection_env = {
-    "host": getenv("PG_CHAIR_HOST", "127.0.0.1"),
-    "port": getenv("PGPORT", 5432),
-    "user": getenv("PGUSER", "isucon"),
-    "password": getenv("PGPASSWORD", "isucon"),
-    "dbname": getenv("PGDATABASE", "isuumo"),
-}
-
-estate_pool = SimpleConnectionPool(
-    minconn=5,
-    maxconn=10,
-    **estate_connection_env,
-    cursor_factory=RealDictCursor,
-)
-chair_pool = SimpleConnectionPool(
-    minconn=5,
-    maxconn=10,
-    **chair_connection_env,
+conn_pool = SimpleConnectionPool(
+    minconn=10,
+    maxconn=20,
+    **pg_connection_env,
     cursor_factory=RealDictCursor,
 )
 
 
-def select_estates(query, *args):
-    conn = estate_pool.getconn()
+def select_all(query, *args):
+    conn = conn_pool.getconn()
     conn.set_session(autocommit=True)
     try:
         cur = conn.cursor()
@@ -69,11 +55,11 @@ def select_estates(query, *args):
         rows = cur.fetchall()
         return rows
     finally:
-        estate_pool.putconn(conn)
+        conn_pool.putconn(conn)
 
 
-def select_estate(query, *args, **kwargs):
-    conn = estate_pool.getconn()
+def select_one(query, *args, **kwargs):
+    conn = conn_pool.getconn()
     conn.set_session(autocommit=True)
     try:
         cur = conn.cursor()
@@ -81,31 +67,7 @@ def select_estate(query, *args, **kwargs):
         row = cur.fetchone()
         return row
     finally:
-        estate_pool.putconn(conn)
-
-
-def select_chairs(query, *args):
-    conn = chair_pool.getconn()
-    conn.set_session(autocommit=True)
-    try:
-        cur = conn.cursor()
-        cur.execute(query, *args)
-        rows = cur.fetchall()
-        return rows
-    finally:
-        chair_pool.putconn(conn)
-
-
-def select_chair(query, *args):
-    conn = chair_pool.getconn()
-    conn.set_session(autocommit=True)
-    try:
-        cur = conn.cursor()
-        cur.execute(query, *args)
-        row = cur.fetchone()
-        return row
-    finally:
-        chair_pool.putconn(conn)
+        conn_pool.putconn(conn)
 
 
 def camelize_key(estate):
@@ -125,7 +87,7 @@ def post_initialize():
 
 @app.route("/api/estate/low_priced", methods=["GET"])
 def get_estate_low_priced():
-    estates = select_estates(
+    estates = select_all(
         f"""
 SELECT
   id,
@@ -154,7 +116,7 @@ LIMIT
 
 @app.route("/api/chair/low_priced", methods=["GET"])
 def get_chair_low_priced():
-    rows = select_chairs(
+    rows = select_all(
         f"""
 SELECT
   id,
@@ -284,7 +246,7 @@ FROM
 WHERE
   {search_condition}
     """
-    count = select_chair(query, params)["count"]
+    count = select_one(query, params)["count"]
 
     query = f"""
 SELECT
@@ -313,7 +275,7 @@ LIMIT
 OFFSET
   {per_page * page}
     """
-    chairs = select_chairs(query, params)
+    chairs = select_all(query, params)
 
     return {"count": count, "chairs": [dict(chair) for chair in chairs]}
 
@@ -325,7 +287,7 @@ def get_chair_search_condition():
 
 @app.route("/api/chair/<int:chair_id>", methods=["GET"])
 def get_chair(chair_id):
-    chair = select_chair(
+    chair = select_one(
         f"""
 SELECT
   id,
@@ -355,7 +317,7 @@ WHERE
 
 @app.route("/api/chair/buy/<int:chair_id>", methods=["POST"])
 def post_chair_buy(chair_id):
-    conn = chair_pool.getconn()
+    conn = conn_pool.getconn()
     conn.set_session(autocommit=True)
     try:
         cur = conn.cursor()
@@ -380,7 +342,7 @@ RETURNING
         conn.rollback()
         raise e
     finally:
-        chair_pool.putconn(conn)
+        conn_pool.putconn(conn)
 
 
 @app.route("/api/estate/search", methods=["GET"])
@@ -459,7 +421,7 @@ FROM
 WHERE
   {search_condition}
     """
-    count = select_estate(query, params)["count"]
+    count = select_one(query, params)["count"]
 
     query = f"""
 SELECT
@@ -487,7 +449,7 @@ LIMIT
 OFFSET
   {per_page * page}
     """
-    estates = select_estates(query, params)
+    estates = select_all(query, params)
 
     return {"count": count, "estates": [camelize_key(estate) for estate in estates]}
 
@@ -499,7 +461,7 @@ def get_estate_search_condition():
 
 @app.route("/api/estate/req_doc/<int:estate_id>", methods=["POST"])
 def post_estate_req_doc(estate_id):
-    estate = select_estate(
+    estate = select_one(
         f"""
 SELECT
   id
@@ -526,7 +488,7 @@ POLYGON((
   {','.join(['{} {}'.format(c['longitude'], c['latitude']) for c in coordinates])}
 ))
     """
-    estates = select_estates(
+    estates = select_all(
         f"""
 SELECT
   id,
@@ -565,7 +527,7 @@ LIMIT
 
 @app.route("/api/estate/<int:estate_id>", methods=["GET"])
 def get_estate(estate_id):
-    estate = select_estate(
+    estate = select_one(
         f"""
 SELECT
   id,
@@ -603,7 +565,7 @@ FROM
 WHERE
   id = {chair_id}
     """
-    chair = select_chair(query)
+    chair = select_one(query)
     if chair is None:
         raise BadRequest(
             f"Invalid format searchRecommendedEstateWithChair id : {chair_id}"
@@ -641,7 +603,7 @@ ORDER BY
 LIMIT
   {LIMIT}
     """
-    estates = select_estates(query)
+    estates = select_all(query)
     return {"estates": [camelize_key(estate) for estate in estates]}
 
 
@@ -651,7 +613,7 @@ def post_chair():
         raise BadRequest()
 
     csv_io = TextIOWrapper(flask.request.files["chairs"], encoding="utf-8")
-    conn = chair_pool.getconn()
+    conn = conn_pool.getconn()
     conn.set_session(autocommit=True)
     try:
         cur = conn.cursor()
@@ -674,7 +636,7 @@ WITH (
         conn.rollback()
         raise e
     finally:
-        chair_pool.putconn(conn)
+        conn_pool.putconn(conn)
 
 
 @app.route("/api/estate", methods=["POST"])
@@ -683,7 +645,7 @@ def post_estate():
         raise BadRequest()
 
     csv_io = TextIOWrapper(flask.request.files["estates"], encoding="utf-8")
-    conn = estate_pool.getconn()
+    conn = conn_pool.getconn()
     conn.set_session(autocommit=True)
     try:
         cur = conn.cursor()
@@ -719,7 +681,7 @@ WITH (
         conn.rollback()
         raise e
     finally:
-        estate_pool.putconn(conn)
+        conn_pool.putconn(conn)
 
 
 if __name__ == "__main__":

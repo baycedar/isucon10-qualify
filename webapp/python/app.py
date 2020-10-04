@@ -1,7 +1,7 @@
 from os import getenv
 import json
 import subprocess
-from io import StringIO
+from io import StringIO, TextIOWrapper
 import csv
 
 import flask
@@ -651,31 +651,25 @@ def post_chair():
     if "chairs" not in flask.request.files:
         raise BadRequest()
 
-    records = csv.reader(StringIO(flask.request.files["chairs"].read().decode()))
-    records = [tuple(record) for record in records]
+    csv_io = TextIOWrapper(flask.request.files["chairs"], encoding="utf-8")
     conn = chair_pool.getconn()
     conn.set_session(autocommit=True)
     try:
         cur = conn.cursor()
-        query = """
-INSERT INTO chair (
-  id,
-  name,
-  description,
-  thumbnail,
-  price,
-  height,
-  width,
-  depth,
-  color,
-  features,
-  kind,
-  popularity,
-  stock
-) VALUES
-  %s
-        """
-        execute_values(cur, query, records)
+        cur.copy_expert(
+            """
+COPY
+  chair
+FROM
+  STDIN
+WITH (
+  FORMAT CSV,
+  DELIMITER ',',
+  FORCE_NOT_NULL(features)
+)
+            """,
+            csv_io,
+        )
         return {"ok": True}, 201
     except Exception as e:
         conn.rollback()

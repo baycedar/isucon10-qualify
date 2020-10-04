@@ -44,7 +44,7 @@ source ~/env.sh
 ssh ${PG_ESTATE_HOST} ~/isuumo/bin/reload/enable_postgresql.sh
 ssh ${PG_CHAIR_HOST} ~/isuumo/bin/reload/enable_postgresql.sh
 APP_HOST_LIST=(${APP_HOSTS})
-for APP_HOST in ${APP_HOST_LIST}; do
+for APP_HOST in ${APP_HOST_LISTi[@]}; do
   ssh ${APP_HOST} ~/isuumo/bin/reload/enable_app.sh
 done
 ssh ${WEB_HOST} ~/isuumo/bin/reload/enable_nginx.sh

@@ -116,7 +116,7 @@ LIMIT
 
 @app.route("/api/chair/low_priced", methods=["GET"])
 def get_chair_low_priced():
-    rows = select_all(
+    chairs = select_all(
         f"""
 SELECT
   id,
@@ -143,7 +143,7 @@ LIMIT
   {LIMIT}
         """,
     )
-    return {"chairs": [dict(row) for row in rows]}
+    return {"chairs": [dict(chair) for chair in chairs]}
 
 
 @app.route("/api/chair/search", methods=["GET"])

@@ -1,0 +1,9 @@
+[Unit]
+Description=isuumo.python
+
+[Socket]
+ListenStream=/run/isuumo/python.sock
+User=isucon
+
+[Install]
+WantedBy=sockets.target

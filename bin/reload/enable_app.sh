@@ -14,6 +14,9 @@ touch ./webapp/python/error.log
 
 # apply new settings
 sudo cp -b ./conf/isuumo.python.service /etc/systemd/system/isuumo.python.service
+sudo cp -b ./conf/isuumo.python.socket /etc/systemd/system/isuumo.python.socket
 sudo systemctl daemon-reload
-sudo systemctl restart isuumo.python.service
+sudo systemctl start isuumo.python.socket
+sudo systemctl enable isuumo.python.socket
+sudo systemctl start isuumo.python.service
 sudo systemctl enable isuumo.python.service

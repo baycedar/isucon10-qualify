@@ -17,6 +17,7 @@ import (
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 	"github.com/labstack/gommon/log"
+	"github.com/lib/pq"
 	_ "github.com/lib/pq"
 )
 
@@ -397,6 +398,28 @@ func postChair(c echo.Context) error {
 		return c.NoContent(http.StatusInternalServerError)
 	}
 	defer tx.Rollback()
+
+	// bulk imports
+	stmt, err := tx.Prepare(pq.CopyIn(
+		"chair",
+		"id",
+		"name",
+		"description",
+		"thumbnail",
+		"price",
+		"height",
+		"width",
+		"depth",
+		"color",
+		"features",
+		"kind",
+		"popularity",
+		"stock",
+	))
+	if err != nil {
+		c.Logger().Errorf("failed to prepare copy: %v", err)
+		return c.NoContent(http.StatusInternalServerError)
+	}
 	for _, row := range records {
 		rm := RecordMapper{Record: row}
 		id := rm.NextInt()
@@ -416,12 +439,31 @@ func postChair(c echo.Context) error {
 			c.Logger().Errorf("failed to read record: %v", err)
 			return c.NoContent(http.StatusBadRequest)
 		}
-		_, err := tx.Exec("INSERT INTO chair(id, name, description, thumbnail, price, height, width, depth, color, features, kind, popularity, stock) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)", id, name, description, thumbnail, price, height, width, depth, color, features, kind, popularity, stock)
+		_, err = stmt.Exec(
+			id,
+			name,
+			description,
+			thumbnail,
+			price,
+			height,
+			width,
+			depth,
+			color,
+			features,
+			kind,
+			popularity,
+			stock,
+		)
 		if err != nil {
 			c.Logger().Errorf("failed to insert chair: %v", err)
 			return c.NoContent(http.StatusInternalServerError)
 		}
 	}
+	if err := stmt.Close(); err != nil {
+		c.Logger().Errorf("failed to close copy: %v", err)
+		return c.NoContent(http.StatusInternalServerError)
+	}
+
 	if err := tx.Commit(); err != nil {
 		c.Logger().Errorf("failed to commit tx: %v", err)
 		return c.NoContent(http.StatusInternalServerError)

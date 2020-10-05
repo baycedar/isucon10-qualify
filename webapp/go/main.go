@@ -483,11 +483,11 @@ func searchChairs(c echo.Context) error {
 		}
 
 		if chairPrice.Min != -1 {
-			conditions = append(conditions, "price >= ?")
+			conditions = append(conditions, "price >= $"+strconv.Itoa(len(params)+1))
 			params = append(params, chairPrice.Min)
 		}
 		if chairPrice.Max != -1 {
-			conditions = append(conditions, "price < ?")
+			conditions = append(conditions, "price < $"+strconv.Itoa(len(params)+1))
 			params = append(params, chairPrice.Max)
 		}
 	}
@@ -500,11 +500,11 @@ func searchChairs(c echo.Context) error {
 		}
 
 		if chairHeight.Min != -1 {
-			conditions = append(conditions, "height >= ?")
+			conditions = append(conditions, "height >= $"+strconv.Itoa(len(params)+1))
 			params = append(params, chairHeight.Min)
 		}
 		if chairHeight.Max != -1 {
-			conditions = append(conditions, "height < ?")
+			conditions = append(conditions, "height < $"+strconv.Itoa(len(params)+1))
 			params = append(params, chairHeight.Max)
 		}
 	}
@@ -517,11 +517,11 @@ func searchChairs(c echo.Context) error {
 		}
 
 		if chairWidth.Min != -1 {
-			conditions = append(conditions, "width >= ?")
+			conditions = append(conditions, "width >= $"+strconv.Itoa(len(params)+1))
 			params = append(params, chairWidth.Min)
 		}
 		if chairWidth.Max != -1 {
-			conditions = append(conditions, "width < ?")
+			conditions = append(conditions, "width < $"+strconv.Itoa(len(params)+1))
 			params = append(params, chairWidth.Max)
 		}
 	}
@@ -534,28 +534,28 @@ func searchChairs(c echo.Context) error {
 		}
 
 		if chairDepth.Min != -1 {
-			conditions = append(conditions, "depth >= ?")
+			conditions = append(conditions, "depth >= $"+strconv.Itoa(len(params)+1))
 			params = append(params, chairDepth.Min)
 		}
 		if chairDepth.Max != -1 {
-			conditions = append(conditions, "depth < ?")
+			conditions = append(conditions, "depth < $"+strconv.Itoa(len(params)+1))
 			params = append(params, chairDepth.Max)
 		}
 	}
 
 	if c.QueryParam("kind") != "" {
-		conditions = append(conditions, "kind = ?")
+		conditions = append(conditions, "kind = $"+strconv.Itoa(len(params)+1))
 		params = append(params, c.QueryParam("kind"))
 	}
 
 	if c.QueryParam("color") != "" {
-		conditions = append(conditions, "color = ?")
+		conditions = append(conditions, "color = $"+strconv.Itoa(len(params)+1))
 		params = append(params, c.QueryParam("color"))
 	}
 
 	if c.QueryParam("features") != "" {
 		for _, f := range strings.Split(c.QueryParam("features"), ",") {
-			conditions = append(conditions, "features LIKE CONCAT('%', ?, '%')")
+			conditions = append(conditions, "features LIKE CONCAT('%', $"+strconv.Itoa(len(params)+1)+", '%')")
 			params = append(params, f)
 		}
 	}
@@ -579,10 +579,42 @@ func searchChairs(c echo.Context) error {
 		return c.NoContent(http.StatusBadRequest)
 	}
 
-	searchQuery := "SELECT * FROM chair WHERE "
-	countQuery := "SELECT COUNT(*) FROM chair WHERE "
-	searchCondition := strings.Join(conditions, " AND ")
-	limitOffset := " ORDER BY popularity DESC, id ASC LIMIT ? OFFSET ?"
+	searchQuery := `
+SELECT
+  id,
+  name,
+  description,
+  thumbnail,
+  price,
+  height,
+  width,
+  depth,
+  color,
+  features,
+  kind,
+  popularity,
+  stock
+FROM
+  chair
+WHERE
+`
+	countQuery := `
+SELECT
+  COUNT(*) as count
+FROM
+  chair
+WHERE
+`
+	searchCondition := strings.Join(conditions, "\n  AND ")
+	limitOffset := `
+ORDER BY
+	popularity DESC,
+	id ASC
+LIMIT
+	$` + strconv.Itoa(len(params)+1) + `
+OFFSET
+	$` + strconv.Itoa(len(params)+2) + `
+`
 
 	var res ChairSearchResponse
 	err = db.Get(&res.Count, countQuery+searchCondition, params...)

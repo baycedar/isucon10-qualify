@@ -337,7 +337,26 @@ func getChairDetail(c echo.Context) error {
 	}
 
 	chair := Chair{}
-	query := `SELECT * FROM chair WHERE id = ?`
+	query := `
+SELECT
+  id,
+  name,
+  description,
+  thumbnail,
+  price,
+  height,
+  width,
+  depth,
+  color,
+  features,
+  kind,
+  popularity,
+  stock
+FROM
+  chair
+WHERE
+  id = $1
+`
 	err = db.Get(&chair, query, id)
 	if err != nil {
 		if err == sql.ErrNoRows {

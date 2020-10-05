@@ -20,7 +20,10 @@ import (
 	"github.com/labstack/gommon/log"
 )
 
+// Limit is the default max number of result rows
 const Limit = 20
+
+// NazotteLimit is the max number of result rows for nazotte queries
 const NazotteLimit = 50
 
 var db *sqlx.DB
@@ -28,10 +31,12 @@ var mySQLConnectionData *MySQLConnectionEnv
 var chairSearchCondition ChairSearchCondition
 var estateSearchCondition EstateSearchCondition
 
+// InitializeResponse is a response format for /initialize
 type InitializeResponse struct {
 	Language string `json:"language"`
 }
 
+// Chair is a base format for chair data
 type Chair struct {
 	ID          int64  `db:"id" json:"id"`
 	Name        string `db:"name" json:"name"`
@@ -48,16 +53,18 @@ type Chair struct {
 	Stock       int64  `db:"stock" json:"-"`
 }
 
+// ChairSearchResponse is a response format for /api/chair/search
 type ChairSearchResponse struct {
 	Count  int64   `json:"count"`
 	Chairs []Chair `json:"chairs"`
 }
 
+// ChairListResponse is a response format for a list of chairs
 type ChairListResponse struct {
 	Chairs []Chair `json:"chairs"`
 }
 
-//Estate 物件
+// Estate is a base format for estate data
 type Estate struct {
 	ID          int64   `db:"id" json:"id"`
 	Thumbnail   string  `db:"thumbnail" json:"thumbnail"`
@@ -73,41 +80,48 @@ type Estate struct {
 	Popularity  int64   `db:"popularity" json:"-"`
 }
 
-//EstateSearchResponse estate/searchへのレスポンスの形式
+// EstateSearchResponse is a response format for /api/estate/search
 type EstateSearchResponse struct {
 	Count   int64    `json:"count"`
 	Estates []Estate `json:"estates"`
 }
 
+// EstateListResponse is a response format for a list of estates
 type EstateListResponse struct {
 	Estates []Estate `json:"estates"`
 }
 
+// Coordinate is a struct for 2-D coordinates
 type Coordinate struct {
 	Latitude  float64 `json:"latitude"`
 	Longitude float64 `json:"longitude"`
 }
 
+// Coordinates is a struct for a 2-D polygon
 type Coordinates struct {
 	Coordinates []Coordinate `json:"coordinates"`
 }
 
+// Range is a base struct for conditions of range queries
 type Range struct {
 	ID  int64 `json:"id"`
 	Min int64 `json:"min"`
 	Max int64 `json:"max"`
 }
 
+// RangeCondition is a struct to decorate ranges
 type RangeCondition struct {
 	Prefix string   `json:"prefix"`
 	Suffix string   `json:"suffix"`
 	Ranges []*Range `json:"ranges"`
 }
 
+// ListCondition is a struct for a list of select conditions
 type ListCondition struct {
 	List []string `json:"list"`
 }
 
+// EstateSearchCondition is a struct for conditions of estates
 type EstateSearchCondition struct {
 	DoorWidth  RangeCondition `json:"doorWidth"`
 	DoorHeight RangeCondition `json:"doorHeight"`
@@ -115,6 +129,7 @@ type EstateSearchCondition struct {
 	Feature    ListCondition  `json:"feature"`
 }
 
+// ChairSearchCondition is a struct for conditions of chairs
 type ChairSearchCondition struct {
 	Width   RangeCondition `json:"width"`
 	Height  RangeCondition `json:"height"`
@@ -125,6 +140,7 @@ type ChairSearchCondition struct {
 	Kind    ListCondition  `json:"kind"`
 }
 
+// BoundingBox will be unused
 type BoundingBox struct {
 	// TopLeftCorner 緯度経度が共に最小値になるような点の情報を持っている
 	TopLeftCorner Coordinate
@@ -132,6 +148,7 @@ type BoundingBox struct {
 	BottomRightCorner Coordinate
 }
 
+// MySQLConnectionEnv is a struct to retain MySQL connection information
 type MySQLConnectionEnv struct {
 	Host     string
 	Port     string
@@ -140,6 +157,7 @@ type MySQLConnectionEnv struct {
 	Password string
 }
 
+// RecordMapper is a struct for a record of query results
 type RecordMapper struct {
 	Record []string
 
@@ -160,6 +178,7 @@ func (r *RecordMapper) next() (string, error) {
 	return s, nil
 }
 
+// NextInt parses a record into int
 func (r *RecordMapper) NextInt() int {
 	s, err := r.next()
 	if err != nil {
@@ -173,6 +192,7 @@ func (r *RecordMapper) NextInt() int {
 	return i
 }
 
+// NextFloat parses a record into float
 func (r *RecordMapper) NextFloat() float64 {
 	s, err := r.next()
 	if err != nil {
@@ -186,6 +206,7 @@ func (r *RecordMapper) NextFloat() float64 {
 	return f
 }
 
+// NextString parses a record into string
 func (r *RecordMapper) NextString() string {
 	s, err := r.next()
 	if err != nil {
@@ -194,10 +215,12 @@ func (r *RecordMapper) NextString() string {
 	return s
 }
 
+// Err returns an error of a record
 func (r *RecordMapper) Err() error {
 	return r.err
 }
 
+// NewMySQLConnectionEnv returns a connection of MySQL
 func NewMySQLConnectionEnv() *MySQLConnectionEnv {
 	return &MySQLConnectionEnv{
 		Host:     getEnv("MYSQL_HOST", "127.0.0.1"),

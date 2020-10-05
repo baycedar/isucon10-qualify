@@ -39,7 +39,9 @@
   // Others
   /*----------------------------------------------------------------------------------*/
   "cSpell.words": [
+    "Beginx",
     "DBNAME",
+    "Infof",
     "NAZOTTE",
     "PGDATABASE",
     "PGHOST",
@@ -47,6 +49,7 @@
     "PGPORT",
     "PGUSER",
     "PSQL",
+    "Rowx",
     "VARCHAR",
     "blks",
     "btree",
@@ -58,8 +61,10 @@
     "dropdb",
     "enduml",
     "getenv",
+    "gommon",
     "isucon",
     "isuumo",
+    "jmoiron",
     "noqa",
     "pipenv",
     "plpgsql",
@@ -69,6 +74,7 @@
     "psycopg",
     "pyenv",
     "skinparam",
+    "sqlx",
     "startuml",
     "stddev",
     "venv",

@@ -13,11 +13,11 @@ import (
 	"strconv"
 	"strings"
 
-	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 	"github.com/labstack/gommon/log"
+	_ "github.com/lib/pq"
 )
 
 // Limit is the default max number of result rows
@@ -27,7 +27,7 @@ const Limit = 20
 const NazotteLimit = 50
 
 var db *sqlx.DB
-var mySQLConnectionData *MySQLConnectionEnv
+var pgConnectionData *PgConnectionEnv
 var chairSearchCondition ChairSearchCondition
 var estateSearchCondition EstateSearchCondition
 
@@ -148,8 +148,8 @@ type BoundingBox struct {
 	BottomRightCorner Coordinate
 }
 
-// MySQLConnectionEnv is a struct to retain MySQL connection information
-type MySQLConnectionEnv struct {
+// PgConnectionEnv is a struct to retain PostgreSQL connection information
+type PgConnectionEnv struct {
 	Host     string
 	Port     string
 	User     string
@@ -220,14 +220,14 @@ func (r *RecordMapper) Err() error {
 	return r.err
 }
 
-// NewMySQLConnectionEnv returns a connection of MySQL
-func NewMySQLConnectionEnv() *MySQLConnectionEnv {
-	return &MySQLConnectionEnv{
-		Host:     getEnv("MYSQL_HOST", "127.0.0.1"),
-		Port:     getEnv("MYSQL_PORT", "3306"),
-		User:     getEnv("MYSQL_USER", "isucon"),
-		DBName:   getEnv("MYSQL_DBNAME", "isuumo"),
-		Password: getEnv("MYSQL_PASS", "isucon"),
+// NewPgConnectionEnv returns a connection of PostgreSQL
+func NewPgConnectionEnv() *PgConnectionEnv {
+	return &PgConnectionEnv{
+		Host:     getEnv("PGHOST", "127.0.0.1"),
+		Port:     getEnv("PGPORT", "5432"),
+		User:     getEnv("PGUSER", "isucon"),
+		DBName:   getEnv("PGDATABASE", "isuumo"),
+		Password: getEnv("PGPASSWORD", "isucon"),
 	}
 }
 
@@ -240,9 +240,16 @@ func getEnv(key, defaultValue string) string {
 }
 
 //ConnectDB isuumoデータベースに接続する
-func (mc *MySQLConnectionEnv) ConnectDB() (*sqlx.DB, error) {
-	dsn := fmt.Sprintf("%v:%v@tcp(%v:%v)/%v", mc.User, mc.Password, mc.Host, mc.Port, mc.DBName)
-	return sqlx.Open("mysql", dsn)
+func (mc *PgConnectionEnv) ConnectDB() (*sqlx.DB, error) {
+	dsn := fmt.Sprintf(
+		"user=%v password=%v host=%v port=%v dbname=%v sslmode=disable",
+		mc.User,
+		mc.Password,
+		mc.Host,
+		mc.Port,
+		mc.DBName,
+	)
+	return sqlx.Open("postgres", dsn)
 }
 
 func init() {
@@ -292,10 +299,10 @@ func main() {
 	e.GET("/api/estate/search/condition", getEstateSearchCondition)
 	e.GET("/api/recommended_estate/:id", searchRecommendedEstateWithChair)
 
-	mySQLConnectionData = NewMySQLConnectionEnv()
+	pgConnectionData = NewPgConnectionEnv()
 
 	var err error
-	db, err = mySQLConnectionData.ConnectDB()
+	db, err = pgConnectionData.ConnectDB()
 	if err != nil {
 		e.Logger.Fatalf("DB connection failed : %v", err)
 	}
@@ -308,27 +315,13 @@ func main() {
 }
 
 func initialize(c echo.Context) error {
-	sqlDir := filepath.Join("..", "mysql", "db")
-	paths := []string{
-		filepath.Join(sqlDir, "0_Schema.sql"),
-		filepath.Join(sqlDir, "1_DummyEstateData.sql"),
-		filepath.Join(sqlDir, "2_DummyChairData.sql"),
-	}
+	psqlDir := filepath.Join("..", "psql")
 
-	for _, p := range paths {
-		sqlFile, _ := filepath.Abs(p)
-		cmdStr := fmt.Sprintf("mysql -h %v -u %v -p%v -P %v %v < %v",
-			mySQLConnectionData.Host,
-			mySQLConnectionData.User,
-			mySQLConnectionData.Password,
-			mySQLConnectionData.Port,
-			mySQLConnectionData.DBName,
-			sqlFile,
-		)
-		if err := exec.Command("bash", "-c", cmdStr).Run(); err != nil {
-			c.Logger().Errorf("Initialize script error : %v", err)
-			return c.NoContent(http.StatusInternalServerError)
-		}
+	absPath, _ := filepath.Abs(psqlDir)
+	cmdStr := fmt.Sprintf("%v/init.sh", absPath)
+	if err := exec.Command("bash", cmdStr).Run(); err != nil {
+		c.Logger().Errorf("Initialize script error : %v", err)
+		return c.NoContent(http.StatusInternalServerError)
 	}
 
 	return c.JSON(http.StatusOK, InitializeResponse{

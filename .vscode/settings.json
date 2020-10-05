@@ -35,6 +35,7 @@
   // Go Settings
   /*----------------------------------------------------------------------------------*/
   "go.goroot": "/opt/go/current",
+  "go.useLanguageServer": true,
   "[go]": {
     "editor.renderWhitespace": "selection",
   },

@@ -547,8 +547,8 @@ func searchChairs(c echo.Context) error {
 
 	if c.QueryParam("features") != "" {
 		for _, f := range strings.Split(c.QueryParam("features"), ",") {
-			conditions = append(conditions, "features LIKE CONCAT('%', $"+strconv.Itoa(len(params)+1)+", '%')")
-			params = append(params, f)
+			conditions = append(conditions, "features LIKE CONCAT('%', '"+f+"', '%')")
+			//params = append(params, f)
 		}
 	}
 
@@ -657,24 +657,25 @@ func buyChair(c echo.Context) error {
 	}
 	defer tx.Rollback()
 
-	chair, err := tx.Queryx(`
+	row := tx.QueryRowx(`
 UPDATE
   chair
 SET
   stock = stock - 1
 WHERE
-  id = {chair_id}
+  id = $1
   AND stock > 0
 RETURNING
   id
 `,
 		id,
 	)
-	if err != nil {
-		c.Echo().Logger.Errorf("chair stock update failed : %v", err)
-		return c.NoContent(http.StatusInternalServerError)
-	}
-	err = chair.StructScan(&chair)
+	//if err != nil {
+	//	c.Echo().Logger.Errorf("chair stock update failed : %v", err)
+	//	return c.NoContent(http.StatusInternalServerError)
+	//}
+	var returning_id int
+	err = row.Scan(&returning_id)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			c.Echo().Logger.Infof("buyChair chair id \"%v\" not found", id)
@@ -966,9 +967,9 @@ func searchEstates(c echo.Context) error {
 		for _, f := range strings.Split(c.QueryParam("features"), ",") {
 			conditions = append(
 				conditions,
-				"features LIKE CONCAT('%', "+strconv.Itoa(len(params)+1)+", '%')",
+				"features LIKE CONCAT('%', '"+f+"', '%')",
 			)
-			params = append(params, f)
+			//params = append(params, f)
 		}
 	}
 
@@ -1024,6 +1025,8 @@ LIMIT
 OFFSET
 	$` + strconv.Itoa(len(params)+2) + `
 `
+
+	c.Logger().Warnf("Estate search SQL: %v", countQuery+searchCondition+limitOffset)
 
 	var res EstateSearchResponse
 	err = db.Get(&res.Count, countQuery+searchCondition, params...)
@@ -1185,19 +1188,23 @@ FROM
   estate
 WHERE
   ST_Contains(
-    ST_PolygonFromText('$1'),
+    ST_PolygonFromText(`+coordinates.coordinatesToText()+`),
     geom_coords
   )
 ORDER BY
   popularity DESC,
   id ASC
 LIMIT
-  $2
+  $1
 `
+
+	c.Echo().Logger.Infof("Nazotte SQL: ", query)
+	c.Echo().Logger.Infof("Nazotte Polygon: ", coordinates.coordinatesToText())
+
 	err = db.Select(
 		&re.Estates,
 		query,
-		coordinates.coordinatesToText(),
+//		coordinates.coordinatesToText(),
 		NazotteLimit,
 	)
 	if err == sql.ErrNoRows {
@@ -1259,7 +1266,7 @@ func getEstateSearchCondition(c echo.Context) error {
 func (cs Coordinates) coordinatesToText() string {
 	points := make([]string, 0, len(cs.Coordinates))
 	for _, c := range cs.Coordinates {
-		points = append(points, fmt.Sprintf("%f %f", c.Latitude, c.Longitude))
+		points = append(points, fmt.Sprintf("%f %f", c.Longitude, c.Latitude))
 	}
 	return fmt.Sprintf("'POLYGON((%s))'", strings.Join(points, ","))
 }

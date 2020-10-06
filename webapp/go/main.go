@@ -1058,7 +1058,28 @@ OFFSET
 
 func getLowPricedEstate(c echo.Context) error {
 	estates := make([]Estate, 0, Limit)
-	query := `SELECT * FROM estate ORDER BY rent ASC, id ASC LIMIT ?`
+	query := `
+SELECT
+  id,
+  name,
+  description,
+  thumbnail,
+  address,
+  latitude,
+  longitude,
+  rent,
+  door_height,
+  door_width,
+  features,
+  popularity
+FROM
+  estate
+ORDER BY
+  rent ASC,
+  id ASC
+LIMIT
+  $1
+`
 	err := db.Select(&estates, query, Limit)
 	if err != nil {
 		if err == sql.ErrNoRows {

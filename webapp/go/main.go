@@ -899,59 +899,83 @@ func searchEstates(c echo.Context) error {
 	params := make([]interface{}, 0)
 
 	if c.QueryParam("doorHeightRangeId") != "" {
-		doorHeight, err := getRange(estateSearchCondition.DoorHeight, c.QueryParam("doorHeightRangeId"))
+		doorHeight, err := getRange(
+			estateSearchCondition.DoorHeight,
+			c.QueryParam("doorHeightRangeId"),
+		)
 		if err != nil {
-			c.Echo().Logger.Infof("doorHeightRangeID invalid, %v : %v", c.QueryParam("doorHeightRangeId"), err)
+			c.Echo().Logger.Infof(
+				"doorHeightRangeID invalid, %v : %v",
+				c.QueryParam("doorHeightRangeId"),
+				err,
+			)
 			return c.NoContent(http.StatusBadRequest)
 		}
 
 		if doorHeight.Min != -1 {
-			conditions = append(conditions, "door_height >= ?")
+			conditions = append(conditions, "door_height >= $"+strconv.Itoa(len(params)+1))
 			params = append(params, doorHeight.Min)
 		}
 		if doorHeight.Max != -1 {
-			conditions = append(conditions, "door_height < ?")
+			conditions = append(conditions, "door_height < $"+strconv.Itoa(len(params)+1))
 			params = append(params, doorHeight.Max)
 		}
 	}
 
 	if c.QueryParam("doorWidthRangeId") != "" {
-		doorWidth, err := getRange(estateSearchCondition.DoorWidth, c.QueryParam("doorWidthRangeId"))
+		doorWidth, err := getRange(
+			estateSearchCondition.DoorWidth,
+			c.QueryParam("doorWidthRangeId"),
+		)
 		if err != nil {
-			c.Echo().Logger.Infof("doorWidthRangeID invalid, %v : %v", c.QueryParam("doorWidthRangeId"), err)
+			c.Echo().Logger.Infof(
+				"doorWidthRangeID invalid, %v : %v",
+				c.QueryParam("doorWidthRangeId"),
+				err,
+			)
 			return c.NoContent(http.StatusBadRequest)
 		}
 
 		if doorWidth.Min != -1 {
-			conditions = append(conditions, "door_width >= ?")
+			conditions = append(conditions, "door_width >= $"+strconv.Itoa(len(params)+1))
 			params = append(params, doorWidth.Min)
 		}
 		if doorWidth.Max != -1 {
-			conditions = append(conditions, "door_width < ?")
+			conditions = append(conditions, "door_width < $"+strconv.Itoa(len(params)+1))
 			params = append(params, doorWidth.Max)
 		}
 	}
 
 	if c.QueryParam("rentRangeId") != "" {
-		estateRent, err := getRange(estateSearchCondition.Rent, c.QueryParam("rentRangeId"))
+		estateRent, err := getRange(
+			estateSearchCondition.Rent,
+			c.QueryParam("rentRangeId"),
+		)
 		if err != nil {
-			c.Echo().Logger.Infof("rentRangeID invalid, %v : %v", c.QueryParam("rentRangeId"), err)
+			c.Echo().Logger.Infof(
+				"rentRangeID invalid, %v : %v",
+				c.QueryParam("rentRangeId"),
+				err,
+			)
 			return c.NoContent(http.StatusBadRequest)
 		}
 
 		if estateRent.Min != -1 {
-			conditions = append(conditions, "rent >= ?")
+			conditions = append(conditions, "rent >= $"+strconv.Itoa(len(params)+1))
 			params = append(params, estateRent.Min)
 		}
 		if estateRent.Max != -1 {
-			conditions = append(conditions, "rent < ?")
+			conditions = append(conditions, "rent < $"+strconv.Itoa(len(params)+1))
 			params = append(params, estateRent.Max)
 		}
 	}
 
 	if c.QueryParam("features") != "" {
 		for _, f := range strings.Split(c.QueryParam("features"), ",") {
-			conditions = append(conditions, "features like concat('%', ?, '%')")
+			conditions = append(
+				conditions,
+				"features LIKE CONCAT('%', "+strconv.Itoa(len(params)+1)+", '%')",
+			)
 			params = append(params, f)
 		}
 	}
@@ -973,10 +997,41 @@ func searchEstates(c echo.Context) error {
 		return c.NoContent(http.StatusBadRequest)
 	}
 
-	searchQuery := "SELECT * FROM estate WHERE "
-	countQuery := "SELECT COUNT(*) FROM estate WHERE "
-	searchCondition := strings.Join(conditions, " AND ")
-	limitOffset := " ORDER BY popularity DESC, id ASC LIMIT ? OFFSET ?"
+	searchQuery := `
+SELECT
+  id,
+  name,
+  description,
+  thumbnail,
+  address,
+  latitude,
+  longitude,
+  rent,
+  door_height,
+  door_width,
+  features,
+  popularity
+FROM
+  estate
+WHERE
+`
+	countQuery := `
+SELECT
+  COUNT(*) AS count
+FROM
+  estate
+WHERE
+`
+	searchCondition := strings.Join(conditions, "\n  AND ")
+	limitOffset := `
+ORDER BY
+	popularity DESC,
+	id ASC
+LIMIT
+	$` + strconv.Itoa(len(params)+1) + `
+OFFSET
+	$` + strconv.Itoa(len(params)+2) + `
+`
 
 	var res EstateSearchResponse
 	err = db.Get(&res.Count, countQuery+searchCondition, params...)

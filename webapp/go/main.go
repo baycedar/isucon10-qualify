@@ -1257,34 +1257,6 @@ func getEstateSearchCondition(c echo.Context) error {
 	return c.JSON(http.StatusOK, estateSearchCondition)
 }
 
-func (cs Coordinates) getBoundingBox() BoundingBox {
-	coordinates := cs.Coordinates
-	boundingBox := BoundingBox{
-		TopLeftCorner: Coordinate{
-			Latitude: coordinates[0].Latitude, Longitude: coordinates[0].Longitude,
-		},
-		BottomRightCorner: Coordinate{
-			Latitude: coordinates[0].Latitude, Longitude: coordinates[0].Longitude,
-		},
-	}
-	for _, coordinate := range coordinates {
-		if boundingBox.TopLeftCorner.Latitude > coordinate.Latitude {
-			boundingBox.TopLeftCorner.Latitude = coordinate.Latitude
-		}
-		if boundingBox.TopLeftCorner.Longitude > coordinate.Longitude {
-			boundingBox.TopLeftCorner.Longitude = coordinate.Longitude
-		}
-
-		if boundingBox.BottomRightCorner.Latitude < coordinate.Latitude {
-			boundingBox.BottomRightCorner.Latitude = coordinate.Latitude
-		}
-		if boundingBox.BottomRightCorner.Longitude < coordinate.Longitude {
-			boundingBox.BottomRightCorner.Longitude = coordinate.Longitude
-		}
-	}
-	return boundingBox
-}
-
 func (cs Coordinates) coordinatesToText() string {
 	points := make([]string, 0, len(cs.Coordinates))
 	for _, c := range cs.Coordinates {

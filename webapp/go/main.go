@@ -1100,24 +1100,56 @@ func searchRecommendedEstateWithChair(c echo.Context) error {
 		return c.NoContent(http.StatusBadRequest)
 	}
 
-	chair := Chair{}
-	query := `SELECT * FROM chair WHERE id = ?`
-	err = db.Get(&chair, query, id)
-	if err != nil {
-		if err == sql.ErrNoRows {
-			c.Logger().Infof("Requested chair id \"%v\" not found", id)
-			return c.NoContent(http.StatusBadRequest)
-		}
-		c.Logger().Errorf("Database execution error : %v", err)
-		return c.NoContent(http.StatusInternalServerError)
-	}
+	// chair := Chair{}
+	// query := `SELECT * FROM chair WHERE id = ?`
+	// err = db.Get(&chair, query, id)
+	// if err != nil {
+	// 	if err == sql.ErrNoRows {
+	// 		c.Logger().Infof("Requested chair id \"%v\" not found", id)
+	// 		return c.NoContent(http.StatusBadRequest)
+	// 	}
+	// 	c.Logger().Errorf("Database execution error : %v", err)
+	// 	return c.NoContent(http.StatusInternalServerError)
+	// }
 
 	var estates []Estate
-	w := chair.Width
-	h := chair.Height
-	d := chair.Depth
-	query = `SELECT * FROM estate WHERE (door_width >= ? AND door_height >= ?) OR (door_width >= ? AND door_height >= ?) OR (door_width >= ? AND door_height >= ?) OR (door_width >= ? AND door_height >= ?) OR (door_width >= ? AND door_height >= ?) OR (door_width >= ? AND door_height >= ?) ORDER BY popularity DESC, id ASC LIMIT ?`
-	err = db.Select(&estates, query, w, h, w, d, h, w, h, d, d, w, d, h, Limit)
+	// w := chair.Width
+	// h := chair.Height
+	// d := chair.Depth
+	query := `
+SELECT
+  e.id,
+  e.name,
+  e.description,
+  e.thumbnail,
+  e.address,
+  e.latitude,
+  e.longitude,
+  e.rent,
+  e.door_height,
+  e.door_width,
+  e.features,
+  e.popularity
+FROM
+  estate AS e,
+  chair AS c
+WHERE
+  c.id = $1
+  AND (
+    (e.door_width >= c.width AND e.door_height >= c.height)
+    OR (e.door_width >= c.width AND e.door_height >= c.depth)
+    OR (e.door_width >= c.height AND e.door_height >= c.width)
+    OR (e.door_width >= c.height AND e.door_height >= c.depth)
+    OR (e.door_width >= c.depth AND e.door_height >= c.width)
+    OR (e.door_width >= c.depth AND e.door_height >= c.height)
+  )
+ORDER BY
+  popularity DESC,
+  id ASC
+LIMIT
+  $2
+`
+	err = db.Select(&estates, query, id, Limit)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return c.JSON(http.StatusOK, EstateListResponse{[]Estate{}})

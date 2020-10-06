@@ -2,7 +2,7 @@
 set -uex -o pipefail
 
 SERVICE_NAME="isuumo.go"
-WORKSPACE_DIR=`dirname ${BASH_SOURCE:-${0}}`/../../
+WORKSPACE_DIR=$(cd $(dirname ${BASH_SOURCE:-${0}})/../../; pwd)
 
 # compile app with new sources
 cd ${WORKSPACE_DIR}/webapp/go

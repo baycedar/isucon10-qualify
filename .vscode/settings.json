@@ -53,6 +53,7 @@
     "PGPORT",
     "PGUSER",
     "PSQL",
+    "Queryx",
     "Rowx",
     "VARCHAR",
     "blks",

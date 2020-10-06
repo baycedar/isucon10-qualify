@@ -753,7 +753,28 @@ func getEstateDetail(c echo.Context) error {
 	}
 
 	var estate Estate
-	err = db.Get(&estate, "SELECT * FROM estate WHERE id = ?", id)
+	err = db.Get(
+		&estate, `
+SELECT
+	id,
+	name,
+	description,
+	thumbnail,
+	address,
+	latitude,
+	longitude,
+	rent,
+	door_height,
+	door_width,
+	features,
+	popularity
+FROM
+	estate
+WHERE
+	id = $1
+`,
+		id,
+	)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			c.Echo().Logger.Infof("getEstateDetail estate id %v not found", id)

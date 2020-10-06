@@ -141,14 +141,6 @@ type ChairSearchCondition struct {
 	Kind    ListCondition  `json:"kind"`
 }
 
-// BoundingBox will be unused
-type BoundingBox struct {
-	// TopLeftCorner 緯度経度が共に最小値になるような点の情報を持っている
-	TopLeftCorner Coordinate
-	// BottomRightCorner 緯度経度が共に最大値になるような点の情報を持っている
-	BottomRightCorner Coordinate
-}
-
 // PgConnectionEnv is a struct to retain PostgreSQL connection information
 type PgConnectionEnv struct {
 	Host     string

@@ -1,22 +1,23 @@
 #!/bin/bash
 set -uex -o pipefail
 
-cd `dirname ${BASH_SOURCE:-${0}}`/../../
+SERVICE_NAME="isuumo.go"
+WORKSPACE_DIR=`dirname ${BASH_SOURCE:-${0}}`/../../
 
-# install packages
-./webapp/python/venv/bin/python -m pip install -r ./webapp/python/requirements.txt
+# compile app with new sources
+cd ${WORKSPACE_DIR}/webapp/go
+make
+
+cd ${WORKSPACE_DIR}
 
 # clear logs
-if [ -f ./webapp/python/error.log ]; then
-  rm ./webapp/python/error.log
+if [ -f ./webapp/go/error.log ]; then
+  rm ./webapp/go/error.log
 fi
-touch ./webapp/python/error.log
+touch ./webapp/go/error.log
 
 # apply new settings
-sudo cp -b ./conf/isuumo.python.service /etc/systemd/system/isuumo.python.service
-sudo cp -b ./conf/isuumo.python.socket /etc/systemd/system/isuumo.python.socket
+sudo cp -b ./conf/${SERVICE_NAME}.service /etc/systemd/system/${SERVICE_NAME}.service
 sudo systemctl daemon-reload
-sudo systemctl start isuumo.python.socket
-sudo systemctl enable isuumo.python.socket
-sudo systemctl start isuumo.python.service
-sudo systemctl enable isuumo.python.service
+sudo systemctl start ${SERVICE_NAME}.service
+sudo systemctl enable ${SERVICE_NAME}.service

@@ -29,8 +29,12 @@ fi
 source /home/isucon/env.sh
 
 # analyze DBs
-psql -h ${PGHOST} -p ${PGPORT} -U ${PGUSER} -d ${PGDATABASE} \
-  -f "./conf/analyze_queries.sql" > ./log/db_summary.txt
+psql -h ${PG_ESTATE_HOST} -p ${PGPORT} -U ${PGUSER} -d ${PGDATABASE} \
+  -f "./conf/analyze_queries.sql" > ./log/db_estate_summary.txt
+
+# analyze DBs
+psql -h ${PG_CHAIR_HOST} -p ${PGPORT} -U ${PGUSER} -d ${PGDATABASE} \
+  -f "./conf/analyze_queries.sql" > ./log/db_chair_summary.txt
 
 # analyze app
 ssh ${WEB_HOST} cat /var/log/nginx/access.log | \

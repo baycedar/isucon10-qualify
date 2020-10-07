@@ -14,8 +14,6 @@ cd $CURRENT_DIR
 
 psql -h $PG_ESTATE_HOST -p $PGPORT -U $PGUSER -d $PGDATABASE \
   -f ./db/0_EstateSchema.sql \
-  -f ./udf/udf_update_estates.sql \
-  -f ./udf/trigger_estate_insert.sql \
   -f ./db/1_DummyEstateData.sql \
   -f ./db/2_CreateEstateIndices.sql \
   -f ./db/3_PostProcessForEstate.sql

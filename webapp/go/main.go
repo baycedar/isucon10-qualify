@@ -1026,8 +1026,6 @@ OFFSET
   $` + strconv.Itoa(len(params)+2) + `
 `
 
-	c.Logger().Warnf("Estate search SQL: %v", countQuery+searchCondition+limitOffset)
-
 	var res EstateSearchResponse
 	err = db.Get(&res.Count, countQuery+searchCondition, params...)
 	if err != nil {
@@ -1197,9 +1195,6 @@ ORDER BY
 LIMIT
   $1
 `
-
-	c.Echo().Logger.Infof("Nazotte SQL: ", query)
-	c.Echo().Logger.Infof("Nazotte Polygon: ", coordinates.coordinatesToText())
 
 	err = db.Select(
 		&re.Estates,

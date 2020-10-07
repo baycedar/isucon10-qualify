@@ -674,8 +674,8 @@ RETURNING
 	//	c.Echo().Logger.Errorf("chair stock update failed : %v", err)
 	//	return c.NoContent(http.StatusInternalServerError)
 	//}
-	var returning_id int
-	err = row.Scan(&returning_id)
+	var returningID int
+	err = row.Scan(&returningID)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			c.Echo().Logger.Infof("buyChair chair id \"%v\" not found", id)

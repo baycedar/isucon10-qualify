@@ -4,7 +4,7 @@ set -o pipefail
 
 CURRENT_DIR=$(cd $(dirname $0);pwd)
 export PG_ESTATE_HOST=${PG_ESTATE_HOST:-127.0.0.1}
-export PG_ESTATE_HOST=${PG_CHAIR_HOST:-127.0.0.1}
+export PG_CHAIR_HOST=${PG_CHAIR_HOST:-127.0.0.1}
 export PGPORT=${PGPORT:-5432}
 export PGUSER=${PGUSER:-isucon}
 export PGDATABASE=${PGDATABASE:-isuumo}

@@ -1116,8 +1116,8 @@ func searchRecommendedEstateWithChair(c echo.Context) error {
 	chair := Chair{}
 	query := `
 SELECT
-  width,
   height,
+  width,
   depth
 FROM
   chair
@@ -1153,14 +1153,14 @@ SELECT
   e.features,
   e.popularity
 FROM
-  estate AS e,
+  estate AS e
 WHERE
-	(e.door_width >= $1 AND e.door_height >= $2)
-	OR (e.door_width >= $3 AND e.door_height >= $4)
-	OR (e.door_width >= $5 AND e.door_height >= $6)
-	OR (e.door_width >= $7 AND e.door_height >= $8)
-	OR (e.door_width >= $9 AND e.door_height >= $10)
-	OR (e.door_width >= $11 AND e.door_height >= $12)
+  (e.door_width >= $1 AND e.door_height >= $2)
+  OR (e.door_width >= $3 AND e.door_height >= $4)
+  OR (e.door_width >= $5 AND e.door_height >= $6)
+  OR (e.door_width >= $7 AND e.door_height >= $8)
+  OR (e.door_width >= $9 AND e.door_height >= $10)
+  OR (e.door_width >= $11 AND e.door_height >= $12)
 ORDER BY
   popularity DESC,
   id ASC

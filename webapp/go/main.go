@@ -600,12 +600,12 @@ WHERE
 	searchCondition := strings.Join(conditions, "\n  AND ")
 	limitOffset := `
 ORDER BY
-	popularity DESC,
-	id ASC
+  popularity DESC,
+  id ASC
 LIMIT
-	$` + strconv.Itoa(len(params)+1) + `
+  $` + strconv.Itoa(len(params)+1) + `
 OFFSET
-	$` + strconv.Itoa(len(params)+2) + `
+  $` + strconv.Itoa(len(params)+2) + `
 `
 
 	var res ChairSearchResponse
@@ -749,22 +749,22 @@ func getEstateDetail(c echo.Context) error {
 	err = db.Get(
 		&estate, `
 SELECT
-	id,
-	name,
-	description,
-	thumbnail,
-	address,
-	latitude,
-	longitude,
-	rent,
-	door_height,
-	door_width,
-	features,
-	popularity
+  id,
+  name,
+  description,
+  thumbnail,
+  address,
+  latitude,
+  longitude,
+  rent,
+  door_height,
+  door_width,
+  features,
+  popularity
 FROM
-	estate
+  estate
 WHERE
-	id = $1
+  id = $1
 `,
 		id,
 	)
@@ -1018,12 +1018,12 @@ WHERE
 	searchCondition := strings.Join(conditions, "\n  AND ")
 	limitOffset := `
 ORDER BY
-	popularity DESC,
-	id ASC
+  popularity DESC,
+  id ASC
 LIMIT
-	$` + strconv.Itoa(len(params)+1) + `
+  $` + strconv.Itoa(len(params)+1) + `
 OFFSET
-	$` + strconv.Itoa(len(params)+2) + `
+  $` + strconv.Itoa(len(params)+2) + `
 `
 
 	c.Logger().Warnf("Estate search SQL: %v", countQuery+searchCondition+limitOffset)
@@ -1188,7 +1188,7 @@ FROM
   estate
 WHERE
   ST_Contains(
-    ST_PolygonFromText(`+coordinates.coordinatesToText()+`),
+    ST_PolygonFromText(` + coordinates.coordinatesToText() + `),
     geom_coords
   )
 ORDER BY
@@ -1204,7 +1204,7 @@ LIMIT
 	err = db.Select(
 		&re.Estates,
 		query,
-//		coordinates.coordinatesToText(),
+		//		coordinates.coordinatesToText(),
 		NazotteLimit,
 	)
 	if err == sql.ErrNoRows {

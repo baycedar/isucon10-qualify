@@ -853,6 +853,7 @@ func postEstate(c echo.Context) error {
 		"door_width",
 		"features",
 		"popularity",
+		"geom_coords",
 	))
 	if err != nil {
 		c.Logger().Errorf("failed to prepare copy: %v", err)
@@ -872,6 +873,7 @@ func postEstate(c echo.Context) error {
 		doorWidth := rm.NextInt()
 		features := rm.NextString()
 		popularity := rm.NextInt()
+		geometry := "POINT(" + fmt.Sprintf("%f %f", longitude, latitude) + ")"
 		if err := rm.Err(); err != nil {
 			c.Logger().Errorf("failed to read record: %v", err)
 			return c.NoContent(http.StatusBadRequest)
@@ -889,6 +891,7 @@ func postEstate(c echo.Context) error {
 			doorWidth,
 			features,
 			popularity,
+			geometry,
 		)
 		if err != nil {
 			c.Logger().Errorf("failed to insert estate: %v", err)

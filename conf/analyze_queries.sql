@@ -1,7 +1,7 @@
 SELECT 'Order by call counts' AS sort_type;
 
 SELECT
-  query,
+  regexp_replace(query, '\([a-zA-Z_," ]*\)','(*)'),
   calls,
   total_time,
   min_time,
@@ -27,7 +27,6 @@ WHERE
   AND NOT query LIKE 'BEGIN'
   AND NOT query LIKE 'COMMIT'
   AND NOT query LIKE 'ROLLBACK'
-  AND NOT query LIKE 'INSERT%' -- ignore bulk inserts
 ORDER BY
   calls DESC
 LIMIT
@@ -36,7 +35,7 @@ LIMIT
 SELECT 'Order by total time' AS sort_type;
 
 SELECT
-  query,
+  regexp_replace(query, '\([a-zA-Z_," ]*\)','(*)'),
   calls,
   total_time,
   min_time,
@@ -62,7 +61,6 @@ WHERE
   AND NOT query LIKE 'BEGIN'
   AND NOT query LIKE 'COMMIT'
   AND NOT query LIKE 'ROLLBACK'
-  AND NOT query LIKE 'INSERT%' -- ignore bulk inserts
 ORDER BY
   total_time DESC
 LIMIT
@@ -71,7 +69,7 @@ LIMIT
 SELECT 'Order by mean time' AS sort_type;
 
 SELECT
-  query,
+  regexp_replace(query, '\([a-zA-Z_," ]*\)','(*)'),
   calls,
   total_time,
   min_time,
@@ -97,7 +95,6 @@ WHERE
   AND NOT query LIKE 'BEGIN'
   AND NOT query LIKE 'COMMIT'
   AND NOT query LIKE 'ROLLBACK'
-  AND NOT query LIKE 'INSERT%' -- ignore bulk inserts
 ORDER BY
   mean_time DESC
 LIMIT
@@ -106,7 +103,7 @@ LIMIT
 SELECT 'Order by standard deviation' AS sort_type;
 
 SELECT
-  query,
+  regexp_replace(query, '\([a-zA-Z_," ]*\)','(*)'),
   calls,
   total_time,
   min_time,
@@ -132,7 +129,6 @@ WHERE
   AND NOT query LIKE 'BEGIN'
   AND NOT query LIKE 'COMMIT'
   AND NOT query LIKE 'ROLLBACK'
-  AND NOT query LIKE 'INSERT%' -- ignore bulk inserts
 ORDER BY
   stddev_time DESC
 LIMIT
@@ -141,7 +137,7 @@ LIMIT
 SELECT 'Order by max time' AS sort_type;
 
 SELECT
-  query,
+  regexp_replace(query, '\([a-zA-Z_," ]*\)','(*)'),
   calls,
   total_time,
   min_time,
@@ -167,7 +163,6 @@ WHERE
   AND NOT query LIKE 'BEGIN'
   AND NOT query LIKE 'COMMIT'
   AND NOT query LIKE 'ROLLBACK'
-  AND NOT query LIKE 'INSERT%' -- ignore bulk inserts
 ORDER BY
   max_time DESC
 LIMIT

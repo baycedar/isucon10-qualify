@@ -279,7 +279,7 @@ func main() {
 	// Echo instance
 	e := echo.New()
 	e.Debug = false
-	e.Logger.SetLevel(log.WARN)
+	e.Logger.SetLevel(log.OFF)
 
 	// Middleware
 	e.Use(middleware.Logger())
@@ -312,8 +312,8 @@ func main() {
 	if err != nil {
 		e.Logger.Fatalf("DB connection failed : %v", err)
 	}
-	estateDB.SetMaxOpenConns(90)
-	estateDB.SetMaxIdleConns(90)
+	estateDB.SetMaxOpenConns(50)
+	estateDB.SetMaxIdleConns(50)
 	estateDB.SetConnMaxLifetime(60 * time.Second)
 	defer estateDB.Close()
 

@@ -29,7 +29,17 @@ DECLARE
 BEGIN
   RETURN QUERY
     SELECT
-      ROW_NUMBER() OVER (ORDER BY stat.mean_time DESC),
+      ROW_NUMBER() OVER (
+        ORDER BY
+          CASE
+            WHEN order_by = 'calls' THEN stat.calls
+            WHEN order_by = 'total_time' THEN stat.total_time
+            WHEN order_by = 'mean_time' THEN stat.mean_time
+            WHEN order_by = 'stddev_time' THEN stat.stddev_time
+            ELSE stat.max_time
+          END
+        DESC
+      ),
       regexp_replace(stat.query, '\([a-zA-Z_," ]*\)','(*)'),
       stat.calls,
       to_char(stat.total_time, '99999.999'),

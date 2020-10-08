@@ -21,14 +21,14 @@ SELECT * FROM analyze_slow_queries('mean_time', 10);
 
 SELECT
 '==================================================
-Order by standard deviation counts
+Order by standard deviation time
 ==================================================' AS sort_type;
 SELECT * FROM analyze_slow_queries('stddev_time', 0);
 SELECT * FROM analyze_slow_queries('stddev_time', 10);
 
 SELECT
 '==================================================
-Order by max counts
+Order by max time
 ==================================================' AS sort_type;
 SELECT * FROM analyze_slow_queries('max_time', 0);
 SELECT * FROM analyze_slow_queries('max_time', 10);

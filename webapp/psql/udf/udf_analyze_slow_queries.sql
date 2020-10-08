@@ -1,9 +1,11 @@
-CREATE OR REPLACE FUNCTION analyze_slow_queries (
+DROP FUNCTION analyze_slow_queries;
+
+CREATE FUNCTION analyze_slow_queries (
   order_by TEXT,
   offset_size INT4
 ) RETURNS TABLE (
   rank INT8,
-  query TEXT,
+  ____________________________query____________________________ TEXT,
   calls INT8,
   total TEXT,
   mean TEXT,

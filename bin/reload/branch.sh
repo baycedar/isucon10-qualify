@@ -1,6 +1,8 @@
 #!/bin/bash
 set -uex -o pipefail
 
+WORKSPACE=$(cd $(dirname ${BASH_SOURCE:-${0}})/../; pwd)
+
 GIT_BRANCH=${1}
 
 # prepare source codes

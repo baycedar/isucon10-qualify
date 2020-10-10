@@ -7,7 +7,7 @@ GO_DIR="${WORKSPACE}/webapp/go"
 
 # compile app with new sources
 cd ${GO_DIR}
-make
+make --quiet
 
 # clear logs
 if [ -f ${WORKSPACE}/log/app_error.log ]; then

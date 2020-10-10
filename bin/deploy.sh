@@ -31,7 +31,7 @@ fi
 
 # sync local sources with remote ones
 git checkout "${GIT_BRANCH}"
-git merge "origin/${GIT_BRANCH}"
+git merge --no-progress "origin/${GIT_BRANCH}"
 
 # load environment variables
 source ${WORKSPACE}/conf/env.sh

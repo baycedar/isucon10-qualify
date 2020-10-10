@@ -10,4 +10,4 @@ chmod 600 ~/.pgpass
 
 # reload sysctl
 sudo cp -b ${WORKSPACE}/conf/sysctl.conf /etc/sysctl.conf
-sudo sysctl -p
+sudo sysctl -p --quiet

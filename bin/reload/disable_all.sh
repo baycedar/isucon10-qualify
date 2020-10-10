@@ -1,10 +1,10 @@
 #!/bin/bash
 set -uex -o pipefail
 
-cd `dirname ${BASH_SOURCE:-${0}}`
+CUR_DIR=$(cd $(dirname ${BASH_SOURCE:-${0}}); pwd)
 
-./disable_app.sh
-./disable_nginx.sh
-./disable_redis.sh
-./disable_mysql.sh
-./disable_postgresql.sh
+${CUR_DIR}/disable_app.sh
+${CUR_DIR}/disable_nginx.sh
+${CUR_DIR}/disable_redis.sh
+${CUR_DIR}/disable_mysql.sh
+${CUR_DIR}/disable_postgresql.sh

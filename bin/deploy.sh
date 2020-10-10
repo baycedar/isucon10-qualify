@@ -1,7 +1,7 @@
 #!/bin/bash
 set -uex -o pipefail
 
-cd `dirname ${BASH_SOURCE:-${0}}`/../
+WORKSPACE=$(cd $(dirname ${BASH_SOURCE:-${0}})/../; pwd)
 
 usage() {
   cat 1>&2 << EOS
@@ -15,35 +15,40 @@ EOS
   exit 1
 }
 
+# check input arguments
 if [ ${#} -ne 1 ]; then
   usage
 fi
 
+# check whether there is a specified branch
 GIT_BRANCH=${1}
+git fetch origin
 if ! git branch --list "${GIT_BRANCH}" | grep "${GIT_BRANCH}" &> /dev/null; then
   echo "There is no branch: ${GIT_BRANCH}" 1>&2
   exit 1
 fi
 
-WORKERS="192.168.33.11 192.168.33.12 192.168.33.13"
+# sync local sources with remote ones
+git checkout "${GIT_BRANCH}"
+git merge "origin/${GIT_BRANCH}"
+
+# load environment variables
+source ${WORKSPACE}/conf/env.sh
 
 # initialization
 for WORKER in ${WORKERS}; do
   # fetch the specified branch on all workers
-  ssh ${WORKER} ~/isuumo/bin/reload/branch.sh "${GIT_BRANCH}"
+  ssh ${WORKER} ${WORKSPACE}/bin/reload/branch.sh "${GIT_BRANCH}"
   # stop/disable all functions
-  ssh ${WORKER} ~/isuumo/bin/reload/disable_all.sh
+  ssh ${WORKER} ${WORKSPACE}/bin/reload/disable_all.sh
   # update server environment
-  ssh ${WORKER} ~/isuumo/bin/reload/environment.sh
+  ssh ${WORKER} ${WORKSPACE}/bin/reload/environment.sh
 done
-
-# load environment variables
-source ~/env.sh
 
 # start/enable service
-ssh ${PG_ESTATE_HOST} ~/isuumo/bin/reload/enable_postgresql.sh
-ssh ${PG_CHAIR_HOST} ~/isuumo/bin/reload/enable_postgresql.sh
+ssh ${PG_ESTATE_HOST} ${WORKSPACE}/bin/reload/enable_postgresql.sh
+ssh ${PG_CHAIR_HOST} ${WORKSPACE}/bin/reload/enable_postgresql.sh
 for APP_HOST in ${APP_HOSTS}; do
-  ssh ${APP_HOST} ~/isuumo/bin/reload/enable_app.sh
+  ssh ${APP_HOST} ${WORKSPACE}/bin/reload/enable_app.sh
 done
-ssh ${WEB_HOST} ~/isuumo/bin/reload/enable_nginx.sh
+ssh ${WEB_HOST} ${WORKSPACE}/bin/reload/enable_nginx.sh

@@ -1,7 +1,7 @@
 #!/bin/bash
 set -uex -o pipefail
 
-cd `dirname ${BASH_SOURCE:-${0}}`/../
+WORKSPACE=$(cd $(dirname ${BASH_SOURCE:-${0}})/../; pwd)
 
 usage() {
   cat 1>&2 << EOS
@@ -15,36 +15,39 @@ EOS
   exit 1
 }
 
+# check input arguments
 if [ ${#} -ne 1 ]; then
   usage
 fi
 
+# check whether there is a specified branch
 GIT_BRANCH=${1}
+git fetch origin
 if ! git branch --list "${GIT_BRANCH}" | grep "${GIT_BRANCH}" &> /dev/null; then
   echo "There is no branch: ${GIT_BRANCH}" 1>&2
   exit 1
 fi
 
 # load environment variables
-source /home/isucon/env.sh
+source ${WORKSPACE}/conf/env.sh
 
 # analyze DBs
 psql -h ${PG_ESTATE_HOST} -p ${PGPORT} -U ${PGUSER} -d ${PGDATABASE} \
-  -f "./webapp/psql/udf/udf_analyze_slow_queries.sql"
+  -f "${WORKSPACE}/webapp/psql/udf/udf_analyze_slow_queries.sql"
 psql -h ${PG_ESTATE_HOST} -p ${PGPORT} -U ${PGUSER} -d ${PGDATABASE} \
-  -f "./conf/analyze_queries.sql" > ./log/db_estate_summary.txt
+  -f "${WORKSPACE}/conf/analyze_queries.sql" > ${WORKSPACE}/log/db_estate_summary.txt
 
 # analyze DBs
 psql -h ${PG_CHAIR_HOST} -p ${PGPORT} -U ${PGUSER} -d ${PGDATABASE} \
-  -f "./webapp/psql/udf/udf_analyze_slow_queries.sql"
+  -f "${WORKSPACE}/webapp/psql/udf/udf_analyze_slow_queries.sql"
 psql -h ${PG_CHAIR_HOST} -p ${PGPORT} -U ${PGUSER} -d ${PGDATABASE} \
-  -f "./conf/analyze_queries.sql" > ./log/db_chair_summary.txt
+  -f "${WORKSPACE}/conf/analyze_queries.sql" > ${WORKSPACE}/log/db_chair_summary.txt
 
 # analyze app
 ssh ${WEB_HOST} cat /var/log/nginx/access.log | \
-  kataribe -f ./conf/kataribe.toml > ./log/nginx_summary.txt
+  kataribe -f ${WORKSPACE}/conf/kataribe.toml > ${WORKSPACE}/log/nginx_summary.txt
 
 # push analysis results
-git add ./log/*
+git add ${WORKSPACE}/log/*
 git commit -m "add analysis results"
 git push origin ${GIT_BRANCH}

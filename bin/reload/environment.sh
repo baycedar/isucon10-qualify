@@ -1,13 +1,13 @@
 #!/bin/bash
 set -uex -o pipefail
 
-cd `dirname ${BASH_SOURCE:-${0}}`/../../
+WORKSPACE=$(cd $(dirname ${BASH_SOURCE:-${0}})/../../; pwd)
 
 # reload environment variables
-cp -b ./conf/env.sh ~/env.sh
-cp -b ./conf/pgpass ~/.pgpass
+cp -b ${WORKSPACE}/conf/env.sh ${HOME}/env.sh
+cp -b ${WORKSPACE}/conf/pgpass ${HOME}/.pgpass
 chmod 600 ~/.pgpass
 
 # reload sysctl
-sudo cp -b ./conf/sysctl.conf /etc/sysctl.conf
+sudo cp -b ${WORKSPACE}/conf/sysctl.conf /etc/sysctl.conf
 sudo sysctl -p

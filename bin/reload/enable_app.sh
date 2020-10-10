@@ -2,22 +2,21 @@
 set -uex -o pipefail
 
 SERVICE_NAME="isuumo.go"
-WORKSPACE_DIR=$(cd $(dirname ${BASH_SOURCE:-${0}})/../../; pwd)
+WORKSPACE=$(cd $(dirname ${BASH_SOURCE:-${0}})/../../; pwd)
+GO_DIR="${WORKSPACE}/webapp/go"
 
 # compile app with new sources
-cd ${WORKSPACE_DIR}/webapp/go
+cd ${GO_DIR}
 make
 
-cd ${WORKSPACE_DIR}
-
 # clear logs
-if [ -f ./webapp/go/error.log ]; then
-  rm ./webapp/go/error.log
+if [ -f ${WORKSPACE}/log/app_error.log ]; then
+  rm ${WORKSPACE}/log/app_error.log
 fi
-touch ./webapp/go/error.log
+touch ${WORKSPACE}/log/app_error.log
 
 # apply new settings
-sudo cp -b ./conf/${SERVICE_NAME}.service /etc/systemd/system/${SERVICE_NAME}.service
+sudo cp -b ${WORKSPACE}/conf/${SERVICE_NAME}.service /etc/systemd/system/${SERVICE_NAME}.service
 sudo systemctl daemon-reload
 sudo systemctl start ${SERVICE_NAME}.service
 sudo systemctl enable ${SERVICE_NAME}.service

@@ -32,14 +32,14 @@ fi
 
 # sync local sources with remote ones
 git checkout "${GIT_BRANCH}"
-git merge --no-progress "origin/${GIT_BRANCH}"
+git merge --quiet "origin/${GIT_BRANCH}"
 
 # load environment variables
 echo "load environment variables..."
 source ${WORKSPACE}/conf/env.sh
 
 # initialization
-echo "initialize workers..."
+echo "initialize workers [${WORKERS}]..."
 for WORKER in ${WORKERS}; do
   echo "${WORKER}:"
   echo "  fetch remote sources..."

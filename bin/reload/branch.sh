@@ -9,4 +9,4 @@ GIT_BRANCH=${1}
 cd ${WORKSPACE}
 git fetch origin
 git checkout "${GIT_BRANCH}"
-git merge --no-progress "origin/${GIT_BRANCH}"
+git merge --quiet "origin/${GIT_BRANCH}"

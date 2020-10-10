@@ -1016,7 +1016,7 @@ func searchEstates(c echo.Context) error {
 			return c.NoContent(http.StatusBadRequest)
 		}
 
-		conditions = append(conditions, "rent = $"+strconv.Itoa(len(params)+1))
+		conditions = append(conditions, "rent_id = $"+strconv.Itoa(len(params)+1))
 		params = append(params, estateRent)
 	}
 

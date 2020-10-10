@@ -19,9 +19,10 @@ EOS
 if [ ${#} -ne 1 ]; then
   usage
 fi
+GIT_BRANCH=${1}
 
 # check whether there is a specified branch
-GIT_BRANCH=${1}
+cd ${WORKSPACE}
 git fetch origin
 if ! git branch --list "${GIT_BRANCH}" | grep "${GIT_BRANCH}" &> /dev/null; then
   echo "There is no branch: ${GIT_BRANCH}" 1>&2

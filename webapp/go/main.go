@@ -620,7 +620,7 @@ SELECT
 FROM
   chair
 WHERE
-`
+  `
 	searchCondition := strings.Join(conditions, "\n  AND ")
 	limitOffset := `
 ORDER BY
@@ -1037,7 +1037,7 @@ SELECT
 FROM
   estate
 WHERE
-`
+  `
 	searchCondition := strings.Join(conditions, "\n  AND ")
 	limitOffset := `
 ORDER BY

@@ -63,7 +63,8 @@ BEGIN
     WHERE
       NOT stat.query LIKE '%pg_catalog%'
       AND NOT stat.query LIKE '%pg_stat%'
-      AND NOT stat.query LIKE 'BEGIN'
+      AND NOT stat.query LIKE '%public.%'
+      AND NOT stat.query LIKE 'BEGIN%'
       AND NOT stat.query LIKE 'COMMIT'
       AND NOT stat.query LIKE 'ROLLBACK'
     LIMIT

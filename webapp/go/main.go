@@ -613,7 +613,7 @@ SELECT
 FROM
   chair
 WHERE
-`
+  `
 	countQuery := `
 SELECT
   COUNT(*) as count
@@ -1030,7 +1030,7 @@ SELECT
 FROM
   estate
 WHERE
-`
+  `
 	countQuery := `
 SELECT
   COUNT(*) AS count

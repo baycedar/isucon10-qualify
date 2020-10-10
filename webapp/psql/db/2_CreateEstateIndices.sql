@@ -3,21 +3,21 @@ UPDATE estate SET
   geom_coords = ST_MakePoint(longitude, latitude),
   rent_id = CASE
     WHEN rent < 50000 THEN 0
-    WHEN 50000 <= rent AND rent < 100000 THEN 2
-    WHEN 100000 <= rent AND rent < 150000 THEN 3
-    ELSE 4
+    WHEN 50000 <= rent AND rent < 100000 THEN 1
+    WHEN 100000 <= rent AND rent < 150000 THEN 2
+    ELSE 3
   END,
   door_height_id = CASE
     WHEN door_height < 80 THEN 0
-    WHEN 80 <= door_height AND door_height < 110 THEN 2
-    WHEN 110 <= door_height AND door_height < 150 THEN 3
-    ELSE 4
+    WHEN 80 <= door_height AND door_height < 110 THEN 1
+    WHEN 110 <= door_height AND door_height < 150 THEN 2
+    ELSE 3
   END,
   door_width_id = CASE
     WHEN door_width < 80 THEN 0
-    WHEN 80 <= door_width AND door_width < 110 THEN 2
-    WHEN 110 <= door_width AND door_width < 150 THEN 3
-    ELSE 4
+    WHEN 80 <= door_width AND door_width < 110 THEN 1
+    WHEN 110 <= door_width AND door_width < 150 THEN 2
+    ELSE 3
   END;
 
 -- indices for ORDER BY

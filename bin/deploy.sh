@@ -31,7 +31,7 @@ if ! git branch --list "${GIT_BRANCH}" | grep "${GIT_BRANCH}" &> /dev/null; then
 fi
 
 # sync local sources with remote ones
-git checkout "${GIT_BRANCH}"
+git checkout --quiet "${GIT_BRANCH}"
 git merge --quiet "origin/${GIT_BRANCH}"
 
 # load environment variables

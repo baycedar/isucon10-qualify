@@ -18,5 +18,8 @@ CREATE TABLE estate
     door_width  INTEGER             NOT NULL,
     features    VARCHAR(64)         NOT NULL,
     popularity  INTEGER             NOT NULL,
-    geom_coords GEOMETRY DEFAULT ST_MakePoint(0, 0) NOT NULL
+    geom_coords GEOMETRY DEFAULT ST_MakePoint(0, 0) NOT NULL,
+    rent_id INTEGER DEFAULT -1 NOT NULL,
+    door_height_id INTEGER DEFAULT -1 NOT NULL,
+    door_width_id INTEGER DEFAULT -1 NOT NULL
 );

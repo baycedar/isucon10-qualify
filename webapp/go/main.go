@@ -854,6 +854,9 @@ func postEstate(c echo.Context) error {
 		"features",
 		"popularity",
 		"geom_coords",
+		"rent_id",
+		"door_height_id",
+		"door_width_id",
 	))
 	if err != nil {
 		c.Logger().Errorf("failed to prepare copy: %v", err)
@@ -874,6 +877,39 @@ func postEstate(c echo.Context) error {
 		features := rm.NextString()
 		popularity := rm.NextInt()
 		geometry := "POINT(" + fmt.Sprintf("%f %f", longitude, latitude) + ")"
+		rentID := func(rent int) int {
+			if rent < 80 {
+				return 0
+			} else if 80 <= rent && rent < 110 {
+				return 1
+			} else if 110 <= rent && rent < 150 {
+				return 2
+			} else {
+				return 3
+			}
+		}(rent)
+		doorHeightID := func(doorHeight int) int {
+			if doorHeight < 80 {
+				return 0
+			} else if 80 <= doorHeight && doorHeight < 110 {
+				return 1
+			} else if 110 <= doorHeight && doorHeight < 150 {
+				return 2
+			} else {
+				return 3
+			}
+		}(doorHeight)
+		doorWidthID := func(doorWidth int) int {
+			if doorWidth < 80 {
+				return 0
+			} else if 80 <= doorWidth && doorWidth < 110 {
+				return 1
+			} else if 110 <= doorWidth && doorWidth < 150 {
+				return 2
+			} else {
+				return 3
+			}
+		}(doorWidth)
 		if err := rm.Err(); err != nil {
 			c.Logger().Errorf("failed to read record: %v", err)
 			return c.NoContent(http.StatusBadRequest)
@@ -892,6 +928,9 @@ func postEstate(c echo.Context) error {
 			features,
 			popularity,
 			geometry,
+			rentID,
+			doorHeightID,
+			doorWidthID,
 		)
 		if err != nil {
 			c.Logger().Errorf("failed to insert estate: %v", err)

@@ -891,11 +891,11 @@ func postEstate(c echo.Context) error {
 		popularity := rm.NextInt()
 		geometry := "POINT(" + fmt.Sprintf("%f %f", longitude, latitude) + ")"
 		rentID := func(rent int) int {
-			if rent < 80 {
+			if rent < 50000 {
 				return 0
-			} else if 80 <= rent && rent < 110 {
+			} else if 50000 <= rent && rent < 100000 {
 				return 1
-			} else if 110 <= rent && rent < 150 {
+			} else if 100000 <= rent && rent < 150000 {
 				return 2
 			} else {
 				return 3

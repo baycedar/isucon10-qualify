@@ -813,6 +813,19 @@ func getRange(cond RangeCondition, rangeID string) (*Range, error) {
 	return cond.Ranges[RangeIndex], nil
 }
 
+func getRangeID(cond RangeCondition, rangeID string) (int, error) {
+	RangeIndex, err := strconv.Atoi(rangeID)
+	if err != nil {
+		return -1, err
+	}
+
+	if RangeIndex < 0 || len(cond.Ranges) <= RangeIndex {
+		return -1, fmt.Errorf("Unexpected Range ID")
+	}
+
+	return RangeIndex, nil
+}
+
 func postEstate(c echo.Context) error {
 	header, err := c.FormFile("estates")
 	if err != nil {
@@ -954,7 +967,7 @@ func searchEstates(c echo.Context) error {
 	params := make([]interface{}, 0)
 
 	if c.QueryParam("doorHeightRangeId") != "" {
-		doorHeight, err := getRange(
+		doorHeight, err := getRangeID(
 			estateSearchCondition.DoorHeight,
 			c.QueryParam("doorHeightRangeId"),
 		)
@@ -967,18 +980,12 @@ func searchEstates(c echo.Context) error {
 			return c.NoContent(http.StatusBadRequest)
 		}
 
-		if doorHeight.Min != -1 {
-			conditions = append(conditions, "door_height >= $"+strconv.Itoa(len(params)+1))
-			params = append(params, doorHeight.Min)
-		}
-		if doorHeight.Max != -1 {
-			conditions = append(conditions, "door_height < $"+strconv.Itoa(len(params)+1))
-			params = append(params, doorHeight.Max)
-		}
+		conditions = append(conditions, "door_height_id = $"+strconv.Itoa(len(params)+1))
+		params = append(params, doorHeight)
 	}
 
 	if c.QueryParam("doorWidthRangeId") != "" {
-		doorWidth, err := getRange(
+		doorWidth, err := getRangeID(
 			estateSearchCondition.DoorWidth,
 			c.QueryParam("doorWidthRangeId"),
 		)
@@ -991,18 +998,12 @@ func searchEstates(c echo.Context) error {
 			return c.NoContent(http.StatusBadRequest)
 		}
 
-		if doorWidth.Min != -1 {
-			conditions = append(conditions, "door_width >= $"+strconv.Itoa(len(params)+1))
-			params = append(params, doorWidth.Min)
-		}
-		if doorWidth.Max != -1 {
-			conditions = append(conditions, "door_width < $"+strconv.Itoa(len(params)+1))
-			params = append(params, doorWidth.Max)
-		}
+		conditions = append(conditions, "door_width_id = $"+strconv.Itoa(len(params)+1))
+		params = append(params, doorWidth)
 	}
 
 	if c.QueryParam("rentRangeId") != "" {
-		estateRent, err := getRange(
+		estateRent, err := getRangeID(
 			estateSearchCondition.Rent,
 			c.QueryParam("rentRangeId"),
 		)
@@ -1015,14 +1016,8 @@ func searchEstates(c echo.Context) error {
 			return c.NoContent(http.StatusBadRequest)
 		}
 
-		if estateRent.Min != -1 {
-			conditions = append(conditions, "rent >= $"+strconv.Itoa(len(params)+1))
-			params = append(params, estateRent.Min)
-		}
-		if estateRent.Max != -1 {
-			conditions = append(conditions, "rent < $"+strconv.Itoa(len(params)+1))
-			params = append(params, estateRent.Max)
-		}
+		conditions = append(conditions, "rent = $"+strconv.Itoa(len(params)+1))
+		params = append(params, estateRent)
 	}
 
 	if c.QueryParam("features") != "" {

@@ -7,5 +7,4 @@ CREATE INDEX ON estate USING btree (popularity DESC, id ASC);
 
 -- indices for WHERE or JOIN
 CREATE INDEX ON estate USING btree (rent, door_height, door_width);
-CREATE INDEX ON estate USING btree (rent, door_width);
 CREATE INDEX ON estate USING gist (geom_coords);

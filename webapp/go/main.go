@@ -643,8 +643,6 @@ func searchChairs(c echo.Context) error {
 		return c.NoContent(http.StatusBadRequest)
 	}
 
-	conditions = append(conditions, "stock > 0")
-
 	page, err := strconv.Atoi(c.QueryParam("page"))
 	if err != nil {
 		c.Logger().Infof("Invalid format page parameter : %v", err)
@@ -675,7 +673,8 @@ SELECT
 FROM
   chair
 WHERE
-	`
+	stock > 0
+  AND `
 	countQuery := ""
 	if c.QueryParam("color") == "" && c.QueryParam("features") == "" {
 		countQuery = `
@@ -692,7 +691,8 @@ SELECT
 FROM
   chair
 WHERE
-  `
+	stock > 0
+  AND `
 	}
 	searchCondition := strings.Join(conditions, "\n  AND ")
 	limitOffset := `

@@ -1065,13 +1065,24 @@ FROM
   estate
 WHERE
   `
-	countQuery := `
+	countQuery := ""
+	if c.QueryParam("features") != "" {
+		countQuery = `
 SELECT
   COUNT(*) AS count
 FROM
   estate
 WHERE
   `
+	} else {
+		countQuery = `
+SELECT
+  SUM(counts) AS count
+FROM
+  estate_counts
+WHERE
+  `
+	}
 	searchCondition := strings.Join(conditions, "\n  AND ")
 	limitOffset := `
 ORDER BY

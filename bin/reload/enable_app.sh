@@ -10,10 +10,10 @@ cd ${GO_DIR}
 make --quiet
 
 # clear logs
-if [ -f ${WORKSPACE}/log/app_error.log ]; then
-  rm ${WORKSPACE}/log/app_error.log
+if [ -f ${WORKSPACE}/log/app.log ]; then
+  rm ${WORKSPACE}/log/app.log
 fi
-touch ${WORKSPACE}/log/app_error.log
+touch ${WORKSPACE}/log/app.log
 
 # apply new settings
 sudo cp -b ${WORKSPACE}/conf/${SERVICE_NAME}.service /etc/systemd/system/${SERVICE_NAME}.service

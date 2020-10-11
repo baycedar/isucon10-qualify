@@ -24,6 +24,7 @@ CREATE TABLE estate
     door_width_id INTEGER DEFAULT -1 NOT NULL
 );
 
+DROP TABLE IF EXISTS estate_counts CASCADE;
 CREATE TABLE estate_counts
 (
     rent_id INTEGER NOT NULL,

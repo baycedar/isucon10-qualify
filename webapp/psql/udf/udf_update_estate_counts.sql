@@ -19,7 +19,7 @@ BEGIN
         door_width_id
     )
   UPDATE estate_counts AS e SET
-    e.counts = e.counts + i.counts
+    counts = e.counts + i.counts
     FROM inserted_counts AS i
     WHERE
       e.rent_id = i.rent_id

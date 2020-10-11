@@ -675,14 +675,25 @@ SELECT
 FROM
   chair
 WHERE
+	`
+	countQuery := ""
+	if c.QueryParam("color") == "" && c.QueryParam("features") == "" {
+		countQuery = `
+SELECT
+  SUM(counts) as count
+FROM
+  chair_counts
+WHERE
   `
-	countQuery := `
+	} else {
+		countQuery = `
 SELECT
   COUNT(*) as count
 FROM
   chair
 WHERE
   `
+	}
 	searchCondition := strings.Join(conditions, "\n  AND ")
 	limitOffset := `
 ORDER BY

@@ -49,6 +49,7 @@ ssh ${WEB_HOST} cat /var/log/nginx/access.log | \
   kataribe -f ${WORKSPACE}/conf/kataribe.toml > ${WORKSPACE}/log/nginx_summary.txt
 
 # push analysis results
-git add ${WORKSPACE}/log/*
+cd ${WORKSPACE}/log/
+git add .
 git commit -m "add analysis results"
 git push origin ${GIT_BRANCH}

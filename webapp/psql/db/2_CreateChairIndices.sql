@@ -51,8 +51,4 @@ CREATE INDEX ON chair USING btree (price ASC, id ASC);
 CREATE INDEX ON chair USING btree (popularity DESC, id ASC);
 
 -- indices for WHERE or JOIN
-CREATE INDEX ON chair USING btree (height_id);
-CREATE INDEX ON chair USING btree (width_id);
-CREATE INDEX ON chair USING btree (depth_id);
-CREATE INDEX ON chair USING btree (kind_id);
-CREATE INDEX ON chair USING btree (color_id);
+CREATE INDEX ON chair USING btree (price_id, height_id, color_id, depth_id, kind_id);

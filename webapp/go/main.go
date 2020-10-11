@@ -483,6 +483,12 @@ func postChair(c echo.Context) error {
 		"kind",
 		"popularity",
 		"stock",
+		"price_id",
+		"height_id",
+		"width_id",
+		"depth_id",
+		"color_id",
+		"kind_id",
 	))
 	if err != nil {
 		c.Logger().Errorf("failed to prepare copy: %v", err)

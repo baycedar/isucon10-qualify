@@ -17,5 +17,11 @@ CREATE TABLE chair
     features    VARCHAR(64)     NOT NULL,
     kind        VARCHAR(64)     NOT NULL,
     popularity  INTEGER         NOT NULL,
-    stock       INTEGER         NOT NULL
+    stock       INTEGER         NOT NULL,
+    price_id INTEGER DEFAULT -1 NOT NULL,
+    height_id INTEGER DEFAULT -1 NOT NULL,
+    width_id INTEGER DEFAULT -1 NOT NULL,
+    depth_id INTEGER DEFAULT -1 NOT NULL,
+    color_id INTEGER DEFAULT -1 NOT NULL,
+    kind_id INTEGER DEFAULT -1 NOT NULL
 );

@@ -216,6 +216,58 @@ func (r *RecordMapper) Err() error {
 	return r.err
 }
 
+func getChairRangeID(length int) int {
+	if length < 80 {
+		return 0
+	} else if 80 <= length && length < 110 {
+		return 1
+	} else if 110 <= length && length < 150 {
+		return 2
+	} else {
+		return 3
+	}
+}
+
+func getColorId(color string) int {
+	if color == "黒" {
+		return 0
+	} else if color == "白" {
+		return 1
+	} else if color == "赤" {
+		return 2
+	} else if color == "青" {
+		return 3
+	} else if color == "緑" {
+		return 4
+	} else if color == "黃" {
+		return 5
+	} else if color == "紫" {
+		return 6
+	} else if color == "ピンク" {
+		return 7
+	} else if color == "オレンジ" {
+		return 8
+	} else if color == "水色" {
+		return 9
+	} else if color == "ネイビー" {
+		return 10
+	} else {
+		return 11
+	}
+}
+
+func getKindID(kind string) int {
+	if kind == "ゲーミングチェア" {
+		return 0
+	} else if kind == "座椅子" {
+		return 1
+	} else if kind == "エルゴノミクス" {
+		return 2
+	} else {
+		return 3
+	}
+}
+
 // NewPgEstateConnectionEnv returns a connection of PostgreSQL
 func NewPgEstateConnectionEnv() *PgConnectionEnv {
 	return &PgConnectionEnv{
@@ -451,6 +503,26 @@ func postChair(c echo.Context) error {
 		kind := rm.NextString()
 		popularity := rm.NextInt()
 		stock := rm.NextInt()
+		priceID := func(price int) int {
+			if price < 3000 {
+				return 0
+			} else if 3000 <= price && price < 6000 {
+				return 1
+			} else if 6000 <= price && price < 9000 {
+				return 2
+			} else if 9000 <= price && price < 12000 {
+				return 3
+			} else if 12000 <= price && price < 15000 {
+				return 4
+			} else {
+				return 5
+			}
+		}(price)
+		heightID := getChairRangeID(height)
+		widthID := getChairRangeID(width)
+		depthID := getChairRangeID(depth)
+		colorID := getColorId(color)
+		kindID := getKindID(kind)
 		if err := rm.Err(); err != nil {
 			c.Logger().Errorf("failed to read record: %v", err)
 			return c.NoContent(http.StatusBadRequest)
@@ -469,6 +541,12 @@ func postChair(c echo.Context) error {
 			kind,
 			popularity,
 			stock,
+			priceID,
+			heightID,
+			widthID,
+			depthID,
+			colorID,
+			kindID,
 		)
 		if err != nil {
 			c.Logger().Errorf("failed to insert chair: %v", err)
@@ -492,81 +570,59 @@ func searchChairs(c echo.Context) error {
 	params := make([]interface{}, 0)
 
 	if c.QueryParam("priceRangeId") != "" {
-		chairPrice, err := getRange(chairSearchCondition.Price, c.QueryParam("priceRangeId"))
+		chairPriceID, err := getRangeID(chairSearchCondition.Price, c.QueryParam("priceRangeId"))
 		if err != nil {
 			c.Echo().Logger.Infof("priceRangeID invalid, %v : %v", c.QueryParam("priceRangeId"), err)
 			return c.NoContent(http.StatusBadRequest)
 		}
 
-		if chairPrice.Min != -1 {
-			conditions = append(conditions, "price >= $"+strconv.Itoa(len(params)+1))
-			params = append(params, chairPrice.Min)
-		}
-		if chairPrice.Max != -1 {
-			conditions = append(conditions, "price < $"+strconv.Itoa(len(params)+1))
-			params = append(params, chairPrice.Max)
-		}
+		conditions = append(conditions, "price_id = $"+strconv.Itoa(len(params)+1))
+		params = append(params, chairPriceID)
 	}
 
 	if c.QueryParam("heightRangeId") != "" {
-		chairHeight, err := getRange(chairSearchCondition.Height, c.QueryParam("heightRangeId"))
+		chairHeightID, err := getRangeID(chairSearchCondition.Height, c.QueryParam("heightRangeId"))
 		if err != nil {
 			c.Echo().Logger.Infof("heightRangeIf invalid, %v : %v", c.QueryParam("heightRangeId"), err)
 			return c.NoContent(http.StatusBadRequest)
 		}
 
-		if chairHeight.Min != -1 {
-			conditions = append(conditions, "height >= $"+strconv.Itoa(len(params)+1))
-			params = append(params, chairHeight.Min)
-		}
-		if chairHeight.Max != -1 {
-			conditions = append(conditions, "height < $"+strconv.Itoa(len(params)+1))
-			params = append(params, chairHeight.Max)
-		}
+		conditions = append(conditions, "height_id = $"+strconv.Itoa(len(params)+1))
+		params = append(params, chairHeightID)
 	}
 
 	if c.QueryParam("widthRangeId") != "" {
-		chairWidth, err := getRange(chairSearchCondition.Width, c.QueryParam("widthRangeId"))
+		chairWidthID, err := getRangeID(chairSearchCondition.Width, c.QueryParam("widthRangeId"))
 		if err != nil {
 			c.Echo().Logger.Infof("widthRangeID invalid, %v : %v", c.QueryParam("widthRangeId"), err)
 			return c.NoContent(http.StatusBadRequest)
 		}
 
-		if chairWidth.Min != -1 {
-			conditions = append(conditions, "width >= $"+strconv.Itoa(len(params)+1))
-			params = append(params, chairWidth.Min)
-		}
-		if chairWidth.Max != -1 {
-			conditions = append(conditions, "width < $"+strconv.Itoa(len(params)+1))
-			params = append(params, chairWidth.Max)
-		}
+		conditions = append(conditions, "width_id = $"+strconv.Itoa(len(params)+1))
+		params = append(params, chairWidthID)
 	}
 
 	if c.QueryParam("depthRangeId") != "" {
-		chairDepth, err := getRange(chairSearchCondition.Depth, c.QueryParam("depthRangeId"))
+		chairDepthID, err := getRangeID(chairSearchCondition.Depth, c.QueryParam("depthRangeId"))
 		if err != nil {
 			c.Echo().Logger.Infof("depthRangeId invalid, %v : %v", c.QueryParam("depthRangeId"), err)
 			return c.NoContent(http.StatusBadRequest)
 		}
 
-		if chairDepth.Min != -1 {
-			conditions = append(conditions, "depth >= $"+strconv.Itoa(len(params)+1))
-			params = append(params, chairDepth.Min)
-		}
-		if chairDepth.Max != -1 {
-			conditions = append(conditions, "depth < $"+strconv.Itoa(len(params)+1))
-			params = append(params, chairDepth.Max)
-		}
+		conditions = append(conditions, "depth_id = $"+strconv.Itoa(len(params)+1))
+		params = append(params, chairDepthID)
 	}
 
 	if c.QueryParam("kind") != "" {
-		conditions = append(conditions, "kind = $"+strconv.Itoa(len(params)+1))
-		params = append(params, c.QueryParam("kind"))
+		kindID := getKindID(c.QueryParam("kind"))
+		conditions = append(conditions, "kind_id = $"+strconv.Itoa(len(params)+1))
+		params = append(params, kindID)
 	}
 
 	if c.QueryParam("color") != "" {
-		conditions = append(conditions, "color = $"+strconv.Itoa(len(params)+1))
-		params = append(params, c.QueryParam("color"))
+		colorID := getColorId(c.QueryParam("color"))
+		conditions = append(conditions, "color_id = $"+strconv.Itoa(len(params)+1))
+		params = append(params, colorID)
 	}
 
 	if c.QueryParam("features") != "" {
@@ -901,28 +957,8 @@ func postEstate(c echo.Context) error {
 				return 3
 			}
 		}(rent)
-		doorHeightID := func(doorHeight int) int {
-			if doorHeight < 80 {
-				return 0
-			} else if 80 <= doorHeight && doorHeight < 110 {
-				return 1
-			} else if 110 <= doorHeight && doorHeight < 150 {
-				return 2
-			} else {
-				return 3
-			}
-		}(doorHeight)
-		doorWidthID := func(doorWidth int) int {
-			if doorWidth < 80 {
-				return 0
-			} else if 80 <= doorWidth && doorWidth < 110 {
-				return 1
-			} else if 110 <= doorWidth && doorWidth < 150 {
-				return 2
-			} else {
-				return 3
-			}
-		}(doorWidth)
+		doorHeightID := getChairRangeID(doorHeight)
+		doorWidthID := getChairRangeID(doorWidth)
 		if err := rm.Err(); err != nil {
 			c.Logger().Errorf("failed to read record: %v", err)
 			return c.NoContent(http.StatusBadRequest)

@@ -46,28 +46,13 @@ UPDATE chair SET
     WHEN kind = 'エルゴノミクス' THEN 2
     ELSE 3
   END;
-
-INSERT INTO chair_counts
-  SELECT
-    price_id,
-    height_id,
-    width_id,
-    depth_id,
-    kind_id,
-    COUNT(*)
-  FROM
-    chair
-  GROUP BY
-    price_id,
-    height_id,
-    width_id,
-    depth_id,
-    kind_id;
-
 -- indices for ORDER BY
 CREATE INDEX ON chair USING btree (price ASC, id ASC);
 CREATE INDEX ON chair USING btree (popularity DESC, id ASC);
 
 -- indices for WHERE or JOIN
-CREATE INDEX ON chair USING btree (price_id, height_id, width_id);
-CREATE INDEX ON chair USING btree (color_id, depth_id, kind_id);
+CREATE INDEX ON chair USING btree (height_id);
+CREATE INDEX ON chair USING btree (width_id);
+CREATE INDEX ON chair USING btree (depth_id);
+CREATE INDEX ON chair USING btree (kind_id);
+CREATE INDEX ON chair USING btree (color_id);

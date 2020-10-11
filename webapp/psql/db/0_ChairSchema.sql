@@ -25,15 +25,3 @@ CREATE TABLE chair
     color_id INTEGER DEFAULT -1 NOT NULL,
     kind_id INTEGER DEFAULT -1 NOT NULL
 );
-
-DROP TABLE IF EXISTS chair_counts CASCADE;
-
-CREATE TABLE chair_counts
-(
-    price_id INTEGER NOT NULL,
-    height_id INTEGER NOT NULL,
-    width_id INTEGER NOT NULL,
-    depth_id INTEGER NOT NULL,
-    kind_id INTEGER NOT NULL,
-    counts INTEGER NOT NULL
-);

@@ -20,6 +20,19 @@ UPDATE estate SET
     ELSE 3
   END;
 
+INSERT INTO estate_counts
+  SELECT
+    rent_id,
+    door_height_id,
+    door_width_id,
+    COUNT(*)
+  FROM
+    estate
+  GROUP BY
+    rent_id,
+    door_height_id,
+    door_width_id;
+
 -- indices for ORDER BY
 CREATE INDEX ON estate USING btree (rent ASC, id ASC);
 CREATE INDEX ON estate USING btree (popularity DESC, id ASC);

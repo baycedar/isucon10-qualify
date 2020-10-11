@@ -23,3 +23,11 @@ CREATE TABLE estate
     door_height_id INTEGER DEFAULT -1 NOT NULL,
     door_width_id INTEGER DEFAULT -1 NOT NULL
 );
+
+CREATE TABLE estate_counts
+(
+    rent_id INTEGER NOT NULL,
+    door_height_id INTEGER NOT NULL,
+    door_width_id INTEGER NOT NULL,
+    counts INTEGER NOT NULL
+);

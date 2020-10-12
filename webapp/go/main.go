@@ -364,8 +364,8 @@ func main() {
 	if err != nil {
 		e.Logger.Fatalf("DB connection failed : %v", err)
 	}
-	estateDB.SetMaxOpenConns(50)
-	estateDB.SetMaxIdleConns(50)
+	estateDB.SetMaxOpenConns(30)
+	estateDB.SetMaxIdleConns(30)
 	estateDB.SetConnMaxLifetime(60 * time.Second)
 	defer estateDB.Close()
 
@@ -374,8 +374,8 @@ func main() {
 	if err != nil {
 		e.Logger.Fatalf("DB connection failed : %v", err)
 	}
-	chairDB.SetMaxOpenConns(50)
-	chairDB.SetMaxIdleConns(50)
+	chairDB.SetMaxOpenConns(30)
+	chairDB.SetMaxIdleConns(30)
 	chairDB.SetConnMaxLifetime(60 * time.Second)
 
 	// Start server
